@@ -17,22 +17,22 @@ import {
   addMonths as addMonthsToDate,
   addYears
 } from 'date-fns';
-import { useTaskStore, type Task } from '../store/taskStore';
+import { useTaskStore, type Task, type StorageItem } from '../store/taskStore';
 import { useCategoryStore } from '../store/categoryStore';
 import { useToastStore } from '../store/toastStore';
 import SpastaTaskQuickView from './spastaTaskQuickView.vue';
 
 const props = defineProps<{
-  tasks: Task[];
+  tasks: StorageItem<Task>[];
 }>();
 
 const taskStore = useTaskStore();
 const categoryStore = useCategoryStore();
 const toastStore = useToastStore();
 const currentMonth = ref(new Date());
-const draggedTask = ref<Task | null>(null);
+const draggedTask = ref<StorageItem<Task> | null>(null);
 const activeDropDate = ref<Date | null>(null);
-const selectedTask = ref<Task | null>(null);
+const selectedTask = ref<StorageItem<Task> | null>(null);
 const showQuickView = ref(false);
 
 const calendarDays = computed(() => {
@@ -46,21 +46,21 @@ const calendarDays = computed(() => {
 
 const selectedCategory = computed(() => {
   if (!selectedTask.value) return null;
-  return categoryStore.categories.find(c => c.id === selectedTask.value?.categoryId);
+  return categoryStore.categories.find(c => c.id === selectedTask.value?.data.categoryId);
 });
 
-const getRecurringTaskOccurrences = (task: Task, startDate: Date, endDate: Date) => {
-  if (!task.isRecurring || !task.recurringPeriod || !task.dueDate) return [];
+const getRecurringTaskOccurrences = (task: StorageItem<Task>, startDate: Date, endDate: Date) => {
+  if (!task.data.isRecurring || !task.data.recurringPeriod || !task.data.dueDate) return [];
   
   const occurrences: Date[] = [];
-  let currentDate = new Date(task.dueDate);
+  let currentDate = new Date(task.data.dueDate);
   
   while (currentDate <= endDate) {
     if (currentDate >= startDate && currentDate <= endDate) {
       occurrences.push(new Date(currentDate));
     }
     
-    switch (task.recurringPeriod) {
+    switch (task.data.recurringPeriod) {
       case 'daily':
         currentDate = addDays(currentDate, 1);
         break;
@@ -81,12 +81,12 @@ const getRecurringTaskOccurrences = (task: Task, startDate: Date, endDate: Date)
 
 const tasksForDay = (date: Date) => {
   const regularTasks = props.tasks.filter(task => {
-    if (!task.dueDate) return false;
-    return isSameDay(new Date(task.dueDate), date);
+    if (!task.data.dueDate) return false;
+    return isSameDay(new Date(task.data.dueDate), date);
   });
   
   const recurringTasks = props.tasks.filter(task => {
-    if (!task.isRecurring || !task.dueDate) return false;
+    if (!task.data.isRecurring || !task.data.dueDate) return false;
     
     const monthStart = startOfMonth(currentMonth.value);
     const monthEnd = endOfMonth(currentMonth.value);
@@ -123,7 +123,7 @@ const goToToday = () => {
   currentMonth.value = new Date();
 };
 
-const onDragStart = (event: DragEvent, task: Task) => {
+const onDragStart = (event: DragEvent, task: StorageItem<Task>) => {
   if (!event.target) return;
   draggedTask.value = task;
   
@@ -133,7 +133,7 @@ const onDragStart = (event: DragEvent, task: Task) => {
     
     const dragImage = document.createElement('div');
     dragImage.className = 'fixed pointer-events-none bg-card p-2 rounded shadow-lg opacity-90 transform rotate-2';
-    dragImage.textContent = task.title;
+    dragImage.textContent = task.data.title;
     document.body.appendChild(dragImage);
     event.dataTransfer.setDragImage(dragImage, 0, 0);
     requestAnimationFrame(() => document.body.removeChild(dragImage));
@@ -174,7 +174,7 @@ const onDrop = async (event: DragEvent, date: Date) => {
   draggedTask.value = null;
 };
 
-const handleTaskClick = (task: Task) => {
+const handleTaskClick = (task: StorageItem<Task>) => {
   selectedTask.value = task;
   showQuickView.value = true;
 };
@@ -270,15 +270,15 @@ const handleTaskDelete = async (taskId: string) => {
             v-for="(task, taskIndex) in tasksForDay(day)"
             :key="`${dayIndex}-${taskIndex}`"
             class="text-xs p-2 rounded bg-white border-l-2 truncate group hover:scale-105 hover:shadow-md transition-all duration-150 cursor-pointer"
-            :class="`border-l-${getPriorityClass(task.priority)}`"
+            :class="`border-l-${getPriorityClass(task.data.priority)}`"
             draggable="true"
             @dragstart="onDragStart($event, task)"
             @dragend="onDragEnd"
             @click="handleTaskClick(task)"
             @dblclick="handleTaskClick(task)"
           >
-            {{ task.title }}
-            <span v-if="task.isRecurring" class="ml-1 opacity-75">🔄</span>
+            {{ task.data.title }}
+            <span v-if="task.data.isRecurring" class="ml-1 opacity-75">🔄</span>
           </div>
         </TransitionGroup>
       </div>
@@ -288,7 +288,7 @@ const handleTaskDelete = async (taskId: string) => {
     <SpastaTaskQuickView
       v-if="showQuickView && selectedTask && selectedCategory"
       :is-open="showQuickView"
-      :task="selectedTask"
+      :task="selectedTask.data"
       :category="selectedCategory"
       @close="showQuickView = false"
       @update="handleTaskUpdate"
