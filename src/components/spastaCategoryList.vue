@@ -16,6 +16,8 @@ const emit = defineEmits<{
   (e: 'selectCategory', categoryId: string): void;
 }>();
 
+const containerClasses = 'w-full'; // Add full width class
+
 const categoryStore = useCategoryStore();
 const taskStore = useTaskStore();
 const toastStore = useToastStore();
@@ -108,25 +110,25 @@ const selectCategory = (categoryId: string) => {
     </div>
     
     <!-- Categories List -->
-    <div class="space-y-2 max-h-96 overflow-y-auto">
+    <div class="flex overflow-x-auto space-x-2 pb-2 max-w-fit">
       <div
         v-for="category in categories"
         :key="category.id"
-        class="group flex items-center justify-between w-full px-3 py-2 rounded-md text-left transition-colors duration-150"
+        class="group flex items-center shrink-0 px-3 py-2 rounded-md text-left transition-colors duration-150"
         :class="category.id === selectedCategoryId ? 'bg-primary-50 text-primary-700' : 'hover:bg-bg'"
       >
         <button
           @click="selectCategory(category.id)"
-          class="flex items-center flex-grow"
+          class="flex items-center"
         >
           <span 
             class="inline-block w-3 h-3 rounded-full mr-2" 
             :style="{ backgroundColor: category.color }"
           ></span>
-          <span class="font-medium truncate text-text">{{ category.name }}</span>
+          <span class="font-medium whitespace-nowrap text-text">{{ category.name }}</span>
         </button>
         
-        <div class="flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div class="flex space-x-1 ml-2 opacity-0 group-hover:opacity-100 transition-opacity">
           <button 
             @click.stop="handleEditCategory(category)"
             class="text-text/60 hover:text-primary-500"
@@ -142,7 +144,7 @@ const selectCategory = (categoryId: string) => {
         </div>
       </div>
       
-      <div v-if="categories.length === 0" class="text-center text-text/60 py-4">
+      <div v-if="categories.length === 0" class="text-center text-text/60 py-4 w-full">
         <p>No categories found</p>
         <button 
           @click="showDialog = true"
@@ -152,7 +154,6 @@ const selectCategory = (categoryId: string) => {
         </button>
       </div>
     </div>
-
     <!-- Category Dialog -->
     <SpastaCategoryDialog
       :is-open="showDialog"

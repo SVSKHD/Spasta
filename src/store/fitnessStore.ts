@@ -30,7 +30,7 @@ export interface Workout {
   duration: number; // in minutes
   exercises: Exercise[];
   notes?: string;
-  userId: string;
+  userId: any;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -49,7 +49,7 @@ export const useFitnessStore = defineStore('fitness', {
   actions: {
     async fetchWorkouts() {
       const authStore = useAuthStore();
-      if (!authStore.user?.uid) {
+      if (!authStore.user?.id) {
         this.workouts = [];
         return;
       }
@@ -88,13 +88,13 @@ export const useFitnessStore = defineStore('fitness', {
     
     async addWorkout(workout: Omit<Workout, 'id' | 'userId' | 'createdAt' | 'updatedAt'>) {
       const authStore = useAuthStore();
-      if (!authStore.user?.uid) throw new Error('User not authenticated');
+      if (!authStore.user?.id) throw new Error('User not authenticated');
       
       try {
         const now = new Date();
         const workoutWithUser = {
           ...workout,
-          userId: authStore.user.uid,
+          userId: authStore.user.id,
           createdAt: now,
           updatedAt: now
         };

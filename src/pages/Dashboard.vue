@@ -14,7 +14,7 @@
             :categories="categories"
             :selected-category-id="selectedCategoryId"
             @selectCategory="handleSelectCategory"
-            class="w-64"
+            class="w-full"
           />
         </div>
       </div>
