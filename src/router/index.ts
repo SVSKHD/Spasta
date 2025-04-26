@@ -10,9 +10,9 @@ const Calendar = () => import('../pages/Calendar.vue');
 const Fitness = () => import('../pages/Fitness.vue');
 const Expenses = () => import('../pages/Expenses.vue');
 const Chat = () => import('../pages/Chat.vue');
-const Trading = () => import('../pages/Trading.vue');
+// const Trading = () => import('../pages/Trading.vue');
 const Login = () => import('../pages/Login.vue');
-const Register = () => import('../pages/Register.vue');
+// const Register = () => import('../pages/Register.vue');
 
 const routes = [
   {

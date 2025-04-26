@@ -15,7 +15,7 @@ const isDark = useDark();
 const toggleDark = useToggle(isDark);
 
 const currentUser = computed(() => authStore.user);
-const currentRouteName = computed(() => route.name);
+// const currentRouteName = computed(() => route.name);
 const userName = computed(() => {
   if (!currentUser.value?.email) return '';
   return currentUser.value.email.split('@')[0];
@@ -25,13 +25,13 @@ const toggleSidebar = () => {
   isSidebarCollapsed.value = !isSidebarCollapsed.value;
 };
 
-const toggleMobileMenu = () => {
-  isMobileMenuOpen.value = !isMobileMenuOpen.value;
-};
+// const toggleMobileMenu = () => {
+//   isMobileMenuOpen.value = !isMobileMenuOpen.value;
+// };
 
-const closeMobileMenu = () => {
-  isMobileMenuOpen.value = false;
-};
+// const closeMobileMenu = () => {
+//   isMobileMenuOpen.value = false;
+// };
 
 const handleLogout = async () => {
   await authStore.signOut();
