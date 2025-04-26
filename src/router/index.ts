@@ -45,11 +45,11 @@ const routes = [
         name: 'chat',
         component: Chat,
       },
-      {
-        path: '/trading',
-        name: 'trading',
-        component: Trading,
-      },
+      // {
+      //   path: '/trading',
+      //   name: 'trading',
+      //   component: Trading,
+      // },
     ],
   },
   {
@@ -58,12 +58,12 @@ const routes = [
     component: Login,
     meta: { guest: true },
   },
-  {
-    path: '/register',
-    name: 'register',
-    component: Register,
-    meta: { guest: true },
-  },
+  // {
+  //   path: '/register',
+  //   name: 'register',
+  //   component: Register,
+  //   meta: { guest: true },
+  // },
 ];
 
 const router = createRouter({
@@ -72,7 +72,7 @@ const router = createRouter({
 });
 
 // Navigation guard
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _from, next) => {
   const authStore = useAuthStore();
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
   const isGuestRoute = to.matched.some(record => record.meta.guest);

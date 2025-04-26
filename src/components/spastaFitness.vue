@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { format } from 'date-fns';
-import { useFitnessStore, type Workout, type Exercise } from '../store/fitnessStore';
+import { useFitnessStore, type Workout} from '../store/fitnessStore';
 
 const props = defineProps<{
   workouts: Workout[];

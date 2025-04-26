@@ -41,7 +41,7 @@ export const useExpenseStore = defineStore('expense', {
   actions: {
     async fetchExpenses() {
       const authStore = useAuthStore();
-      if (!authStore.user?.uid) {
+      if (!authStore.user?.id) {
         this.expenses = [];
         return;
       }
@@ -49,7 +49,7 @@ export const useExpenseStore = defineStore('expense', {
       this.isLoading = true;
       try {
         const expensesRef = collection(db, 'expenses');
-        const q = query(expensesRef, where('userId', '==', authStore.user.uid));
+        const q = query(expensesRef, where('userId', '==', authStore.user.id));
         const querySnapshot = await getDocs(q);
         
         const expenses: Expense[] = [];
@@ -80,13 +80,13 @@ export const useExpenseStore = defineStore('expense', {
     
     async addExpense(expense: Omit<Expense, 'id' | 'userId' | 'createdAt' | 'updatedAt'>) {
       const authStore = useAuthStore();
-      if (!authStore.user?.uid) throw new Error('User not authenticated');
+      if (!authStore.user?.id) throw new Error('User not authenticated');
       
       try {
         const now = new Date();
         const expenseWithUser = {
           ...expense,
-          userId: authStore.user.uid,
+          userId: authStore.user.id,
           createdAt: now,
           updatedAt: now
         };

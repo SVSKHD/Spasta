@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue';
+import { ref, watch } from 'vue';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/vue';
 import { type Category } from '../store/categoryStore';
 

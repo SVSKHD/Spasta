@@ -48,10 +48,10 @@ const dueDateFormatted = computed(() => {
   return format(props.task.dueDate, 'MMM dd, yyyy');
 });
 
-const flowName = computed(() => {
-  const flow = props.category.flows.find(f => f.id === props.task.flowId);
-  return flow ? flow.name : '';
-});
+// const flowName = computed(() => {
+//   const flow = props.category.flows.find(f => f.id === props.task.flowId);
+//   return flow ? flow.name : '';
+// });
 
 const totalHours = computed(() => {
   return (props.task.timeEntries || []).reduce((sum, entry) => sum + entry.hours, 0);

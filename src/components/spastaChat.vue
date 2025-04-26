@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, nextTick } from 'vue';
-import { useChatStore, type Message } from '../store/chatStore';
+import { useChatStore } from '../store/chatStore';
 import { useAuthStore } from '../store/authStore';
 import { format } from 'date-fns';
 

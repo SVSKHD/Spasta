@@ -16,7 +16,7 @@ const emit = defineEmits<{
   (e: 'selectCategory', categoryId: string): void;
 }>();
 
-const containerClasses = 'w-full'; // Add full width class
+
 
 const categoryStore = useCategoryStore();
 const taskStore = useTaskStore();
