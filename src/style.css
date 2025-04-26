@@ -1,0 +1,232 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'JetBrains Mono', monospace;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@layer base {
+  :root {
+    --color-bg: 249 250 251;
+    --color-text: 17 24 39;
+    --color-border: 229 231 235;
+    --color-card: 255 255 255;
+    
+    --color-primary-50: 239 246 255;
+    --color-primary-100: 219 234 254;
+    --color-primary-200: 191 219 254;
+    --color-primary-300: 147 197 253;
+    --color-primary-400: 96 165 250;
+    --color-primary-500: 59 130 246;
+    --color-primary-600: 37 99 235;
+    --color-primary-700: 29 78 216;
+    --color-primary-800: 30 64 175;
+    --color-primary-900: 30 58 138;
+
+    --color-success-50: 240 253 244;
+    --color-success-100: 220 252 231;
+    --color-success-600: 34 197 94;
+    --color-success-700: 21 128 61;
+    --color-success-800: 22 101 52;
+
+    --color-warning-50: 254 252 232;
+    --color-warning-100: 254 249 195;
+    --color-warning-700: 161 98 7;
+    --color-warning-800: 133 77 14;
+
+    --color-error-50: 254 242 242;
+    --color-error-100: 254 226 226;
+    --color-error-700: 185 28 28;
+    --color-error-800: 153 27 27;
+  }
+
+  .dark {
+    --color-bg: 17 24 39;
+    --color-text: 243 244 246;
+    --color-border: 55 65 81;
+    --color-card: 31 41 55;
+    
+    --color-primary-50: 30 58 138;
+    --color-primary-100: 30 64 175;
+    --color-primary-200: 29 78 216;
+    --color-primary-300: 37 99 235;
+    --color-primary-400: 59 130 246;
+    --color-primary-500: 96 165 250;
+    --color-primary-600: 147 197 253;
+    --color-primary-700: 191 219 254;
+    --color-primary-800: 219 234 254;
+    --color-primary-900: 239 246 255;
+
+    --color-success-50: 22 101 52;
+    --color-success-100: 21 128 61;
+    --color-success-600: 34 197 94;
+    --color-success-700: 220 252 231;
+    --color-success-800: 240 253 244;
+
+    --color-warning-50: 133 77 14;
+    --color-warning-100: 161 98 7;
+    --color-warning-700: 254 249 195;
+    --color-warning-800: 254 252 232;
+
+    --color-error-50: 153 27 27;
+    --color-error-100: 185 28 28;
+    --color-error-700: 254 226 226;
+    --color-error-800: 254 242 242;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply px-4 py-2 rounded-md font-medium transition-all duration-150 ease-out;
+  }
+
+  .btn-primary {
+    @apply bg-primary-600 text-white hover:bg-primary-700 dark:bg-primary-400 dark:text-gray-900 dark:hover:bg-primary-300;
+  }
+
+  .btn-secondary {
+    @apply bg-gray-600 text-white hover:bg-gray-700 dark:bg-gray-400 dark:text-gray-900 dark:hover:bg-gray-300;
+  }
+
+  .card {
+    @apply bg-card rounded-lg shadow-md border border-border p-6;
+  }
+
+  .input {
+    @apply w-full px-3 py-2 bg-bg border border-border rounded-md 
+           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent
+           text-text placeholder-text/50 dark:placeholder-text/30;
+  }
+
+  /* Grid Layout */
+  .scrollable-row {
+    @apply flex overflow-x-auto gap-4 pb-4 px-4 -mx-4;
+    scrollbar-width: thin;
+    scrollbar-color: theme('colors.primary.200') transparent;
+  }
+
+  .scrollable-row::-webkit-scrollbar {
+    @apply h-2;
+  }
+
+  .scrollable-row::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  .scrollable-row::-webkit-scrollbar-thumb {
+    @apply bg-primary-200 rounded-full;
+  }
+
+  .scrollable-row::-webkit-scrollbar-thumb:hover {
+    @apply bg-primary-300;
+  }
+
+  .scrollable-column {
+    @apply flex-none overflow-y-auto;
+    min-width: 300px;
+    max-height: calc(100vh - 16rem);
+  }
+}
+
+/* Custom Toast Styles */
+.spasta-toast {
+  @apply font-mono !important;
+}
+
+.spasta-toast-body {
+  @apply text-sm !important;
+}
+
+.Vue-Toastification__toast {
+  @apply rounded-lg shadow-lg border border-border/10 !important;
+}
+
+.Vue-Toastification__toast--success {
+  @apply bg-success-600 text-white !important;
+}
+
+.Vue-Toastification__toast--error {
+  @apply bg-error-700 text-white !important;
+}
+
+.Vue-Toastification__toast--warning {
+  @apply bg-warning-700 text-white !important;
+}
+
+.Vue-Toastification__toast--info {
+  @apply bg-primary-600 text-white !important;
+}
+
+.Vue-Toastification__progress-bar {
+  @apply bg-white opacity-20 !important;
+}
+
+.Vue-Toastification__close-button {
+  @apply text-white opacity-50 hover:opacity-100 !important;
+}
+
+/* Page Transitions */
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.15s ease-out;
+}
+
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+}
+
+/* Theme Transition */
+.theme-transition {
+  @apply transition-colors duration-150;
+}
+
+/* Task Card Animations */
+.task-card-enter-active,
+.task-card-leave-active {
+  transition: all 0.15s ease-out;
+}
+
+.task-card-enter-from,
+.task-card-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+/* Drag and Drop Animations */
+.dragging {
+  @apply scale-105 opacity-75 shadow-lg rotate-1;
+  transition: all 0.15s ease-out !important;
+}
+
+.dropzone-active {
+  @apply ring-2 ring-primary-500 bg-primary-50/50;
+  transition: all 0.15s ease-out !important;
+}
+
+.task-move {
+  transition: transform 0.15s ease-out !important;
+}
+
+/* Full Page Layout */
+.page-container {
+  @apply h-full flex flex-col;
+}
+
+.page-content {
+  @apply flex-1 overflow-y-auto;
+}
+
+/* Card Overrides for Full Page */
+.full-page-card {
+  @apply rounded-none border-0 shadow-none h-full;
+}
