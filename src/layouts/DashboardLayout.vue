@@ -10,7 +10,7 @@ const router = useRouter();
 const route = useRoute();
 const authStore = useAuthStore();
 const isSidebarCollapsed = ref(false);
-const isMobileMenuOpen = ref(false);
+// const isMobileMenuOpen = ref(false);
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
 

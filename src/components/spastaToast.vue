@@ -5,6 +5,7 @@ import { useToastStore } from '../store/toastStore';
 const toastStore = useToastStore();
 const isVisible = ref(false);
 const timeout = ref<number | null>(null);
+const TOAST_DURATION = 3000; // Default duration in milliseconds
 
 const showToast = () => {
   isVisible.value = true;
@@ -14,7 +15,7 @@ const showToast = () => {
   timeout.value = window.setTimeout(() => {
     isVisible.value = false;
     toastStore.clearMessage();
-  }, toastStore.duration);
+  }, TOAST_DURATION);
 };
 
 watch(() => toastStore.message, (newMessage) => {

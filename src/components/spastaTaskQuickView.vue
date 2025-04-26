@@ -136,7 +136,7 @@ const handleDelete = () => {
                 <label class="block text-sm font-medium text-text/60">Status</label>
                 <select v-model="editedTask.flowId" class="input">
                   <option 
-                    v-for="flow in category?.data?.flows" 
+                    v-for="flow in category?.flows"
                     :key="flow.id" 
                     :value="flow.id"
                   >

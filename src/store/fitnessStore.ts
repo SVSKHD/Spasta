@@ -57,7 +57,7 @@ export const useFitnessStore = defineStore('fitness', {
       this.isLoading = true;
       try {
         const workoutsRef = collection(db, 'workouts');
-        const q = query(workoutsRef, where('userId', '==', authStore.user.uid));
+        const q = query(workoutsRef, where('userId', '==', authStore.user?.id));
         const querySnapshot = await getDocs(q);
         
         const workouts: Workout[] = [];

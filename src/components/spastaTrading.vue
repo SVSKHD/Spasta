@@ -32,7 +32,7 @@ const calculateProfit = () => {
   }
 };
 
-const profitBySymbol = computed(() => tradingStore.profitBySymbol);
+// const profitBySymbol = computed(() => tradingStore.profitBySymbol);
 const totalProfit = computed(() => tradingStore.totalProfit);
 const winRate = computed(() => tradingStore.winRate);
 

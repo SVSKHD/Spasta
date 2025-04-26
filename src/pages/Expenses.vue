@@ -11,7 +11,7 @@ const isLoading = ref(true);
 const expenses = computed(() => expenseStore.expenses);
 
 onMounted(async () => {
-  if (!authStore.user?.uid) {
+  if (!authStore.user?.id) {
     isLoading.value = false;
     return;
   }
