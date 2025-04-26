@@ -18,7 +18,7 @@ import {
   addYears
 } from 'date-fns';
 import { useTaskStore, type Task } from '../store/taskStore';
-import { useCategoryStore, type Category } from '../store/categoryStore';
+import { useCategoryStore } from '../store/categoryStore';
 import { useToastStore } from '../store/toastStore';
 import SpastaTaskQuickView from './spastaTaskQuickView.vue';
 
