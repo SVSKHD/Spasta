@@ -9,7 +9,7 @@ import { type StorageItem } from '../lib/storage';
 const props = defineProps<{
   isOpen: boolean;
   task: StorageItem<Task>;
-  category: Category;
+  category: StorageItem<Category>;
 }>();
 
 const emit = defineEmits<{
@@ -35,7 +35,7 @@ const priorityClasses = computed(() => {
 });
 
 const flowName = computed(() => {
-  const flow = props.category?.data?.flows?.find(f => f.id === props.task?.data?.flowId);
+  const flow = props.category?.data?.flows?.find((f: { id: string }) => f.id === props.task?.data?.flowId);
   return flow ? flow.name : '';
 });
 
@@ -136,7 +136,7 @@ const handleDelete = () => {
                 <label class="block text-sm font-medium text-text/60">Status</label>
                 <select v-model="editedTask.flowId" class="input">
                   <option 
-                    v-for="flow in category?.flows"
+                    v-for="flow in category?.data?.flows"
                     :key="flow.id" 
                     :value="flow.id"
                   >

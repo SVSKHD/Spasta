@@ -8,13 +8,14 @@ const router = useRouter();
 const authStore = useAuthStore();
 const isLoading = ref(false);
 const errorMessage = ref('');
+const isOpen = ref(true);
 
-const handleRegister = async (email: string, password: string) => {
+const handleRegister = async (email: string) => {
   isLoading.value = true;
   errorMessage.value = '';
   
   try {
-    await authStore.registerWithEmail(email, password);
+    await authStore.signInWithEmail(email);
     router.push('/');
   } catch (error: any) {
     errorMessage.value = error.message || 'Failed to register';
@@ -36,6 +37,10 @@ const handleGoogleLogin = async () => {
     isLoading.value = false;
   }
 };
+
+const handleClose = () => {
+  isOpen.value = false;
+};
 </script>
 
 <template>
@@ -46,10 +51,10 @@ const handleGoogleLogin = async () => {
       </div>
       
       <SpastaAuth 
+        :is-open="isOpen"
         :error-message="errorMessage"
-        :is-loading="isLoading"
-        auth-type="register"
-        @submit-email="handleRegister"
+        @close="handleClose"
+        @email-auth="handleRegister"
         @google-auth="handleGoogleLogin"
       />
       

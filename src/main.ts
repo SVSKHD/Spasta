@@ -1,6 +1,6 @@
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
-import Toast, { type PluginOptions } from 'vue-toastification';
+import Toast, { type PluginOptions, POSITION } from 'vue-toastification';
 import 'vue-toastification/dist/index.css';
 import router from './router';
 import App from './App.vue';
@@ -13,7 +13,7 @@ const pinia = createPinia();
 const app = createApp(App);
 
 const toastOptions: PluginOptions = {
-  position: 'bottom-right',
+  position: POSITION.BOTTOM_RIGHT,
   timeout: 3000,
   closeOnClick: true,
   pauseOnFocusLoss: true,

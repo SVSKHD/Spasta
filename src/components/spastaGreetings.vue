@@ -2,7 +2,7 @@
 import { ref, onMounted, computed } from 'vue';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/vue';
 
-const props = defineProps<{
+defineProps<{
   userName?: string;
 }>();
 
