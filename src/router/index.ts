@@ -6,7 +6,7 @@ import DashboardLayout from '../layouts/DashboardLayout.vue';
 
 // Pages
 const Dashboard = () => import('../pages/Dashboard.vue');
-// const Calendar = () => import('../pages/Calendar.vue');
+const Calendar = () => import('../pages/Calendar.vue');
 const Fitness = () => import('../pages/Fitness.vue');
 const Expenses = () => import('../pages/Expenses.vue');
 const Chat = () => import('../pages/Chat.vue');
@@ -25,11 +25,11 @@ const routes = [
         name: 'dashboard',
         component: Dashboard,
       },
-      // {
-      //   path: '/calendar',
-      //   name: 'calendar',
-      //   component: Calendar,
-      // },
+      {
+        path: '/calendar',
+        name: 'calendar',
+        component: Calendar,
+      },
       {
         path: '/fitness',
         name: 'fitness',
