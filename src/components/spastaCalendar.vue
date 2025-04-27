@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<!-- <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { 
   startOfMonth, 
@@ -339,4 +339,4 @@ const handleTaskDelete = async (taskId: string) => {
   opacity: 0;
   transform: translateY(5px);
 }
-</style>
+</style> -->
