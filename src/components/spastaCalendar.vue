@@ -215,10 +215,10 @@ const handleTaskDelete = async (taskId: string) => {
 </script>
 
 <template>
-  <div class="bg-white rounded-lg shadow-md p-6 animate-slide-in">
+  <div class="bg-card rounded-lg shadow-md p-6 animate-slide-in">
     <!-- Calendar Header -->
     <div class="flex items-center justify-between mb-6">
-      <h2 class="text-xl font-bold text-gray-900">
+      <h2 class="text-xl font-bold text-text">
         {{ format(currentMonth, 'MMMM yyyy') }}
       </h2>
       <div class="flex items-center space-x-4">
@@ -240,19 +240,19 @@ const handleTaskDelete = async (taskId: string) => {
         <div class="flex space-x-2">
           <button 
             @click="previousMonth"
-            class="p-1.5 rounded-md bg-gray-100 hover:bg-gray-200"
+            class="p-1.5 rounded-md bg-bg hover:bg-bg/70 text-text"
           >
             &larr;
           </button>
           <button 
             @click="goToToday"
-            class="px-3 py-1 rounded-md bg-primary-100 text-primary-700 hover:bg-primary-200 text-sm font-medium"
+            class="px-3 py-1 rounded-md bg-primary-100 text-primary-700 hover:bg-primary-200 dark:bg-primary-900 dark:text-primary-100 dark:hover:bg-primary-800 text-sm font-medium"
           >
             Today
           </button>
           <button 
             @click="nextMonth"
-            class="p-1.5 rounded-md bg-gray-100 hover:bg-gray-200"
+            class="p-1.5 rounded-md bg-bg hover:bg-bg/70 text-text"
           >
             &rarr;
           </button>
@@ -266,7 +266,7 @@ const handleTaskDelete = async (taskId: string) => {
       <div 
         v-for="day in ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']" 
         :key="day"
-        class="text-center font-medium text-gray-500 py-2"
+        class="text-center font-medium text-text/60 py-2"
       >
         {{ day }}
       </div>
@@ -275,29 +275,32 @@ const handleTaskDelete = async (taskId: string) => {
       <div 
         v-for="(day, dayIndex) in calendarDays" 
         :key="dayIndex"
-        class="relative border border-gray-200 rounded-md p-1 min-h-[100px] transition-all duration-150"
+        class="relative border border-border rounded-md p-1 min-h-[100px] transition-all duration-150"
         :class="{
-          'bg-gray-50': !isSameMonth(day, currentMonth),
-          'bg-primary-50': isToday(day),
-          'ring-2 ring-primary-500 bg-primary-50/20': activeDropDate && isSameDay(activeDropDate, day)
+          'bg-bg/50 dark:bg-bg/30': !isSameMonth(day, currentMonth),
+          'bg-primary-50/20 dark:bg-primary-900/20': isToday(day),
+          'ring-2 ring-primary-500 bg-primary-50/20 dark:bg-primary-900/20': activeDropDate && isSameDay(activeDropDate, day)
         }"
         @dragover="onDragOver($event, day)"
         @dragleave="onDragLeave"
         @drop="onDrop($event, day)"
       >
-        <div class="text-right text-sm mb-1" :class="isSameMonth(day, currentMonth) ? 'text-gray-900' : 'text-gray-400'">
+        <div 
+          class="text-right text-sm mb-1" 
+          :class="isSameMonth(day, currentMonth) ? 'text-text' : 'text-text/40'"
+        >
           {{ format(day, 'd') }}
         </div>
         
         <TransitionGroup 
           name="task-list"
           tag="div" 
-          class="space-y-1 overflow-y-auto max-h-[80px]"
+          class="space-y-1 overflow-y-auto max-h-[80px] scrollbar-thin scrollbar-thumb-primary-200 dark:scrollbar-thumb-primary-700 scrollbar-track-transparent"
         >
           <div 
             v-for="(task, taskIndex) in tasksForDay(day)"
             :key="`${dayIndex}-${taskIndex}`"
-            class="text-xs p-2 rounded bg-white border-l-2 truncate group hover:scale-105 hover:shadow-md transition-all duration-150 cursor-pointer"
+            class="text-xs p-2 rounded bg-card border-l-2 truncate group hover:scale-105 hover:shadow-md transition-all duration-150 cursor-pointer"
             :class="`border-l-${getPriorityClass(task.priority)}`"
             draggable="true"
             @dragstart="onDragStart($event, task)"
@@ -305,7 +308,7 @@ const handleTaskDelete = async (taskId: string) => {
             @click="handleTaskClick(task)"
             @dblclick="handleTaskClick(task)"
           >
-            {{ task.title }}
+            <span class="text-text">{{ task.title }}</span>
             <span v-if="task.isRecurring" class="ml-1 opacity-75">🔄</span>
           </div>
         </TransitionGroup>
@@ -314,14 +317,14 @@ const handleTaskDelete = async (taskId: string) => {
 
     <!-- Task Quick View Dialog -->
     <SpastaTaskQuickView
-  v-if="showQuickView && selectedTask && selectedCategory"
-  :is-open="showQuickView"
-  :task="{ data: selectedTask, id: selectedTask.id, createdAt: selectedTask.createdAt, updatedAt: selectedTask.updatedAt }"
-  :category="{ data: selectedCategory, id: selectedCategory.id, createdAt: selectedCategory.createdAt, updatedAt: selectedCategory.updatedAt }"
-  @close="showQuickView = false"
-  @update="handleTaskUpdate"
-  @delete="handleTaskDelete"
-/>
+      v-if="showQuickView && selectedTask && selectedCategory"
+      :is-open="showQuickView"
+      :task="{ data: selectedTask, id: selectedTask.id, createdAt: selectedTask.createdAt, updatedAt: selectedTask.updatedAt }"
+      :category="{ data: selectedCategory, id: selectedCategory.id, createdAt: selectedCategory.createdAt, updatedAt: selectedCategory.updatedAt }"
+      @close="showQuickView = false"
+      @update="handleTaskUpdate"
+      @delete="handleTaskDelete"
+    />
   </div>
 </template>
 
@@ -343,5 +346,23 @@ const handleTaskDelete = async (taskId: string) => {
 .task-list-leave-to {
   opacity: 0;
   transform: translateY(5px);
+}
+
+/* Scrollbar Styling */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  @apply bg-primary-200 dark:bg-primary-700;
+  border-radius: 2px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  @apply bg-primary-300 dark:bg-primary-600;
 }
 </style>
