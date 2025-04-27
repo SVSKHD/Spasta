@@ -21,7 +21,7 @@ import {
 import { useTaskStore, type Task } from '../store/taskStore';
 import { useCategoryStore, type Category } from '../store/categoryStore';
 import { useToastStore } from '../store/toastStore';
-import {type StorageItem} from "../lib/storage/index"
+// import {type StorageItem} from "../lib/storage/index"
 import SpastaTaskQuickView from './spastaTaskQuickView.vue';
 
 const props = defineProps<{
