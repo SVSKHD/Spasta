@@ -21,7 +21,7 @@ import {
 import { useTaskStore, type Task } from '../store/taskStore';
 import { useCategoryStore, type Category } from '../store/categoryStore';
 import { useToastStore } from '../store/toastStore';
-// import {type StorageItem} from "../lib/storage/index"
+import {type StorageItem} from "../lib/storage/index"
 import SpastaTaskQuickView from './spastaTaskQuickView.vue';
 
 const props = defineProps<{
@@ -46,9 +46,30 @@ const calendarDays = computed(() => {
   return eachDayOfInterval({ start: startDate, end: endDate });
 });
 
-const selectedCategory = computed<Category | null>(() => {
+const selectedCategory = computed<StorageItem<Category> | null>(() => {
   if (!selectedTask.value) return null;
-  return categoryStore.categories.find(c => c.id === selectedTask.value?.categoryId) ?? null;
+  
+  const category = categoryStore.categories.find(c => c.id === selectedTask.value?.categoryId);
+  
+  if (!category) return null;
+  
+  return {
+    data: category,
+    isLoading: false,
+    isError: false,
+    isSuccess: true, // or whatever fields StorageItem has
+  };
+});
+
+const selectedStorageTask = computed<StorageItem<Task> | null>(() => {
+  if (!selectedTask.value) return null;
+  
+  return {
+    data: selectedTask.value,
+    isLoading: false,
+    isError: false,
+    isSuccess: true,
+  };
 });
 
 const getRecurringTaskOccurrences = (task: Task, startDate: Date, endDate: Date) => {
@@ -288,14 +309,14 @@ const handleTaskDelete = async (taskId: string) => {
 
     <!-- Task Quick View Dialog -->
     <SpastaTaskQuickView
-      v-if="showQuickView && selectedTask && selectedCategory"
-      :is-open="showQuickView"
-      :task="selectedTask"
-      :category="selectedCategory"
-      @close="showQuickView = false"
-      @update="handleTaskUpdate"
-      @delete="handleTaskDelete"
-    />
+  v-if="showQuickView && selectedStorageTask && selectedCategory"
+  :is-open="showQuickView"
+  :task="selectedStorageTask"
+  :category="selectedCategory"
+  @close="showQuickView = false"
+  @update="handleTaskUpdate"
+  @delete="handleTaskDelete"
+/>
   </div>
 </template>
 
