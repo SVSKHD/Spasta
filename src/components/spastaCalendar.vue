@@ -46,19 +46,9 @@ const calendarDays = computed(() => {
   return eachDayOfInterval({ start: startDate, end: endDate });
 });
 
-const selectedCategory = computed<StorageItem<Category> | null>(() => {
+const selectedCategory = computed<Category | null>(() => {
   if (!selectedTask.value) return null;
-  
-  const category = categoryStore.categories.find(c => c.id === selectedTask.value?.categoryId);
-  
-  if (!category) return null;
-  
-  return {
-    data: category,
-    isLoading: false,
-    isError: false,
-    isSuccess: true,
-  };
+  return categoryStore.categories.find(c => c.id === selectedTask.value?.categoryId) ?? null;
 });
 
 const getRecurringTaskOccurrences = (task: Task, startDate: Date, endDate: Date) => {
