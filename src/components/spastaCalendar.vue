@@ -17,7 +17,7 @@ import {
   addMonths as addMonthsToDate,
   addYears
 } from 'date-fns';
-import { useTaskStore, type Task, type StorageItem } from '../store/taskStore';
+import { useTaskStore, type Task} from '../store/taskStore';
 import { useCategoryStore} from '../store/categoryStore';
 import { useToastStore } from '../store/toastStore';
 import SpastaTaskQuickView from './spastaTaskQuickView.vue';
