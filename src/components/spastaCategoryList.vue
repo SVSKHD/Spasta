@@ -16,8 +16,6 @@ const emit = defineEmits<{
   (e: 'selectCategory', categoryId: string): void;
 }>();
 
-
-
 const categoryStore = useCategoryStore();
 const taskStore = useTaskStore();
 const toastStore = useToastStore();
@@ -29,11 +27,9 @@ const categoryToDelete = ref<Category | null>(null);
 const handleAddCategory = async (category: Omit<Category, 'id' | 'userId' | 'createdAt' | 'updatedAt'>) => {
   try {
     if (editingCategory.value) {
-      // Update existing category
       await categoryStore.updateCategory(editingCategory.value.id, category);
       toastStore.showToast('Category updated successfully! 🎉', 'success');
     } else {
-      // Create new category
       const addedCategory = await categoryStore.addCategory(category);
       emit('selectCategory', addedCategory.id);
       toastStore.showToast('Category created successfully! 🎉', 'success');
@@ -67,15 +63,10 @@ const handleDeleteCategory = async () => {
   
   try {
     const categoryId = categoryToDelete.value.id;
-    
-    // Delete all tasks in the category first
     await taskStore.deleteTasksByCategory(categoryId);
-    
-    // Then delete the category
     await categoryStore.deleteCategory(categoryId);
     
     if (props.selectedCategoryId === categoryId && props.categories.length > 0) {
-      // Select the first available category
       const remainingCategories = props.categories.filter(c => c.id !== categoryId);
       if (remainingCategories.length > 0) {
         emit('selectCategory', remainingCategories[0].id);
@@ -98,24 +89,25 @@ const selectCategory = (categoryId: string) => {
 </script>
 
 <template>
-  <div class="card animate-slide-in">
-    <div class="flex justify-between items-center mb-4">
+  <div class="card">
+    <!-- Header with fixed Add button -->
+    <div class="flex justify-between items-center mb-4 px-4">
       <h2 class="text-xl font-bold text-text">Categories</h2>
       <button 
         @click="() => { editingCategory = null; showDialog = true; }"
-        class="btn-primary text-sm py-1 px-2 rounded-md"
+        class="btn-primary text-sm py-1 px-2 rounded-md shrink-0"
       >
         + Add
       </button>
     </div>
     
-    <!-- Categories List -->
-    <div class="flex overflow-x-auto space-x-2 pb-2 max-w-fit">
+    <!-- Scrollable Categories List -->
+    <div class="scrollable-row">
       <div
         v-for="category in categories"
         :key="category.id"
         class="group flex items-center shrink-0 px-3 py-2 rounded-md text-left transition-colors duration-150"
-        :class="category.id === selectedCategoryId ? 'bg-primary-50 text-primary-700' : 'hover:bg-bg'"
+        :class="category.id === selectedCategoryId ? 'bg-primary-50 text-primary-700 dark:bg-primary-900/50 dark:text-primary-100' : 'hover:bg-bg'"
       >
         <button
           @click="selectCategory(category.id)"
@@ -144,7 +136,7 @@ const selectCategory = (categoryId: string) => {
         </div>
       </div>
       
-      <div v-if="categories.length === 0" class="text-center text-text/60 py-4 w-full">
+      <div v-if="categories.length === 0" class="text-center text-text/60 py-4 px-4">
         <p>No categories found</p>
         <button 
           @click="showDialog = true"
@@ -154,6 +146,7 @@ const selectCategory = (categoryId: string) => {
         </button>
       </div>
     </div>
+
     <!-- Category Dialog -->
     <SpastaCategoryDialog
       :is-open="showDialog"
@@ -196,3 +189,4 @@ const selectCategory = (categoryId: string) => {
     </Dialog>
   </div>
 </template>
+```

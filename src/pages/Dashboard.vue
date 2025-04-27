@@ -113,7 +113,7 @@ const taskStore = useTaskStore();
 const isLoading = ref(true);
 const selectedCategoryId = ref<string>('');
 
-const categories = computed<Category[]>(() => categoryStore.categories);
+const categories = computed<Category[]>(() => categoryStore.categories.sort((a, b) => a.name.localeCompare(b.name)));
 
 const selectedCategory = computed<Category | undefined>(() => {
   return categories.value.find(cat => cat.id === selectedCategoryId.value);
