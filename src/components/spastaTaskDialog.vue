@@ -25,7 +25,7 @@ const defaultTask = {
   priority: 'medium' as const,
   tags: [],
   progress: 0,
-  estimatedHours: 2,
+  estimatedHours: 0,
   actualHours: 0,
   startDate: new Date(),
   categoryId: props.category.id,
@@ -155,7 +155,9 @@ const handleSubmit = () => {
                 type="number" 
                 min="0" 
                 step="0.5" 
-                class="input" 
+                class="input"
+                required
+                placeholder="Enter estimated time in hours"
               />
             </div>
             

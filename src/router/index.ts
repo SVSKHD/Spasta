@@ -10,6 +10,7 @@ const Calendar = () => import('../pages/Calendar.vue');
 const Fitness = () => import('../pages/Fitness.vue');
 const Expenses = () => import('../pages/Expenses.vue');
 const Chat = () => import('../pages/Chat.vue');
+const notes = () => import('../pages/notes.vue');
 // const Trading = () => import('../pages/Trading.vue');
 const Login = () => import('../pages/Login.vue');
 // const Register = () => import('../pages/Register.vue');
@@ -44,6 +45,11 @@ const routes = [
         path: '/chat',
         name: 'chat',
         component: Chat,
+      },
+      {
+        path: '/notes',
+        name: 'notes',
+        component: notes,
       },
       // {
       //   path: '/trading',
