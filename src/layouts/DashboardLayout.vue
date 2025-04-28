@@ -134,7 +134,7 @@ const navigation = [
             
             <!-- Logo -->
             <div class="flex-shrink-0 flex items-center ml-4">
-              <span class="text-xl font-bold text-primary-500">spasta.io</span>
+              <span class="text-xl font-bold text-primary-500">spasta.online</span>
             </div>
           </div>
           
