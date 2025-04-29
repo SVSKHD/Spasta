@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { format } from 'date-fns';
-import { type Task } from '../store/taskStore';
+import { type Task} from '../store/taskStore';
+import { type SubTask } from '../store/subTaskStore';
 import { type Category } from '../store/categoryStore';
 import SpastaTaskDialog from './spastaTaskDialog.vue';
+import SpastaSubtaskDialog from './spastaSubDialog.vue';
 
 const props = defineProps<{
   task: Task;
@@ -13,9 +15,15 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: 'delete', taskId: string): void;
   (e: 'update', updates: Partial<Task>): void;
+  (e: 'update-SubTask', SubTask: SubTask, parentTaskId: string): void;
+  (e: 'create-SubTask', newSubtask: Omit<SubTask, 'id' | 'createdAt' | 'updatedAt'>, parentTaskId: string): void;
 }>();
 
-const showDialog = ref(false);
+const showTaskDialog = ref(false);
+const showSubtaskDialog = ref(false);
+const showSubtasksAccordion = ref(false); // ✅ Accordion toggle
+
+const editingSubtask = ref<SubTask | null>(null);
 
 const priorityClasses = computed(() => {
   switch (props.task.priority) {
@@ -48,24 +56,38 @@ const dueDateFormatted = computed(() => {
   return format(props.task.dueDate, 'MMM dd, yyyy');
 });
 
-// const flowName = computed(() => {
-//   const flow = props.category.flows.find(f => f.id === props.task.flowId);
-//   return flow ? flow.name : '';
-// });
-
 const totalHours = computed(() => {
   return (props.task.timeEntries || []).reduce((sum, entry) => sum + entry.hours, 0);
 });
 
-const handleSave = (updates: Partial<Task>) => {
-  emit('update', updates);
-  showDialog.value = false;
+const createSubTask = () => {
+  editingSubtask.value = null;
+  showSubtaskDialog.value = true;
+};
+
+const editSubTask = (SubTask: SubTask) => {
+  editingSubtask.value = SubTask;
+  showSubtaskDialog.value = true;
 };
 
 const deleteTask = () => {
   if (confirm('Are you sure you want to delete this task?')) {
     emit('delete', props.task.id);
   }
+};
+
+const handleTaskSave = (updates: Partial<Task>) => {
+  emit('update', updates);
+  showTaskDialog.value = false;
+};
+
+const handleSubtaskSave = (SubTask: Omit<SubTask, 'id' | 'createdAt' | 'updatedAt'>) => {
+  if (editingSubtask.value) {
+    emit('update-SubTask', { ...editingSubtask.value, ...SubTask }, props.task.id);
+  } else {
+    emit('create-SubTask', SubTask, props.task.id);
+  }
+  showSubtaskDialog.value = false;
 };
 </script>
 
@@ -92,20 +114,29 @@ const deleteTask = () => {
       
       <div class="flex space-x-1">
         <button 
-          @click.stop="showDialog = true"
+          @click.stop="createSubTask"
+          class="text-text/60 hover:text-success-500 transition-colors duration-150"
+          title="Create Subtask"
+        >
+          ➕
+        </button>
+        <button 
+          @click.stop="showTaskDialog = true"
           class="text-text/60 hover:text-primary-500 transition-colors duration-150"
+          title="Edit Task"
         >
           ✎
         </button>
         <button 
           @click.stop="deleteTask"
           class="text-text/60 hover:text-error-500 transition-colors duration-150"
+          title="Delete Task"
         >
           ✕
         </button>
       </div>
     </div>
-    
+
     <!-- Task Details -->
     <div class="mt-3 space-y-2">
       <!-- Progress Bar -->
@@ -123,7 +154,7 @@ const deleteTask = () => {
           <span v-if="task.estimatedHours">/ {{ task.estimatedHours }}h est.</span>
         </span>
       </div>
-      
+
       <div class="flex flex-wrap gap-2 text-xs">
         <span v-if="task.dueDate" class="text-text/60">
           {{ dueDateFormatted }}
@@ -134,15 +165,53 @@ const deleteTask = () => {
         </span>
       </div>
     </div>
-    
-    <!-- Task Dialog -->
+
+    <!-- Subtasks Accordion -->
+    <div v-if="task.subTasks?.length" class="mt-4">
+  <div 
+    class="flex items-center justify-between cursor-pointer text-xs font-medium text-text/70 py-2 hover:text-primary-500"
+    @click="showSubtasksAccordion = !showSubtasksAccordion"
+  >
+    <span>Subtasks ({{ task.subTasks.length }})</span>
+    <span 
+      class="transition-transform"
+      :class="{'rotate-90': showSubtasksAccordion}"
+    >▶️</span>
+  </div>
+
+  <div v-if="showSubtasksAccordion" class="mt-2 space-y-2 pl-2">
+    <ul class="space-y-1">
+      <li 
+        v-for="SubTask in task.subTasks" 
+        :key="SubTask.id"
+        class="flex items-center justify-between bg-gray-50 dark:bg-gray-800 p-2 rounded text-xs cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
+        @click.stop="editSubTask(SubTask)"
+      >
+        <span>{{ SubTask.title }}</span>
+        <span class="text-gray-400">{{ SubTask.completed ? '✅' : '⏳' }}</span>
+      </li>
+    </ul>
+  </div>
+</div>
+
+    <!-- Task Edit Dialog -->
     <SpastaTaskDialog
-      v-if="showDialog"
-      :is-open="showDialog"
+      v-if="showTaskDialog"
+      :is-open="showTaskDialog"
       :category="category"
       :task="task"
-      @close="showDialog = false"
-      @save="handleSave"
+      @close="showTaskDialog = false"
+      @save="handleTaskSave"
+    />
+
+    <!-- Subtask Create/Edit Dialog -->
+    <SpastaSubtaskDialog
+      v-if="showSubtaskDialog"
+      :is-open="showSubtaskDialog"
+      :parent-task="task"
+      :SubTask="editingSubtask || undefined"
+      @close="showSubtaskDialog = false"
+      @save="handleSubtaskSave"
     />
   </div>
 </template>

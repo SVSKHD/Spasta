@@ -10,6 +10,7 @@ import SpastaTaskBoard from './spastaTaskBoard.vue';
 import SpastaTaskCard from './spastaTaskCard.vue';
 import SpastaTaskDialog from './spastaTaskDialog.vue';
 import SpastaTaskQuickView from './spastaTaskQuickView.vue';
+import spastaSubDialog from './spastaSubDialog.vue';
 
 export default {
   install: (app: App) => {
@@ -24,5 +25,6 @@ export default {
     app.component('SpastaTaskCard', SpastaTaskCard);
     app.component('SpastaTaskDialog', SpastaTaskDialog);
     app.component('SpastaTaskQuickView', SpastaTaskQuickView);
+    app.component('SpastaSubDialog', spastaSubDialog);
   }
 };

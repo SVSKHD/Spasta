@@ -15,7 +15,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../lib/firebase/config';
 import { useAuthStore } from './authStore';
-
+import { useSubTaskStore, type SubTask } from '../store/subTaskStore'; // ✅
 export interface Task {
   id: string;
   title: string;
@@ -40,7 +40,10 @@ export interface Task {
     hours: number;
     description?: string;
   }[];
+  subTasks?: SubTask[]; // ✅ ADD THIS
 }
+
+
 
 interface TaskState {
   tasks: Task[];
@@ -94,30 +97,54 @@ export const useTaskStore = defineStore('task', {
   actions: {
     async fetchTasks() {
       const authStore = useAuthStore();
+      const subTaskStore = useSubTaskStore();
+    
       if (!authStore.user?.id) return;
-      
+    
       this.isLoading = true;
       try {
         const tasksRef = collection(db, 'tasks');
         const q = query(tasksRef, where('userId', '==', authStore.user.id));
         const querySnapshot = await getDocs(q);
-        
-        this.tasks = querySnapshot.docs.map(doc => {
+    
+        const loadedTasks: Task[] = querySnapshot.docs.map(doc => {
           const data = doc.data();
+    
           return {
             id: doc.id,
-            ...data,
-            createdAt: (data.createdAt as Timestamp).toDate(),
-            updatedAt: (data.updatedAt as Timestamp).toDate(),
+            title: data.title,
+            description: data.description || '',
+            categoryId: data.categoryId,
+            flowId: data.flowId,
             dueDate: data.dueDate ? (data.dueDate as Timestamp).toDate() : undefined,
             startDate: data.startDate ? (data.startDate as Timestamp).toDate() : undefined,
             completedDate: data.completedDate ? (data.completedDate as Timestamp).toDate() : undefined,
-            timeEntries: data.timeEntries?.map((entry: any) => ({
+            priority: data.priority || 'medium',
+            tags: data.tags || [],
+            userId: data.userId,
+            createdAt: (data.createdAt as Timestamp)?.toDate?.() || new Date(),
+            updatedAt: (data.updatedAt as Timestamp)?.toDate?.() || new Date(),
+            progress: data.progress || 0,
+            estimatedHours: data.estimatedHours || 0,
+            actualHours: data.actualHours || 0,
+            isRecurring: data.isRecurring || false,
+            recurringPeriod: data.recurringPeriod || undefined,
+            timeEntries: (data.timeEntries || []).map((entry: any) => ({
               ...entry,
               date: (entry.date as Timestamp).toDate()
-            }))
+            })),
+            subTasks: [] // subTasks we attach later
           } as Task;
         });
+    
+        await subTaskStore.fetchSubTasks();
+    
+        loadedTasks.forEach(task => {
+          task.subTasks = subTaskStore.subTasksByTask(task.id);
+        });
+    
+        this.tasks = loadedTasks;
+    
       } catch (error) {
         console.error('Error fetching tasks:', error);
         throw error;

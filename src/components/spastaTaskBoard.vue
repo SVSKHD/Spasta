@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useTaskStore, type Task } from '../store/taskStore';
+import {useSubTaskStore} from '../store/subTaskStore';
 import { type Category } from '../store/categoryStore';
 import { useToastStore } from '../store/toastStore';
 import { useAuthStore } from '../store/authStore';
@@ -9,18 +10,49 @@ import { soundManager } from '../utils/sounds';
 import SpastaTaskCard from './spastaTaskCard.vue';
 import SpastaTaskDialog from './spastaTaskDialog.vue';
 
+
 const props = defineProps<{
   category: Category;
   tasks: Task[];
 }>();
 
 const taskStore = useTaskStore();
+const subTaskStore = useSubTaskStore();
 const toastStore = useToastStore();
 const authStore = useAuthStore();
 const showDialog = ref(false);
 const activeDropzone = ref<string | null>(null);
 const draggedTask = ref<Task | null>(null);
 const draggedElement = ref<HTMLElement | null>(null);
+
+
+const handleCreateSubtask = async (data:any) => {
+  try {
+    if (!authStore.user?.id) {
+      toastStore.showToast('You must be logged in to create tasks.', 'error');
+      return;
+    }
+    await subTaskStore.addSubTask({
+      taskId: data.parentTaskId,
+      title: data.title,
+      description: data.description,
+      completed: false,
+      actualHours: 0,
+      timeEntries: []
+    });
+    showDialog.value = false;
+    toastStore.showToast('Sub Task created successfully! 🎯', 'success');
+    triggerConfetti();
+  } catch (error) {
+    console.error('Error adding task:', error);
+    toastStore.showToast('Failed to create task', 'error');
+  }
+};
+
+
+
+
+
 
 // Group tasks by flow
 const tasksByFlow = computed(() => {
@@ -253,6 +285,7 @@ const onDrop = async (event: DragEvent, flowId: string) => {
             :task="task"
             :category="category"
             draggable="true"
+            @create-subtask="handleCreateSubtask"
             @dragstart="onDragStart($event, task)"
             @dragend="onDragEnd"
             @delete="handleDeleteTask(task.id)"
@@ -280,6 +313,7 @@ const onDrop = async (event: DragEvent, flowId: string) => {
       @close="showDialog = false"
       @save="handleAddTask"
     />
+
   </div>
 </template>
 

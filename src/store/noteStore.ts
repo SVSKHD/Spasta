@@ -24,9 +24,11 @@ export interface NoteTask {
 export interface Note {
   id: string;
   title: string;
-  description?: string;
+  content: string;
+  categoryId: string;
   tags?: string[];
   keywords?: string[];
+  remarks?: string;
   tasks?: NoteTask[];
   userId: string;
   createdAt: Date;
@@ -45,13 +47,15 @@ export const useNoteStore = defineStore('note', {
   }),
   
   getters: {
-    notesByTag: (state) => (tag: string) => {
-      return state.notes.filter(note => note.tags?.includes(tag));
+    // Get notes by categoryId
+    notesByCategory: (state) => (categoryId: string) => {
+      return state.notes.filter(note => note.categoryId === categoryId);
     },
     totalNotes: (state) => state.notes.length,
   },
   
   actions: {
+    // Fetch ALL notes for user
     async fetchNotes() {
       const authStore = useAuthStore();
       if (!authStore.user?.id) return;
@@ -67,8 +71,8 @@ export const useNoteStore = defineStore('note', {
           return {
             id: doc.id,
             ...data,
-            createdAt: (data.createdAt as Timestamp).toDate(),
-            updatedAt: (data.updatedAt as Timestamp).toDate(),
+            createdAt: (data.createdAt as Timestamp)?.toDate?.() || new Date(),
+            updatedAt: (data.updatedAt as Timestamp)?.toDate?.() || new Date(),
             tasks: data.tasks || []
           } as Note;
         });
@@ -79,7 +83,41 @@ export const useNoteStore = defineStore('note', {
         this.isLoading = false;
       }
     },
+
+    // Fetch notes by categoryId
+    async fetchNotesByCategory(categoryId: string) {
+      const authStore = useAuthStore();
+      if (!authStore.user?.id) return;
+
+      this.isLoading = true;
+      try {
+        const notesRef = collection(db, 'notes');
+        const q = query(
+          notesRef, 
+          where('userId', '==', authStore.user.id),
+          where('categoryId', '==', categoryId)
+        );
+        const querySnapshot = await getDocs(q);
+        
+        this.notes = querySnapshot.docs.map(doc => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            ...data,
+            createdAt: (data.createdAt as Timestamp)?.toDate?.() || new Date(),
+            updatedAt: (data.updatedAt as Timestamp)?.toDate?.() || new Date(),
+            tasks: data.tasks || []
+          } as Note;
+        });
+      } catch (error) {
+        console.error('Error fetching notes by category:', error);
+        throw error;
+      } finally {
+        this.isLoading = false;
+      }
+    },
     
+    // Add new note
     async addNote(note: Omit<Note, 'id' | 'userId' | 'createdAt' | 'updatedAt'>) {
       const authStore = useAuthStore();
       if (!authStore.user?.id) throw new Error('User not authenticated');
@@ -109,6 +147,7 @@ export const useNoteStore = defineStore('note', {
       }
     },
     
+    // Update existing note
     async updateNote(noteId: string, updates: Partial<Omit<Note, 'id' | 'userId' | 'createdAt' | 'updatedAt'>>) {
       const authStore = useAuthStore();
       if (!authStore.user?.id) throw new Error('User not authenticated');
@@ -146,6 +185,7 @@ export const useNoteStore = defineStore('note', {
       }
     },
     
+    // Delete note
     async deleteNote(noteId: string) {
       const authStore = useAuthStore();
       if (!authStore.user?.id) throw new Error('User not authenticated');
