@@ -1,54 +1,54 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import { useAuthStore } from '../store/authStore';
+import { createRouter, createWebHistory } from "vue-router";
+import { useAuthStore } from "../store/authStore";
 
 // Layouts
-import DashboardLayout from '../layouts/DashboardLayout.vue';
+import DashboardLayout from "../layouts/DashboardLayout.vue";
 
 // Pages
-const Dashboard = () => import('../pages/Dashboard.vue');
-const Calendar = () => import('../pages/Calendar.vue');
-const Fitness = () => import('../pages/Fitness.vue');
-const Expenses = () => import('../pages/Expenses.vue');
-const Chat = () => import('../pages/Chat.vue');
-const notes = () => import('../pages/notes.vue');
+const Dashboard = () => import("../pages/Dashboard.vue");
+const Calendar = () => import("../pages/Calendar.vue");
+const Fitness = () => import("../pages/Fitness.vue");
+const Expenses = () => import("../pages/Expenses.vue");
+const Chat = () => import("../pages/Chat.vue");
+const notes = () => import("../pages/notes.vue");
 // const Trading = () => import('../pages/Trading.vue');
-const Login = () => import('../pages/Login.vue');
+const Login = () => import("../pages/Login.vue");
 // const Register = () => import('../pages/Register.vue');
 
 const routes = [
   {
-    path: '/',
+    path: "/",
     component: DashboardLayout,
     meta: { requiresAuth: true },
     children: [
       {
-        path: '',
-        name: 'dashboard',
+        path: "",
+        name: "dashboard",
         component: Dashboard,
       },
       {
-        path: '/calendar',
-        name: 'calendar',
+        path: "/calendar",
+        name: "calendar",
         component: Calendar,
       },
       {
-        path: '/fitness',
-        name: 'fitness',
+        path: "/fitness",
+        name: "fitness",
         component: Fitness,
       },
       {
-        path: '/expenses',
-        name: 'expenses',
+        path: "/expenses",
+        name: "expenses",
         component: Expenses,
       },
       {
-        path: '/chat',
-        name: 'chat',
+        path: "/chat",
+        name: "chat",
         component: Chat,
       },
       {
-        path: '/notes',
-        name: 'notes',
+        path: "/notes",
+        name: "notes",
         component: notes,
       },
       // {
@@ -59,8 +59,8 @@ const routes = [
     ],
   },
   {
-    path: '/login',
-    name: 'login',
+    path: "/login",
+    name: "login",
     component: Login,
     meta: { guest: true },
   },
@@ -80,13 +80,13 @@ const router = createRouter({
 // Navigation guard
 router.beforeEach((to, _from, next) => {
   const authStore = useAuthStore();
-  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-  const isGuestRoute = to.matched.some(record => record.meta.guest);
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+  const isGuestRoute = to.matched.some((record) => record.meta.guest);
 
   if (requiresAuth && !authStore.isAuthenticated) {
-    next('/login');
+    next("/login");
   } else if (isGuestRoute && authStore.isAuthenticated) {
-    next('/');
+    next("/");
   } else {
     next();
   }

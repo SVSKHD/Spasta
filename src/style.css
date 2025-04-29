@@ -1,11 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: "JetBrains Mono", monospace;
   line-height: 1.5;
   font-weight: 400;
   font-synthesis: none;
@@ -20,7 +20,7 @@
     --color-text: 17 24 39;
     --color-border: 229 231 235;
     --color-card: 255 255 255;
-    
+
     --color-primary-50: 239 246 255;
     --color-primary-100: 219 234 254;
     --color-primary-200: 191 219 254;
@@ -54,7 +54,7 @@
     --color-text: 243 244 246;
     --color-border: 55 65 81;
     --color-card: 31 41 55;
-    
+
     --color-primary-50: 30 58 138;
     --color-primary-100: 30 64 175;
     --color-primary-200: 29 78 216;
@@ -111,7 +111,7 @@
   .scrollable-row {
     @apply flex overflow-x-auto gap-4 pb-4 px-4 -mx-4;
     scrollbar-width: thin;
-    scrollbar-color: theme('colors.primary.200') transparent;
+    scrollbar-color: theme("colors.primary.200") transparent;
   }
 
   .scrollable-row::-webkit-scrollbar {

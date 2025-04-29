@@ -1,4 +1,4 @@
-import confetti from 'canvas-confetti';
+import confetti from "canvas-confetti";
 
 export const triggerConfetti = () => {
   const duration = 3000;
@@ -21,12 +21,12 @@ export const triggerConfetti = () => {
     confetti({
       ...defaults,
       particleCount,
-      origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+      origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
     });
     confetti({
       ...defaults,
       particleCount,
-      origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+      origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
     });
   }, 250);
 };

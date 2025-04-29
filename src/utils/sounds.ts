@@ -5,13 +5,13 @@ export class SoundManager {
 
   private constructor() {
     this.sounds = {
-      drag: new Audio('/sounds/drag.mp3'),
-      drop: new Audio('/sounds/drop.mp3'),
-      complete: new Audio('/sounds/complete.mp3')
+      drag: new Audio("/sounds/drag.mp3"),
+      drop: new Audio("/sounds/drop.mp3"),
+      complete: new Audio("/sounds/complete.mp3"),
     };
 
     // Preload sounds
-    Object.values(this.sounds).forEach(sound => {
+    Object.values(this.sounds).forEach((sound) => {
       sound.load();
       sound.volume = 0.5; // Set default volume to 50%
     });
@@ -24,14 +24,14 @@ export class SoundManager {
     return SoundManager.instance;
   }
 
-  public play(soundName: 'drag' | 'drop' | 'complete'): void {
+  public play(soundName: "drag" | "drop" | "complete"): void {
     if (!this.enabled) return;
 
     const sound = this.sounds[soundName];
     if (sound) {
       sound.currentTime = 0;
-      sound.play().catch(error => {
-        console.warn('Sound playback failed:', error);
+      sound.play().catch((error) => {
+        console.warn("Sound playback failed:", error);
       });
     }
   }
@@ -41,7 +41,7 @@ export class SoundManager {
   }
 
   public setVolume(volume: number): void {
-    Object.values(this.sounds).forEach(sound => {
+    Object.values(this.sounds).forEach((sound) => {
       sound.volume = Math.max(0, Math.min(1, volume));
     });
   }

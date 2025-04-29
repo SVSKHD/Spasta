@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
-import { useAuthStore } from '../store/authStore';
-import { useDark, useToggle, useStorage } from '@vueuse/core';
-import { LogOut, Menu, ChevronLeft, Sun, Moon } from 'lucide-vue-next';
-import SpastaGreetings from '../components/spastaGreetings.vue';
+import { ref, computed, onMounted, onUnmounted, watch } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import { useAuthStore } from "../store/authStore";
+import { useDark, useToggle, useStorage } from "@vueuse/core";
+import { LogOut, Menu, ChevronLeft, Sun, Moon } from "lucide-vue-next";
+import SpastaGreetings from "../components/spastaGreetings.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -15,21 +15,21 @@ const isDark = useDark();
 const toggleDark = useToggle(isDark);
 const currentTime = ref(new Date());
 const timeInterval = ref<number | null>(null);
-const userThemePreference = useStorage('theme-preference', 'auto');
+const userThemePreference = useStorage("theme-preference", "auto");
 
 const currentUser = computed(() => authStore.user);
 // const currentRouteName = computed(() => route.name);
 const userName = computed(() => {
-  if (!currentUser.value?.email) return '';
-  return currentUser.value.email.split('@')[0];
+  if (!currentUser.value?.email) return "";
+  return currentUser.value.email.split("@")[0];
 });
 
 const formattedTime = computed(() => {
-  return new Intl.DateTimeFormat('en-US', {
-    hour: 'numeric',
-    minute: 'numeric',
-    second: 'numeric',
-    hour12: true
+  return new Intl.DateTimeFormat("en-US", {
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    hour12: true,
   }).format(currentTime.value);
 });
 
@@ -47,12 +47,12 @@ const toggleSidebar = () => {
 
 const handleLogout = async () => {
   await authStore.signOut();
-  router.push('/login');
+  router.push("/login");
 };
 
 const checkAndUpdateTheme = () => {
-  if (userThemePreference.value !== 'auto') return;
-  
+  if (userThemePreference.value !== "auto") return;
+
   const hour = currentTime.value.getHours();
   if (hour >= 18 || hour < 6) {
     if (!isDark.value) {
@@ -66,24 +66,24 @@ const checkAndUpdateTheme = () => {
 };
 
 const handleThemeChange = () => {
-  if (userThemePreference.value === 'auto') {
-    userThemePreference.value = isDark.value ? 'dark' : 'light';
+  if (userThemePreference.value === "auto") {
+    userThemePreference.value = isDark.value ? "dark" : "light";
   } else {
     toggleDark();
-    userThemePreference.value = isDark.value ? 'dark' : 'light';
+    userThemePreference.value = isDark.value ? "dark" : "light";
   }
 };
 
 const toggleAutoTheme = () => {
-  userThemePreference.value = 'auto';
+  userThemePreference.value = "auto";
   checkAndUpdateTheme();
 };
 
 watch(userThemePreference, (newValue) => {
-  if (newValue === 'auto') {
+  if (newValue === "auto") {
     checkAndUpdateTheme();
   } else {
-    isDark.value = newValue === 'dark';
+    isDark.value = newValue === "dark";
   }
 });
 
@@ -105,25 +105,25 @@ onUnmounted(() => {
 });
 
 const navigation = [
-  { name: 'Dashboard', path: '/', icon: '📋' },
-  { name: 'Calendar', path: '/calendar', icon: '🗓️' },
-  { name: 'Fitness', path: '/fitness', icon: '🏋️' },
-  { name: 'Expenses', path: '/expenses', icon: '💸' },
-  { name: 'Trading', path: '/trading', icon: '📈' },
-  { name: 'Notes', path: '/notes', icon: '📝' },
-  { name: 'Chat', path: '/chat', icon: '💬' },
+  { name: "Dashboard", path: "/", icon: "📋" },
+  { name: "Calendar", path: "/calendar", icon: "🗓️" },
+  { name: "Fitness", path: "/fitness", icon: "🏋️" },
+  { name: "Expenses", path: "/expenses", icon: "💸" },
+  { name: "Trading", path: "/trading", icon: "📈" },
+  { name: "Notes", path: "/notes", icon: "📝" },
+  { name: "Chat", path: "/chat", icon: "💬" },
 ];
 </script>
 
 <template>
-  <div :class="{ 'dark': isDark }" class="min-h-screen flex flex-col">
+  <div :class="{ dark: isDark }" class="min-h-screen flex flex-col">
     <!-- Top Navigation Bar -->
     <header class="bg-card shadow-sm z-10 border-b border-border">
       <div class="px-6">
         <div class="flex justify-between h-16">
           <div class="flex items-center">
             <!-- Sidebar Toggle -->
-            <button 
+            <button
               @click="toggleSidebar"
               type="button"
               class="p-2 rounded-md text-text/60 hover:text-text hover:bg-bg focus:outline-none"
@@ -131,13 +131,15 @@ const navigation = [
               <Menu v-if="isSidebarCollapsed" class="w-5 h-5" />
               <ChevronLeft v-else class="w-5 h-5" />
             </button>
-            
+
             <!-- Logo -->
             <div class="flex-shrink-0 flex items-center ml-4">
-              <span class="text-xl font-bold text-primary-500">spasta.online</span>
+              <span class="text-xl font-bold text-primary-500"
+                >spasta.online</span
+              >
             </div>
           </div>
-          
+
           <!-- Right side controls -->
           <div class="flex items-center space-x-4">
             <!-- Current Time -->
@@ -147,7 +149,7 @@ const navigation = [
 
             <!-- Theme Controls -->
             <div class="flex items-center space-x-2">
-              <button 
+              <button
                 @click="handleThemeChange"
                 class="p-2 rounded-md text-text/60 hover:text-text hover:bg-bg focus:outline-none"
                 :title="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
@@ -158,7 +160,11 @@ const navigation = [
               <button
                 @click="toggleAutoTheme"
                 class="text-xs px-2 py-1 rounded-md"
-                :class="userThemePreference === 'auto' ? 'bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-100' : 'text-text/60 hover:text-text hover:bg-bg'"
+                :class="
+                  userThemePreference === 'auto'
+                    ? 'bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-100'
+                    : 'text-text/60 hover:text-text hover:bg-bg'
+                "
               >
                 Auto
               </button>
@@ -167,10 +173,12 @@ const navigation = [
             <!-- User Menu -->
             <div class="relative">
               <div class="flex items-center space-x-3">
-                <div class="h-8 w-8 rounded-full bg-primary-200 flex items-center justify-center text-primary-700">
-                  {{ currentUser?.email?.charAt(0).toUpperCase() || 'U' }}
+                <div
+                  class="h-8 w-8 rounded-full bg-primary-200 flex items-center justify-center text-primary-700"
+                >
+                  {{ currentUser?.email?.charAt(0).toUpperCase() || "U" }}
                 </div>
-                <button 
+                <button
                   @click="handleLogout"
                   class="flex items-center space-x-2 px-3 py-2 text-sm text-text/60 hover:text-text hover:bg-bg rounded-md"
                 >
@@ -186,23 +194,25 @@ const navigation = [
 
     <div class="flex flex-1 overflow-hidden">
       <!-- Sidebar -->
-      <div 
+      <div
         class="bg-card border-r border-border transition-all duration-300"
         :class="isSidebarCollapsed ? 'w-16' : 'w-64'"
       >
         <nav class="mt-5 px-2 space-y-1">
-          <router-link 
-            v-for="item in navigation" 
-            :key="item.name" 
-            :to="item.path" 
+          <router-link
+            v-for="item in navigation"
+            :key="item.name"
+            :to="item.path"
             :class="[
-              route.path === item.path ? 'bg-primary-50 text-primary-700 dark:bg-primary-900/50 dark:text-primary-100' : 'text-text/60 hover:bg-bg hover:text-text',
-              'group flex items-center px-2 py-2 text-sm font-medium rounded-md'
+              route.path === item.path
+                ? 'bg-primary-50 text-primary-700 dark:bg-primary-900/50 dark:text-primary-100'
+                : 'text-text/60 hover:bg-bg hover:text-text',
+              'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
             ]"
           >
             <span class="text-xl">{{ item.icon }}</span>
-            <span 
-              v-if="!isSidebarCollapsed" 
+            <span
+              v-if="!isSidebarCollapsed"
               class="ml-3 transition-opacity duration-300"
             >
               {{ item.name }}

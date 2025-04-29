@@ -5,6 +5,7 @@ A modern, feature-rich application built with Vue 3, TypeScript, and Firebase, d
 ## Features
 
 ### 🎯 Task Management
+
 - Kanban board with customizable columns
 - Drag and drop task organization
 - Priority levels (High, Medium, Low)
@@ -17,6 +18,7 @@ A modern, feature-rich application built with Vue 3, TypeScript, and Firebase, d
 - Estimated vs actual time tracking
 
 ### 📅 Calendar View
+
 - Monthly calendar overview
 - Visual task distribution
 - Drag and drop task scheduling
@@ -25,6 +27,7 @@ A modern, feature-rich application built with Vue 3, TypeScript, and Firebase, d
 - Quick task preview
 
 ### 💪 Fitness Tracker
+
 - Workout logging
 - Exercise details (sets, reps, weight)
 - Progress tracking
@@ -35,6 +38,7 @@ A modern, feature-rich application built with Vue 3, TypeScript, and Firebase, d
 - Exercise categorization
 
 ### 💰 Expense Management
+
 - Transaction logging
 - Category-based organization
 - Recurring expenses
@@ -45,6 +49,7 @@ A modern, feature-rich application built with Vue 3, TypeScript, and Firebase, d
 - Currency formatting
 
 ### 📈 Trading Journal
+
 - Trade entry logging
 - Profit/Loss tracking
 - Win rate calculation
@@ -55,6 +60,7 @@ A modern, feature-rich application built with Vue 3, TypeScript, and Firebase, d
 - Trade history
 
 ### 💬 Team Chat
+
 - Real-time messaging
 - User identification
 - Emoji support
@@ -64,6 +70,7 @@ A modern, feature-rich application built with Vue 3, TypeScript, and Firebase, d
 - Message formatting
 
 ### 🎨 User Interface
+
 - Dark/Light mode
 - Responsive design
 - Smooth animations
@@ -74,6 +81,7 @@ A modern, feature-rich application built with Vue 3, TypeScript, and Firebase, d
 - Mobile-friendly
 
 ### 🔐 Authentication
+
 - Email authentication
 - User profiles
 - Secure data access
@@ -81,6 +89,7 @@ A modern, feature-rich application built with Vue 3, TypeScript, and Firebase, d
 - Session management
 
 ### 🎉 Extra Features
+
 - Confetti celebrations
 - Sound effects
 - Activity tracking

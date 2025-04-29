@@ -1,14 +1,18 @@
 <template>
   <div>
     <h1 class="text-2xl font-bold text-text mb-6">Task Dashboard</h1>
-    
+
     <div v-if="isLoading" class="flex justify-center items-center h-64">
-      <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500"></div>
+      <div
+        class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500"
+      ></div>
     </div>
-    
+
     <div v-else class="space-y-6">
       <!-- Categories List - Horizontal Scrolling -->
-      <div class="overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-primary-200 scrollbar-track-transparent">
+      <div
+        class="overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-primary-200 scrollbar-track-transparent"
+      >
         <div class="flex space-x-4 min-w-max">
           <SpastaCategoryList
             :categories="categories"
@@ -20,15 +24,27 @@
       </div>
 
       <!-- Task Statistics -->
-      <div v-if="selectedCategory" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div
+        v-if="selectedCategory"
+        class="grid grid-cols-1 md:grid-cols-4 gap-4"
+      >
         <!-- Overall Progress -->
         <div class="card bg-primary-500/10 dark:bg-primary-500/20">
           <div class="flex items-center justify-between mb-2">
-            <h3 class="text-sm font-medium text-primary-700 dark:text-primary-300">Overall Progress</h3>
-            <span class="text-xl font-bold text-primary-700 dark:text-primary-300">{{ taskStats.progress }}%</span>
+            <h3
+              class="text-sm font-medium text-primary-700 dark:text-primary-300"
+            >
+              Overall Progress
+            </h3>
+            <span
+              class="text-xl font-bold text-primary-700 dark:text-primary-300"
+              >{{ taskStats.progress }}%</span
+            >
           </div>
-          <div class="w-full bg-primary-200 dark:bg-primary-700/50 rounded-full h-2">
-            <div 
+          <div
+            class="w-full bg-primary-200 dark:bg-primary-700/50 rounded-full h-2"
+          >
+            <div
               class="bg-primary-600 dark:bg-primary-400 h-2 rounded-full transition-all duration-300"
               :style="{ width: `${taskStats.progress}%` }"
             ></div>
@@ -37,10 +53,16 @@
 
         <!-- Time Tracking -->
         <div class="card bg-success-500/10 dark:bg-success-500/20">
-          <h3 class="text-sm font-medium text-success-700 dark:text-success-300 mb-2">Time Spent</h3>
+          <h3
+            class="text-sm font-medium text-success-700 dark:text-success-300 mb-2"
+          >
+            Time Spent
+          </h3>
           <div class="text-xl font-bold text-success-700 dark:text-success-300">
             {{ taskStats.totalHours }}h
-            <span class="text-sm font-normal text-success-600 dark:text-success-300">
+            <span
+              class="text-sm font-normal text-success-600 dark:text-success-300"
+            >
               / {{ taskStats.estimatedHours }}h est.
             </span>
           </div>
@@ -48,34 +70,56 @@
 
         <!-- Priority Distribution -->
         <div class="card bg-warning-500/10 dark:bg-warning-500/20">
-          <h3 class="text-sm font-medium text-warning-700 dark:text-warning-300 mb-2">Priority Tasks</h3>
+          <h3
+            class="text-sm font-medium text-warning-700 dark:text-warning-300 mb-2"
+          >
+            Priority Tasks
+          </h3>
           <div class="space-y-1">
             <div class="flex justify-between items-center">
-              <span class="text-sm text-warning-600 dark:text-warning-300">High</span>
-              <span class="font-bold text-warning-700 dark:text-warning-300">{{ taskStats.byPriority.high }}</span>
+              <span class="text-sm text-warning-600 dark:text-warning-300"
+                >High</span
+              >
+              <span class="font-bold text-warning-700 dark:text-warning-300">{{
+                taskStats.byPriority.high
+              }}</span>
             </div>
             <div class="flex justify-between items-center">
-              <span class="text-sm text-warning-600 dark:text-warning-300">Medium</span>
-              <span class="font-bold text-warning-700 dark:text-warning-300">{{ taskStats.byPriority.medium }}</span>
+              <span class="text-sm text-warning-600 dark:text-warning-300"
+                >Medium</span
+              >
+              <span class="font-bold text-warning-700 dark:text-warning-300">{{
+                taskStats.byPriority.medium
+              }}</span>
             </div>
             <div class="flex justify-between items-center">
-              <span class="text-sm text-warning-600 dark:text-warning-300">Low</span>
-              <span class="font-bold text-warning-700 dark:text-warning-300">{{ taskStats.byPriority.low }}</span>
+              <span class="text-sm text-warning-600 dark:text-warning-300"
+                >Low</span
+              >
+              <span class="font-bold text-warning-700 dark:text-warning-300">{{
+                taskStats.byPriority.low
+              }}</span>
             </div>
           </div>
         </div>
 
         <!-- Flow Distribution -->
         <div class="card bg-info-500/10 dark:bg-info-500/20">
-          <h3 class="text-sm font-medium text-info-700 dark:text-info-300 mb-2">Task Distribution</h3>
+          <h3 class="text-sm font-medium text-info-700 dark:text-info-300 mb-2">
+            Task Distribution
+          </h3>
           <div class="space-y-1">
-            <div 
-              v-for="flow in selectedCategory.flows" 
+            <div
+              v-for="flow in selectedCategory.flows"
               :key="flow.id"
               class="flex justify-between items-center"
             >
-              <span class="text-sm text-info-600 dark:text-info-300">{{ flow.name }}</span>
-              <span class="font-bold text-info-700 dark:text-info-300">{{ taskStats.byFlow[flow.id] || 0 }}</span>
+              <span class="text-sm text-info-600 dark:text-info-300">{{
+                flow.name
+              }}</span>
+              <span class="font-bold text-info-700 dark:text-info-300">{{
+                taskStats.byFlow[flow.id] || 0
+              }}</span>
             </div>
           </div>
         </div>
@@ -89,7 +133,9 @@
           :tasks="filteredTasks"
         />
         <div v-else class="card text-center">
-          <p class="text-text/60">Select or create a category to manage tasks</p>
+          <p class="text-text/60">
+            Select or create a category to manage tasks
+          </p>
         </div>
       </div>
     </div>
@@ -97,13 +143,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
-import { useRouter } from 'vue-router';
-import { useAuthStore } from '../store/authStore';
-import { useCategoryStore, type Category } from '../store/categoryStore';
-import { useTaskStore, type Task } from '../store/taskStore';
-import SpastaCategoryList from '../components/spastaCategoryList.vue';
-import SpastaTaskBoard from '../components/spastaTaskBoard.vue';
+import { ref, onMounted, computed } from "vue";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "../store/authStore";
+import { useCategoryStore, type Category } from "../store/categoryStore";
+import { useTaskStore, type Task } from "../store/taskStore";
+import SpastaCategoryList from "../components/spastaCategoryList.vue";
+import SpastaTaskBoard from "../components/spastaTaskBoard.vue";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -111,16 +157,18 @@ const categoryStore = useCategoryStore();
 const taskStore = useTaskStore();
 
 const isLoading = ref(true);
-const selectedCategoryId = ref<string>('');
+const selectedCategoryId = ref<string>("");
 
-const categories = computed<Category[]>(() => categoryStore.categories.sort((a, b) => a.name.localeCompare(b.name)));
+const categories = computed<Category[]>(() =>
+  categoryStore.categories.sort((a, b) => a.name.localeCompare(b.name)),
+);
 
 const selectedCategory = computed<Category | undefined>(() => {
-  return categories.value.find(cat => cat.id === selectedCategoryId.value);
+  return categories.value.find((cat) => cat.id === selectedCategoryId.value);
 });
 
 const allTasks = computed<Task[]>(() => {
-  return taskStore.tasks.map(t => {
+  return taskStore.tasks.map((t) => {
     if ((t as any).data) {
       const { data, id, userId, createdAt, updatedAt } = t as any;
       return { id, userId, createdAt, updatedAt, ...(data as object) } as Task;
@@ -131,7 +179,9 @@ const allTasks = computed<Task[]>(() => {
 
 const filteredTasks = computed<Task[]>(() => {
   if (!selectedCategoryId.value) return [];
-  return allTasks.value.filter(t => t.categoryId === selectedCategoryId.value);
+  return allTasks.value.filter(
+    (t) => t.categoryId === selectedCategoryId.value,
+  );
 });
 
 const taskStats = computed(() => {
@@ -140,15 +190,15 @@ const taskStats = computed(() => {
     byPriority: {
       high: 0,
       medium: 0,
-      low: 0
+      low: 0,
     },
     byFlow: {} as Record<string, number>,
     totalHours: 0,
     estimatedHours: 0,
-    progress: 0
+    progress: 0,
   };
 
-  filteredTasks.value.forEach(task => {
+  filteredTasks.value.forEach((task) => {
     stats.byPriority[task.priority]++;
 
     if (!stats.byFlow[task.flowId]) {
@@ -156,7 +206,10 @@ const taskStats = computed(() => {
     }
     stats.byFlow[task.flowId]++;
 
-    stats.totalHours += (task.timeEntries || []).reduce((sum, entry) => sum + entry.hours, 0);
+    stats.totalHours += (task.timeEntries || []).reduce(
+      (sum, entry) => sum + entry.hours,
+      0,
+    );
     stats.estimatedHours += task.estimatedHours || 0;
 
     stats.progress += task.progress || 0;
@@ -173,12 +226,12 @@ function handleSelectCategory(categoryId: string) {
 
 onMounted(async () => {
   if (!authStore.user) {
-    return router.push('/login');
+    return router.push("/login");
   }
   try {
     await Promise.all([
       categoryStore.fetchCategories(),
-      taskStore.fetchTasks()
+      taskStore.fetchTasks(),
     ]);
     if (categories.value.length) {
       selectedCategoryId.value = categories.value[0].id;

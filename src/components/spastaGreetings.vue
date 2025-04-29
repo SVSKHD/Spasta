@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
-import { Dialog, DialogPanel, DialogTitle } from '@headlessui/vue';
+import { ref, onMounted, computed } from "vue";
+import { Dialog, DialogPanel, DialogTitle } from "@headlessui/vue";
 
 defineProps<{
   userName?: string;
@@ -13,10 +13,10 @@ const inactivityTimeout = 5 * 60 * 1000; // 5 minutes
 
 const greeting = computed(() => {
   const hour = new Date().getHours();
-  if (hour < 12) return 'Good morning';
-  if (hour < 17) return 'Good afternoon';
-  if (hour < 21) return 'Good evening';
-  return 'Time to rest';
+  if (hour < 12) return "Good morning";
+  if (hour < 17) return "Good afternoon";
+  if (hour < 21) return "Good evening";
+  return "Time to rest";
 });
 
 const checkTime = () => {
@@ -41,15 +41,15 @@ const resetActivityTimer = () => {
 onMounted(() => {
   // Check time every minute
   setInterval(checkTime, 60000);
-  
+
   // Check inactivity every minute
   setInterval(checkInactivity, 60000);
-  
+
   // Add activity listeners
-  document.addEventListener('mousemove', resetActivityTimer);
-  document.addEventListener('keydown', resetActivityTimer);
-  document.addEventListener('click', resetActivityTimer);
-  
+  document.addEventListener("mousemove", resetActivityTimer);
+  document.addEventListener("keydown", resetActivityTimer);
+  document.addEventListener("click", resetActivityTimer);
+
   // Initial time check
   checkTime();
 });
@@ -59,31 +59,39 @@ onMounted(() => {
   <div>
     <!-- Greeting Message -->
     <div class="text-lg font-medium text-text mb-6 animate-fade-in">
-      {{ greeting }}{{ userName ? `, ${userName}` : '' }}! 
+      {{ greeting }}{{ userName ? `, ${userName}` : "" }}!
       <span class="text-sm text-text/60">
-        {{ new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) }}
+        {{
+          new Date().toLocaleDateString("en-US", {
+            weekday: "long",
+            month: "long",
+            day: "numeric",
+          })
+        }}
       </span>
     </div>
 
     <!-- Rest Time Dialog -->
-    <Dialog :open="showRestDialog" @close="showRestDialog = false" class="relative z-50">
+    <Dialog
+      :open="showRestDialog"
+      @close="showRestDialog = false"
+      class="relative z-50"
+    >
       <div class="fixed inset-0 bg-black/30" aria-hidden="true" />
-      
+
       <div class="fixed inset-0 flex items-center justify-center p-4">
         <DialogPanel class="w-full max-w-sm rounded-lg bg-card p-6 shadow-xl">
           <DialogTitle class="text-xl font-semibold text-text mb-4">
             Time to Rest 😴
           </DialogTitle>
-          
+
           <p class="text-text/80 mb-4">
-            It's getting late! Consider taking a break and getting some rest. A good night's sleep will help you be more productive tomorrow.
+            It's getting late! Consider taking a break and getting some rest. A
+            good night's sleep will help you be more productive tomorrow.
           </p>
-          
+
           <div class="flex justify-end">
-            <button 
-              @click="showRestDialog = false"
-              class="btn btn-primary"
-            >
+            <button @click="showRestDialog = false" class="btn btn-primary">
               Got it
             </button>
           </div>
@@ -92,24 +100,26 @@ onMounted(() => {
     </Dialog>
 
     <!-- Inactivity Dialog -->
-    <Dialog :open="showInactivityDialog" @close="resetActivityTimer" class="relative z-50">
+    <Dialog
+      :open="showInactivityDialog"
+      @close="resetActivityTimer"
+      class="relative z-50"
+    >
       <div class="fixed inset-0 bg-black/30" aria-hidden="true" />
-      
+
       <div class="fixed inset-0 flex items-center justify-center p-4">
         <DialogPanel class="w-full max-w-sm rounded-lg bg-card p-6 shadow-xl">
           <DialogTitle class="text-xl font-semibold text-text mb-4">
             Still there? 👋
           </DialogTitle>
-          
+
           <p class="text-text/80 mb-4">
-            We noticed you've been inactive for a while. Need a break or just deep in thought?
+            We noticed you've been inactive for a while. Need a break or just
+            deep in thought?
           </p>
-          
+
           <div class="flex justify-end">
-            <button 
-              @click="resetActivityTimer"
-              class="btn btn-primary"
-            >
+            <button @click="resetActivityTimer" class="btn btn-primary">
               I'm here
             </button>
           </div>

@@ -2,7 +2,7 @@
 import { ref, computed } from "vue";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/vue";
 import { type Task } from "../store/taskStore"; // Assume Subtask type exists
-import { type SubTask } from "../store/subTaskStore"; 
+import { type SubTask } from "../store/subTaskStore";
 import { Plus as PlusIcon, Minus as MinusIcon } from "lucide-vue-next";
 
 const props = defineProps<{
@@ -45,18 +45,16 @@ const newSubtask = ref<Omit<SubTask, "id" | "createdAt" | "updatedAt">>({
   timeEntries: props.subtask?.timeEntries ?? [],
 });
 
-
-
 const showTimeEntry = ref(false);
 const newTimeEntry = ref({
   hours: 1,
   description: "Work done on subtask",
-})
+});
 
 const totalHours = computed(() => {
   return (newSubtask.value.timeEntries || []).reduce(
     (sum, entry) => sum + entry.hours,
-    0
+    0,
   );
 });
 
@@ -71,7 +69,9 @@ const addTimeEntry = () => {
     description: newTimeEntry.value.description,
   });
 
-newSubtask.value.actualHours = Number(newSubtask.value.actualHours || 0) + Number(newTimeEntry.value.hours);
+  newSubtask.value.actualHours =
+    Number(newSubtask.value.actualHours || 0) +
+    Number(newTimeEntry.value.hours);
 
   newTimeEntry.value = {
     hours: 1,
