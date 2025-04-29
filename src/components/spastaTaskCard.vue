@@ -91,6 +91,8 @@ const handleTaskSave = (updates: Partial<Task>) => {
 const handleSubtaskSave = (
   SubTask: Omit<SubTask, "id" | "createdAt" | "updatedAt">,
 ) => {
+  console.log("Subtask to save:", SubTask);
+  console.log("Editing subtask:", editingSubtask.value);
   if (editingSubtask.value) {
     emit(
       "update-SubTask",
@@ -204,9 +206,9 @@ const handleSubtaskSave = (
             v-for="SubTask in task.subTasks"
             :key="SubTask.id"
             class="flex items-center justify-between bg-gray-50 dark:bg-gray-800 p-2 rounded text-xs cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
-            @click.stop="editSubTask(SubTask)"
           >
             <span>{{ SubTask.title }}</span>
+            <button @click.stop="editSubTask(SubTask)">✎</button>
             <span class="text-gray-400">{{
               SubTask.completed ? "✅" : "⏳"
             }}</span>

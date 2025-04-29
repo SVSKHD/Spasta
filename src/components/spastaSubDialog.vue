@@ -101,6 +101,7 @@ const handleSubmit = () => {
               <label class="block text-sm font-medium text-gray-700"
                 >Title</label
               >
+              {{ subtask }}
               <input
                 v-model="newSubtask.title"
                 type="text"

@@ -25,6 +25,7 @@ const draggedTask = ref<Task | null>(null);
 const draggedElement = ref<HTMLElement | null>(null);
 
 const handleCreateSubtask = async (data: any) => {
+  console.log(data);
   try {
     if (!authStore.user?.id) {
       toastStore.showToast("You must be logged in to create tasks.", "error");
@@ -288,7 +289,7 @@ const onDrop = async (event: DragEvent, flowId: string) => {
             :task="task"
             :category="category"
             draggable="true"
-            @create-subtask="handleCreateSubtask"
+            @create-sub-task="handleCreateSubtask"
             @dragstart="onDragStart($event, task)"
             @dragend="onDragEnd"
             @delete="handleDeleteTask(task.id)"

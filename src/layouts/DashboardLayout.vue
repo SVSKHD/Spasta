@@ -108,10 +108,11 @@ const navigation = [
   { name: "Dashboard", path: "/", icon: "📋" },
   { name: "Calendar", path: "/calendar", icon: "🗓️" },
   { name: "Fitness", path: "/fitness", icon: "🏋️" },
+  { name: "Goal", path: "/goals", icon: "🥅" },
   { name: "Expenses", path: "/expenses", icon: "💸" },
   { name: "Trading", path: "/trading", icon: "📈" },
   { name: "Notes", path: "/notes", icon: "📝" },
-  { name: "Chat", path: "/chat", icon: "💬" },
+  { name: "Chat", path: "/chat", icon: "💬" }
 ];
 </script>
 
