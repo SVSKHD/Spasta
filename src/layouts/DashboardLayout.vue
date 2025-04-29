@@ -112,7 +112,7 @@ const navigation = [
   { name: "Expenses", path: "/expenses", icon: "💸" },
   { name: "Trading", path: "/trading", icon: "📈" },
   { name: "Notes", path: "/notes", icon: "📝" },
-  { name: "Chat", path: "/chat", icon: "💬" }
+  { name: "Chat", path: "/chat", icon: "💬" },
 ];
 </script>
 
