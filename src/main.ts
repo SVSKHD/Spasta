@@ -9,10 +9,21 @@ import "./style.css";
 // Import global components
 import components from "./components";
 
-const pinia = createPinia();
-const app = createApp(App);
+// 🆕 Import auth store
+import { useAuthStore } from "./store/authStore";
 
-const toastOptions: PluginOptions = {
+const app = createApp(App);
+const pinia = createPinia();
+
+app.use(pinia);
+
+// 🆕 Initialize auth listener *after* using Pinia
+const authStore = useAuthStore();
+authStore.initAuthListener();
+
+app.use(router);
+app.use(components);
+app.use(Toast, {
   position: POSITION.BOTTOM_RIGHT,
   timeout: 3000,
   closeOnClick: true,
@@ -31,10 +42,6 @@ const toastOptions: PluginOptions = {
   toastClassName: "spasta-toast",
   bodyClassName: ["spasta-toast-body"],
   containerClassName: "spasta-toast-container",
-};
+});
 
-app.use(pinia);
-app.use(router);
-app.use(components);
-app.use(Toast, toastOptions);
 app.mount("#app");

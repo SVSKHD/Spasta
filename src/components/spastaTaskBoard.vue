@@ -262,52 +262,56 @@ const onDrop = async (event: DragEvent, flowId: string) => {
       </div>
     </div>
 
-    <!-- Task Board -->
-    <div class="scrollable-row">
-      <div
-        v-for="flow in category.flows"
-        :key="flow.id"
-        class="flow-column bg-bg rounded-md p-3 transition-all duration-150 flex-none w-80"
-        @dragover="onDragOver($event, flow.id)"
-        @dragleave="onDragLeave"
-        @drop="onDrop($event, flow.id)"
-        :class="{
-          'dropzone-active': activeDropzone === flow.id,
-          'is-drop-target': draggedTask && draggedTask.flowId !== flow.id,
-        }"
+  <!-- Task Board -->
+<div class="scrollable-row overflow-x-auto">
+  <div
+    class="flex space-x-4 h-[calc(100vh-250px)] overflow-y-auto pb-4"
+  >
+    <div
+      v-for="flow in category.flows"
+      :key="flow.id"
+      class="flow-column bg-bg rounded-md p-3 flex-none w-80 overflow-y-auto"
+      @dragover="onDragOver($event, flow.id)"
+      @dragleave="onDragLeave"
+      @drop="onDrop($event, flow.id)"
+      :class="{
+        'dropzone-active': activeDropzone === flow.id,
+        'is-drop-target': draggedTask && draggedTask.flowId !== flow.id,
+      }"
+    >
+      <h3 class="font-medium text-text mb-3">{{ flow.name }}</h3>
+
+      <TransitionGroup
+        name="task-list"
+        tag="div"
+        class="space-y-3"
       >
-        <h3 class="font-medium text-text mb-3">{{ flow.name }}</h3>
+        <SpastaTaskCard
+          v-for="task in tasksByFlow[flow.id]"
+          :key="task.id"
+          :task="task"
+          :category="category"
+          draggable="true"
+          @create-sub-task="handleCreateSubtask"
+          @dragstart="onDragStart($event, task)"
+          @dragend="onDragEnd"
+          @delete="handleDeleteTask(task.id)"
+          @update="handleEditTask(task, $event)"
+          class="transform transition-transform duration-150 ease-out cursor-move"
+        />
 
-        <TransitionGroup
-          name="task-list"
-          tag="div"
-          class="space-y-3 min-h-[100px]"
+        <div
+          v-if="!tasksByFlow[flow.id]?.length"
+          :key="'empty-' + flow.id"
+          class="empty-column text-center text-text/40 p-4 border-2 border-dashed border-border/50 rounded-md"
         >
-          <SpastaTaskCard
-            v-for="task in tasksByFlow[flow.id]"
-            :key="task.id"
-            :task="task"
-            :category="category"
-            draggable="true"
-            @create-sub-task="handleCreateSubtask"
-            @dragstart="onDragStart($event, task)"
-            @dragend="onDragEnd"
-            @delete="handleDeleteTask(task.id)"
-            @update="handleEditTask(task, $event)"
-            class="transform transition-transform duration-150 ease-out cursor-move"
-          />
-
-          <div
-            v-if="!tasksByFlow[flow.id]?.length"
-            :key="'empty-' + flow.id"
-            class="empty-column text-center text-text/40 p-4 border-2 border-dashed border-border/50 rounded-md transition-all duration-150"
-            :class="{ 'dropzone-active': activeDropzone === flow.id }"
-          >
-            <p>Drop tasks here</p>
-          </div>
-        </TransitionGroup>
-      </div>
+          <p>Drop tasks here</p>
+        </div>
+      </TransitionGroup>
     </div>
+  </div>
+</div>
+
 
     <!-- Task Dialog -->
     <SpastaTaskDialog
