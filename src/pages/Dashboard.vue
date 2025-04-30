@@ -10,21 +10,33 @@
 
     <div v-else class="space-y-6">
       <!-- Categories List - Horizontal Scrolling -->
-      <div
-        class="overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-primary-200 scrollbar-track-transparent"
-      >
-        <div class="flex space-x-4 min-w-max">
-          <SpastaCategoryList
-            :categories="categories"
-            :selected-category-id="selectedCategoryId"
-            @selectCategory="handleSelectCategory"
-            class="w-full"
-          />
-        </div>
-      </div>
+      <div class="flex justify-end mb-4">
+  <button
+    @click="showSummary = !showSummary"
+    class="text-sm text-primary-600 hover:underline"
+  >
+    {{ showSummary ? "Hide Summary ▲" : "Show Summary ▼" }}
+  </button>
+</div>
 
-      <!-- Task Statistics -->
-      <div
+<Transition name="fade">
+  <div v-if="showSummary">
+    <!-- Categories List -->
+    <div
+      class="overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-primary-200 scrollbar-track-transparent"
+    >
+      <div class="flex space-x-4 min-w-max">
+        <SpastaCategoryList
+          :categories="categories"
+          :selected-category-id="selectedCategoryId"
+          @selectCategory="handleSelectCategory"
+          class="w-full"
+        />
+      </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div
         v-if="selectedCategory"
         class="grid grid-cols-1 md:grid-cols-4 gap-4"
       >
@@ -124,6 +136,16 @@
           </div>
         </div>
       </div>
+  </div>
+</Transition>
+      <div
+        class="overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-primary-200 scrollbar-track-transparent"
+      >
+      
+      </div>
+
+      <!-- Task Statistics -->
+   
 
       <!-- Task Board -->
       <div class="w-full">
@@ -157,6 +179,8 @@ const categoryStore = useCategoryStore();
 const taskStore = useTaskStore();
 
 const isLoading = ref(true);
+const showSummary = ref(true); 
+
 const selectedCategoryId = ref<string>("");
 
 const categories = computed<Category[]>(() =>
