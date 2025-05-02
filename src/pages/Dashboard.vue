@@ -12,10 +12,32 @@
       <!-- Categories List - Horizontal Scrolling -->
       <div class="flex justify-end mb-4">
   <button
-    @click="showSummary = !showSummary"
-    class="text-sm text-primary-600 hover:underline"
+    @click="toggleSummary"
+    class="text-sm text-primary-600 hover:underline flex items-center gap-2"
+    :disabled="isSummaryLoading"
   >
-    {{ showSummary ? "Hide Summary ▲" : "Show Summary ▼" }}
+    <span>{{ showSummary ? "Hide Summary ▲" : "Show Summary ▼" }}</span>
+    <svg
+      v-if="isSummaryLoading"
+      class="w-4 h-4 animate-spin text-primary-600"
+      fill="none"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <circle
+        class="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        stroke-width="4"
+      ></circle>
+      <path
+        class="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+      ></path>
+    </svg>
   </button>
 </div>
 
@@ -180,6 +202,7 @@ const taskStore = useTaskStore();
 
 const isLoading = ref(true);
 const showSummary = ref(true); 
+const isSummaryLoading = ref(false);
 
 const selectedCategoryId = ref<string>("");
 
@@ -246,6 +269,14 @@ const taskStats = computed(() => {
 
 function handleSelectCategory(categoryId: string) {
   selectedCategoryId.value = categoryId;
+}
+
+function toggleSummary() {
+  isSummaryLoading.value = true;
+  setTimeout(() => {
+    showSummary.value = !showSummary.value;
+    isSummaryLoading.value = false;
+  }, 500); // simulate loading
 }
 
 onMounted(async () => {
