@@ -186,7 +186,9 @@ const showDialog = ref(false);
 const isCategoryLoading = ref(false);
 const isGoalAdding = ref(false);
 
-const goalsMap = ref<Record<string, { title: string; description: string; priority: 'high' | 'medium' | 'low' }[]>>({});
+const goalsMap = ref<Record<string, {
+  completed: any; title: string; description: string; priority: 'high' | 'medium' | 'low' 
+}[]>>({});
 
 const goalCategories = computed(() => store.categories.map((c) => c.name));
 
@@ -196,11 +198,12 @@ onMounted(async () => {
   await store.fetchGoals();
 
   // Group goals by category name
-  const grouped: Record<string, { title: string; description: string; priority: "high" | "medium" | "low" }[]> = {};
+  const grouped: Record<string, { completed: boolean; title: string; description: string; priority: "high" | "medium" | "low" }[]> = {};
   for (const category of store.categories) {
     grouped[category.name] = store.goals
       .filter((goal) => goal.categoryId === category.id)
       .map((goal) => ({
+        completed: goal.checklist?.every(item => item.completed) ?? false,
         title: goal.title,
         description: goal.description || "",
         priority: goal.priority || "medium",
@@ -261,6 +264,7 @@ const addGoal = async () => {
     // Remap goals after adding
     const updatedGoals = store.goals.filter((g) => g.categoryId === category.id);
     goalsMap.value[selectedCategory.value] = updatedGoals.map((goal) => ({
+      completed: goal.checklist?.every(item => item.completed) ?? false,
       title: goal.title,
       description: goal.description || "",
       priority: goal.priority || "medium",
