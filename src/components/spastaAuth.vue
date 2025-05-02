@@ -44,7 +44,7 @@ const handleGoogleAuth = async () => {
     <div class="fixed inset-0 flex items-center justify-center p-4">
       <DialogPanel class="w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
         <div class="text-center mb-8">
-          <h1 class="text-2xl font-bold text-primary-600">spasta.io</h1>
+          <h1 class="text-2xl font-bold text-primary-600">spasta.online</h1>
           <p class="text-sm text-gray-500 mt-2">
             Your all-in-one productivity suite
           </p>
