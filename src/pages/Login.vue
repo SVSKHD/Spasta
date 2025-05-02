@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../store/authStore";
 import SpastaAuth from "../components/spastaAuth.vue";
@@ -8,6 +8,12 @@ const router = useRouter();
 const authStore = useAuthStore();
 const showAuthDialog = ref(true);
 const errorMessage = ref("");
+
+onMounted(() => {
+  if (authStore.isAuthenticated) {
+    router.push("/");
+  }
+});
 
 const handleEmailAuth = async (email: string) => {
   try {

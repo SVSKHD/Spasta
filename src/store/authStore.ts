@@ -24,6 +24,24 @@ export const useAuthStore = defineStore("auth", {
 
   actions: {
     initAuthListener() {
+      const savedLogin = localStorage.getItem("spasta-login");
+      const savedUser = localStorage.getItem("spasta-user");
+      const now = new Date();
+      
+      if (savedLogin && savedUser) {
+        const loginTime = new Date(savedLogin);
+        const hoursSince = (now.getTime() - loginTime.getTime()) / (1000 * 60 * 60);
+        if (hoursSince < 24) {
+          this.user = JSON.parse(savedUser);
+          this.isAuthenticated = true;
+          this.isLoading = false;
+          return;
+        } else {
+          localStorage.removeItem("spasta-login");
+          localStorage.removeItem("spasta-user");
+        }
+      }
+
       const auth = getAuth();
       auth.onAuthStateChanged((user) => {
         if (user) {
@@ -34,6 +52,8 @@ export const useAuthStore = defineStore("auth", {
             photoURL: user.photoURL || "",
           };
           this.isAuthenticated = true;
+          localStorage.setItem("spasta-login", new Date().toISOString());
+          localStorage.setItem("spasta-user", JSON.stringify(this.user));
         } else {
           this.user = null;
           this.isAuthenticated = false;
@@ -52,6 +72,9 @@ export const useAuthStore = defineStore("auth", {
           displayName: "Demo User",
         };
         this.isAuthenticated = true;
+
+        localStorage.setItem("spasta-login", new Date().toISOString());
+        localStorage.setItem("spasta-user", JSON.stringify(this.user));
 
         toast.success("Welcome to spasta.io! 🎉");
         return this.user;
@@ -77,6 +100,9 @@ export const useAuthStore = defineStore("auth", {
         };
         this.isAuthenticated = true;
 
+        localStorage.setItem("spasta-login", new Date().toISOString());
+        localStorage.setItem("spasta-user", JSON.stringify(this.user));
+
         toast.success("Successfully signed in with Google! 🎉");
         return this.user;
       } catch (error: any) {
@@ -91,6 +117,10 @@ export const useAuthStore = defineStore("auth", {
       try {
         const auth = getAuth();
         await auth.signOut();
+
+        localStorage.removeItem("spasta-login");
+        localStorage.removeItem("spasta-user");
+
         this.user = null;
         this.isAuthenticated = false;
         toast.success("Successfully signed out! 👋");
