@@ -28,6 +28,7 @@ const showSubtaskDialog = ref(false);
 const showSubtasksAccordion = ref(false); // ✅ Accordion toggle
 
 const editingSubtask = ref<SubTask | null>(null);
+const isSubtaskSaving = ref(false);
 
 const priorityClasses = computed(() => {
   switch (props.task.priority) {
@@ -88,21 +89,20 @@ const handleTaskSave = (updates: Partial<Task>) => {
   showTaskDialog.value = false;
 };
 
-const handleSubtaskSave = (
-  SubTask: Omit<SubTask, "id" | "createdAt" | "updatedAt">,
+const handleSubtaskSave = async (
+  SubTask: Omit<SubTask, "id" | "createdAt" | "updatedAt">
 ) => {
-  console.log("Subtask to save:", SubTask);
-  console.log("Editing subtask:", editingSubtask.value);
-  if (editingSubtask.value) {
-    emit(
-      "update-SubTask",
-      { ...editingSubtask.value, ...SubTask },
-      props.task.id,
-    );
-  } else {
-    emit("create-SubTask", SubTask, props.task.id);
+  isSubtaskSaving.value = true;
+  try {
+    if (editingSubtask.value) {
+      emit("update-SubTask", { ...editingSubtask.value, ...SubTask }, props.task.id);
+    } else {
+      emit("create-SubTask", SubTask, props.task.id);
+    }
+    showSubtaskDialog.value = false;
+  } finally {
+    isSubtaskSaving.value = false;
   }
-  showSubtaskDialog.value = false;
 };
 </script>
 
@@ -232,7 +232,8 @@ const handleSubtaskSave = (
       v-if="showSubtaskDialog"
       :is-open="showSubtaskDialog"
       :parent-task="task"
-      :SubTask="editingSubtask || undefined"
+      :subtask="editingSubtask || undefined"
+      :is-loading="isSubtaskSaving"
       @close="showSubtaskDialog = false"
       @save="handleSubtaskSave"
     />

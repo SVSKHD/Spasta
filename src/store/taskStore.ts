@@ -143,13 +143,14 @@ export const useTaskStore = defineStore("task", {
           } as Task;
         });
 
+        this.tasks = loadedTasks;
+
         await subTaskStore.fetchSubTasks();
 
-        loadedTasks.forEach((task) => {
-          task.subTasks = subTaskStore.subTasksByTask(task.id);
-        });
-
-        this.tasks = loadedTasks;
+        this.tasks = this.tasks.map((task) => ({
+          ...task,
+          subTasks: subTaskStore.subTasksByTask(task.id),
+        }));
       } catch (error) {
         console.error("Error fetching tasks:", error);
         throw error;

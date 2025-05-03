@@ -110,7 +110,7 @@ const getCategoryClass = (category: string) => {
 <template>
   <div class="space-y-6 animate-slide-in">
     <div class="flex justify-between items-center">
-      <h2 class="text-xl font-bold text-gray-900">Expense Tracker</h2>
+    
       <button @click="toggleAddForm" class="btn btn-primary">
         {{ showAddForm ? "Cancel" : "+ Add Expense" }}
       </button>

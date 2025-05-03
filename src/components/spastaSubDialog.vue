@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/vue";
 import { type Task } from "../store/taskStore"; // Assume Subtask type exists
 import { type SubTask } from "../store/subTaskStore";
@@ -16,20 +16,6 @@ const emit = defineEmits<{
   (e: "save", subtask: Omit<SubTask, "id" | "createdAt" | "updatedAt">): void;
 }>();
 
-// Default subtask values
-// const defaultSubtask = {
-//   title: "",
-//   description: "",
-//   progress: 0,
-//   estimatedHours: 0,
-//   actualHours: 0 as number, // Ensure actualHours is explicitly a number
-//   startDate: new Date(),
-//   dueDate: new Date(new Date().setHours(17, 0, 0, 0)),
-//   parentTaskId: props.parentTask.id,
-//   taskId: props.parentTask.id, // Ensure taskId is explicitly set to a valid string
-//   timeEntries: [] as Array<{ date: Date; hours: number; description: string }>, // Ensure timeEntries is an array of objects
-// };
-
 const newSubtask = ref<Omit<SubTask, "id" | "createdAt" | "updatedAt">>({
   title: props.subtask?.title ?? "",
   description: props.subtask?.description ?? "",
@@ -45,11 +31,35 @@ const newSubtask = ref<Omit<SubTask, "id" | "createdAt" | "updatedAt">>({
   timeEntries: props.subtask?.timeEntries ?? [],
 });
 
+watch(
+  () => props.subtask,
+  (updatedSubtask) => {
+    newSubtask.value = {
+      title: updatedSubtask?.title ?? "",
+      description: updatedSubtask?.description ?? "",
+      completed: updatedSubtask?.completed ?? false,
+      progress: updatedSubtask?.progress ?? 0,
+      estimatedHours: updatedSubtask?.estimatedHours ?? 0,
+      actualHours: updatedSubtask?.actualHours ?? 0,
+      startDate: updatedSubtask?.startDate ?? new Date(),
+      dueDate: updatedSubtask?.dueDate ??
+        new Date(new Date().setHours(17, 0, 0, 0)),
+      userId: updatedSubtask?.userId ?? "",
+      parentTaskId: props.parentTask.id,
+      taskId: updatedSubtask?.taskId ?? props.parentTask.id,
+      timeEntries: updatedSubtask?.timeEntries ?? [],
+    };
+  },
+  { immediate: true }
+);
+
 const showTimeEntry = ref(false);
 const newTimeEntry = ref({
   hours: 1,
   description: "Work done on subtask",
 });
+
+const isSubmitting = ref(false);
 
 const totalHours = computed(() => {
   return (newSubtask.value.timeEntries || []).reduce(
@@ -81,7 +91,12 @@ const addTimeEntry = () => {
 };
 
 const handleSubmit = () => {
-  emit("save", newSubtask.value);
+  isSubmitting.value = true;
+  try {
+    emit("save", newSubtask.value);
+  } finally {
+    isSubmitting.value = false;
+  }
 };
 </script>
 
@@ -101,7 +116,7 @@ const handleSubmit = () => {
               <label class="block text-sm font-medium text-gray-700"
                 >Title</label
               >
-              {{ subtask }}
+            
               <input
                 v-model="newSubtask.title"
                 type="text"
@@ -270,8 +285,33 @@ const handleSubmit = () => {
             >
               Cancel
             </button>
-            <button type="submit" class="btn btn-primary">
-              {{ subtask ? "Save Changes" : "Create Subtask" }}
+            <button
+              type="submit"
+              class="btn btn-primary"
+              :disabled="isSubmitting"
+            >
+              <span v-if="!isSubmitting">{{ subtask ? "Save Changes" : "Create Subtask" }}</span>
+              <svg
+                v-else
+                class="w-5 h-5 animate-spin text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                ></path>
+              </svg>
             </button>
           </div>
         </form>

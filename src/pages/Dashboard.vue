@@ -173,6 +173,7 @@
       <div class="w-full">
         <SpastaTaskBoard
           v-if="selectedCategory"
+          @refresh="refreshTasks"
           :category="selectedCategory"
           :tasks="filteredTasks"
         />
@@ -191,6 +192,7 @@ import { ref, onMounted, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../store/authStore";
 import { useCategoryStore, type Category } from "../store/categoryStore";
+import {useSubTaskStore} from "../store/subTaskStore"
 import { useTaskStore, type Task } from "../store/taskStore";
 import SpastaCategoryList from "../components/spastaCategoryList.vue";
 import SpastaTaskBoard from "../components/spastaTaskBoard.vue";
@@ -198,6 +200,7 @@ import SpastaTaskBoard from "../components/spastaTaskBoard.vue";
 const router = useRouter();
 const authStore = useAuthStore();
 const categoryStore = useCategoryStore();
+const subTaskStore = useSubTaskStore();
 const taskStore = useTaskStore();
 
 const isLoading = ref(true);
@@ -279,15 +282,20 @@ function toggleSummary() {
   }, 500); // simulate loading
 }
 
+async function refreshTasks() {
+  await subTaskStore.fetchSubTasks();
+  await taskStore.fetchTasks();
+}
+
+defineExpose({ refreshTasks });
+
 onMounted(async () => {
   if (!authStore.user) {
     return router.push("/login");
   }
   try {
-    await Promise.all([
-      categoryStore.fetchCategories(),
-      taskStore.fetchTasks(),
-    ]);
+    await categoryStore.fetchCategories();
+    await refreshTasks();
     if (categories.value.length) {
       selectedCategoryId.value = categories.value[0].id;
     }

@@ -10,6 +10,10 @@ import { soundManager } from "../utils/sounds";
 import SpastaTaskCard from "./spastaTaskCard.vue";
 import SpastaTaskDialog from "./spastaTaskDialog.vue";
 
+const emit = defineEmits<{
+  (e: 'refresh'): void;
+}>();
+
 const props = defineProps<{
   category: Category;
   tasks: Task[];
@@ -42,6 +46,7 @@ const handleCreateSubtask = async (data: any) => {
     showDialog.value = false;
     toastStore.showToast("Sub Task created successfully! 🎯", "success");
     triggerConfetti();
+    emit('refresh');
   } catch (error) {
     console.error("Error adding task:", error);
     toastStore.showToast("Failed to create task", "error");
@@ -100,6 +105,7 @@ const handleAddTask = async (
     showDialog.value = false;
     toastStore.showToast("Task created successfully! 🎯", "success");
     triggerConfetti();
+    emit('refresh');
   } catch (error) {
     console.error("Error adding task:", error);
     toastStore.showToast("Failed to create task", "error");

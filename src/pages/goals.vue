@@ -133,6 +133,12 @@
               </svg>
               <span v-else class="text-xs">×</span>
             </button>
+            <button
+              @click="startEditingGoal(goalItem)"
+              class="flex items-center justify-center w-6 h-6 rounded-full text-white bg-yellow-400 hover:bg-yellow-500 transition duration-200 ml-2"
+            >
+              ✏️
+            </button>
           </div>
         </transition-group>
       </div>
@@ -199,6 +205,56 @@
     </div>
   </div>
 </transition>
+
+<transition name="fade-dialog">
+  <div
+    v-if="editingGoalTitle"
+    class="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
+  >
+    <div class="bg-white p-6 rounded-lg w-full max-w-md shadow-xl scale-in">
+      <h2 class="text-xl font-bold mb-4">Edit Goal</h2>
+      <input v-model="editTitle" placeholder="Goal title" class="input mb-3 w-full" />
+      <textarea v-model="editDescription" placeholder="Goal description" class="input mb-3 w-full" rows="2"></textarea>
+      <select v-model="editPriority" class="input mb-4 w-full">
+        <option disabled value="">Select priority</option>
+        <option value="high">🔥 High</option>
+        <option value="medium">🌟 Medium</option>
+        <option value="low">✅ Low</option>
+      </select>
+      <div class="flex justify-end gap-2">
+        <button class="btn bg-gray-200 text-gray-700" @click="cancelEdit">Cancel</button>
+        <button
+          class="btn transition-transform duration-200 active:scale-95 disabled:opacity-50"
+          :disabled="isGoalUpdating"
+          @click="submitEdit"
+        >
+          <span v-if="!isGoalUpdating">Update Goal</span>
+          <svg
+            v-else
+            class="w-5 h-5 animate-spin text-white"
+            fill="none"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+            ></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</transition>
   </div>
 </template>
 
@@ -227,6 +283,13 @@ const goalsMap = ref<Record<string, {
 }[]>>({});
 
 const goalCategories = computed(() => store.categories.map((c) => c.name));
+
+// New reactive refs for editing
+const editingGoalTitle = ref<string | null>(null);
+const editTitle = ref("");
+const editDescription = ref("");
+const editPriority = ref<"high" | "medium" | "low" | "">("");
+const isGoalUpdating = ref(false);
 
 // Load categories and goals on mount
 onMounted(async () => {
@@ -376,6 +439,47 @@ const toggleGoalCompletion = async (goalTitle: string) => {
   const newCompletedStatus = !goal.completed;
   goal.completed = newCompletedStatus;
   await store.updateGoalCompleted(goal.id, newCompletedStatus);
+};
+
+// New functions for editing goals
+const startEditingGoal = (goal: any) => {
+  editingGoalTitle.value = goal.title;
+  editTitle.value = goal.title;
+  editDescription.value = goal.description;
+  editPriority.value = goal.priority;
+};
+
+const cancelEdit = () => {
+  editingGoalTitle.value = null;
+};
+
+const submitEdit = async () => {
+  if (!selectedCategory.value || !editingGoalTitle.value) return;
+  const category = store.categories.find(c => c.name === selectedCategory.value);
+  if (!category) return;
+  const goal = store.goals.find(g => g.categoryId === category.id && g.title === editingGoalTitle.value);
+  if (!goal) return;
+
+  isGoalUpdating.value = true;
+  try {
+    await store.updateGoal(goal.id, {
+      title: editTitle.value,
+      description: editDescription.value,
+      priority: editPriority.value,
+    });
+
+    await store.fetchGoals();
+    const updatedGoals = store.goals.filter((g) => g.categoryId === category.id);
+    goalsMap.value[selectedCategory.value] = updatedGoals.map((goal) => ({
+      completed: goal.completed ?? false,
+      title: goal.title,
+      description: goal.description || "",
+      priority: goal.priority || "medium",
+    }));
+    editingGoalTitle.value = null;
+  } finally {
+    isGoalUpdating.value = false;
+  }
 };
 </script>
 
