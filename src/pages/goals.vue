@@ -465,7 +465,7 @@ const submitEdit = async () => {
     await store.updateGoal(goal.id, {
       title: editTitle.value,
       description: editDescription.value,
-      priority: editPriority.value,
+      priority: editPriority.value || undefined,
     });
 
     await store.fetchGoals();
