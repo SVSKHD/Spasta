@@ -28,7 +28,6 @@ const showSubtaskDialog = ref(false);
 const showSubtasksAccordion = ref(false); // ✅ Accordion toggle
 const showQuickView = ref(false);
 
-const showInlinePreview = ref(false);
 const showPopCard = ref(false);
 
 // Track expanded state of subtasks in Quick View
@@ -132,7 +131,7 @@ const handleSubtaskSave = async (
         <div class="relative inline-block">
           <h4
             class="font-medium text-text cursor-pointer hover:underline transition inline"
-            @click="showInlinePreview = !showInlinePreview"
+            @click="showPopCard = !showPopCard"
           >
             {{ task.title }}
           </h4>
@@ -147,49 +146,39 @@ const handleSubtaskSave = async (
           <transition name="fade">
             <div
               v-if="showPopCard"
-              class="absolute top-8 right-0 z-50 w-72 bg-white dark:bg-gray-900 shadow-lg rounded p-4 border border-gray-200 dark:border-gray-700 text-xs"
+              class="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm"
+              @click.self="showPopCard = false"
             >
-              <div class="flex justify-between items-center mb-2">
-                <strong>{{ task.title }}</strong>
-                <button @click="showPopCard = false" class="text-sm text-gray-500 hover:text-red-500">✕</button>
-              </div>
-              <p class="mb-2">{{ task.description }}</p>
-              <div class="space-y-1">
-                <p><strong>Progress:</strong> {{ task.progress }}%</p>
-                <p><strong>Due:</strong> {{ dueDateFormatted }}</p>
-                <p><strong>Hours:</strong> {{ totalHours }} / {{ task.estimatedHours || '∞' }}</p>
-              </div>
-              <div v-if="task.subTasks?.length" class="mt-2">
-                <p class="font-semibold">Subtasks:</p>
-                <ul class="list-disc pl-4">
-                  <li v-for="sub in task.subTasks" :key="sub.id">
-                    {{ sub.title }} ({{ sub.completed ? '✅' : '⏳' }})
-                  </li>
-                </ul>
+              <div
+                class="w-full max-w-md bg-white/80 dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-6 backdrop-blur-md"
+              >
+                <div class="flex justify-between items-center mb-3">
+                  <h2 class="text-lg font-bold text-text">{{ task.title }}</h2>
+                  <button
+                    @click="showPopCard = false"
+                    class="text-gray-500 hover:text-red-500 text-sm"
+                  >
+                    ✕
+                  </button>
+                </div>
+                <p class="text-sm text-text/80 mb-2">{{ task.description }}</p>
+                <div class="space-y-1 text-xs text-text/70">
+                  <p><strong>Progress:</strong> {{ task.progress }}%</p>
+                  <p><strong>Due:</strong> {{ dueDateFormatted }}</p>
+                  <p><strong>Hours:</strong> {{ totalHours }} / {{ task.estimatedHours || '∞' }}</p>
+                </div>
+                <div v-if="task.subTasks?.length" class="mt-4">
+                  <p class="font-semibold mb-1 text-xs">Subtasks</p>
+                  <ul class="list-disc pl-4 text-xs">
+                    <li v-for="sub in task.subTasks" :key="sub.id">
+                      {{ sub.title }} ({{ sub.completed ? '✅' : '⏳' }})
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           </transition>
         </div>
-        <transition name="slide-fade">
-          <div
-            v-if="showInlinePreview"
-            class="w-full mt-3 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 shadow-inner px-4 py-3 text-xs text-text/80"
-          >
-            <p><strong>Description:</strong> {{ task.description }}</p>
-            <p><strong>Progress:</strong> {{ task.progress }}%</p>
-            <p><strong>Due:</strong> {{ dueDateFormatted }}</p>
-            <p><strong>Recurring:</strong> {{ task.isRecurring ? task.recurringPeriod : 'No' }}</p>
-
-            <div v-if="task.subTasks?.length" class="mt-3">
-              <p class="font-semibold text-xs mb-1">Subtasks:</p>
-              <ul class="list-disc pl-4 space-y-1">
-                <li v-for="sub in task.subTasks" :key="sub.id">
-                  {{ sub.title }} ({{ sub.completed ? '✅' : '⏳' }})
-                </li>
-              </ul>
-            </div>
-          </div>
-        </transition>
         <p v-if="task.description" class="text-sm text-text/60 mt-1">
           {{ task.description }}
         </p>
