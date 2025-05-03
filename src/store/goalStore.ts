@@ -23,6 +23,7 @@ export interface Goal {
   priority: "low" | "medium" | "high";
   createdAt: Date;
   updatedAt: Date;
+  completed?: boolean;
   checklist: {
     id: string;
     title: string;
@@ -85,6 +86,7 @@ export const useGoalCategoryStore = defineStore("goalCategory", {
             priority: data.priority || "medium",
             createdAt: (data.createdAt as Timestamp)?.toDate?.() || new Date(),
             updatedAt: (data.updatedAt as Timestamp)?.toDate?.() || new Date(),
+            completed: typeof data.completed === "boolean" ? data.completed : false,
             checklist: data.checklist || [],
           } as Goal;
         });
@@ -104,6 +106,7 @@ export const useGoalCategoryStore = defineStore("goalCategory", {
         const goalData = {
           ...goal,
           userId: authStore.user.id,
+          completed: false,
           createdAt: serverTimestamp(),
           updatedAt: serverTimestamp(),
         };
@@ -113,6 +116,7 @@ export const useGoalCategoryStore = defineStore("goalCategory", {
         this.goals.push({
           id: docRef.id,
           ...goal,
+          completed: false,
           createdAt: new Date(),
           updatedAt: new Date(),
         });
@@ -148,8 +152,28 @@ export const useGoalCategoryStore = defineStore("goalCategory", {
       try {
         await deleteDoc(doc(db, "goals", goalId));
         this.goals = this.goals.filter((g) => g.id !== goalId);
+        await this.fetchGoals();
       } catch (e) {
         console.error("Error deleting goal:", e);
+        throw e;
+      }
+    },
+
+    async updateGoalCompleted(goalId: string, completed: boolean) {
+      try {
+        const goalRef = doc(db, "goals", goalId);
+        await updateDoc(goalRef, {
+          completed,
+          updatedAt: serverTimestamp(),
+        });
+
+        const index = this.goals.findIndex((g) => g.id === goalId);
+        if (index !== -1) {
+          this.goals[index].completed = completed;
+          this.goals[index].updatedAt = new Date();
+        }
+      } catch (e) {
+        console.error("Error updating goal completion status:", e);
         throw e;
       }
     },
@@ -229,9 +253,16 @@ export const useGoalCategoryStore = defineStore("goalCategory", {
 
     async deleteCategory(id: string) {
       try {
+        // Delete related goals from Firestore
+        const relatedGoals = this.goals.filter((g) => g.categoryId === id);
+        for (const goal of relatedGoals) {
+          await deleteDoc(doc(db, "goals", goal.id));
+        }
         await deleteDoc(doc(db, "goalCategories", id));
         this.categories = this.categories.filter((cat) => cat.id !== id);
-        this.goals = this.goals.filter((g) => g.categoryId !== id); // Optional cascade
+        this.goals = this.goals.filter((g) => g.categoryId !== id);
+        await this.fetchCategories();
+        await this.fetchGoals();
       } catch (error) {
         console.error("Error deleting category:", error);
         throw error;

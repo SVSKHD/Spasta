@@ -12,7 +12,7 @@ const Expenses = () => import("../pages/Expenses.vue");
 const Chat = () => import("../pages/Chat.vue");
 const notes = () => import("../pages/notes.vue");
 const goals = () => import("../pages/goals.vue");
-// const Trading = () => import('../pages/Trading.vue');
+const Trading = () => import('../pages/Trading.vue');
 const Login = () => import("../pages/Login.vue");
 // const Register = () => import('../pages/Register.vue');
 
@@ -57,11 +57,11 @@ const routes = [
         name: "notes",
         component: notes,
       },
-      // {
-      //   path: '/trading',
-      //   name: 'trading',
-      //   component: Trading,
-      // },
+      {
+        path: '/trading',
+        name: 'trading',
+        component: Trading,
+      },
     ],
   },
   {
