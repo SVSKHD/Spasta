@@ -26,6 +26,13 @@ const emit = defineEmits<{
 const showTaskDialog = ref(false);
 const showSubtaskDialog = ref(false);
 const showSubtasksAccordion = ref(false); // ✅ Accordion toggle
+const showQuickView = ref(false);
+
+const showInlinePreview = ref(false);
+const showPopCard = ref(false);
+
+// Track expanded state of subtasks in Quick View
+const expandedSubtasks = ref<Record<string, boolean>>({});
 
 const editingSubtask = ref<SubTask | null>(null);
 const isSubtaskSaving = ref(false);
@@ -104,6 +111,7 @@ const handleSubtaskSave = async (
     isSubtaskSaving.value = false;
   }
 };
+
 </script>
 
 <template>
@@ -121,34 +129,111 @@ const handleSubtaskSave = async (
             {{ priorityIcon }} {{ props.task.priority.toUpperCase() }}
           </span>
         </div>
-        <h4 class="font-medium text-text">{{ task.title }}</h4>
+        <div class="relative inline-block">
+          <h4
+            class="font-medium text-text cursor-pointer hover:underline transition inline"
+            @click="showInlinePreview = !showInlinePreview"
+          >
+            {{ task.title }}
+          </h4>
+          <button
+            class="ml-2 text-xs text-gray-400 hover:text-primary-500"
+            @click.stop="showPopCard = !showPopCard"
+            title="Quick View"
+          >
+            🪟
+          </button>
+
+          <transition name="fade">
+            <div
+              v-if="showPopCard"
+              class="absolute top-8 right-0 z-50 w-72 bg-white dark:bg-gray-900 shadow-lg rounded p-4 border border-gray-200 dark:border-gray-700 text-xs"
+            >
+              <div class="flex justify-between items-center mb-2">
+                <strong>{{ task.title }}</strong>
+                <button @click="showPopCard = false" class="text-sm text-gray-500 hover:text-red-500">✕</button>
+              </div>
+              <p class="mb-2">{{ task.description }}</p>
+              <div class="space-y-1">
+                <p><strong>Progress:</strong> {{ task.progress }}%</p>
+                <p><strong>Due:</strong> {{ dueDateFormatted }}</p>
+                <p><strong>Hours:</strong> {{ totalHours }} / {{ task.estimatedHours || '∞' }}</p>
+              </div>
+              <div v-if="task.subTasks?.length" class="mt-2">
+                <p class="font-semibold">Subtasks:</p>
+                <ul class="list-disc pl-4">
+                  <li v-for="sub in task.subTasks" :key="sub.id">
+                    {{ sub.title }} ({{ sub.completed ? '✅' : '⏳' }})
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </transition>
+        </div>
+        <transition name="slide-fade">
+          <div
+            v-if="showInlinePreview"
+            class="w-full mt-3 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 shadow-inner px-4 py-3 text-xs text-text/80"
+          >
+            <p><strong>Description:</strong> {{ task.description }}</p>
+            <p><strong>Progress:</strong> {{ task.progress }}%</p>
+            <p><strong>Due:</strong> {{ dueDateFormatted }}</p>
+            <p><strong>Recurring:</strong> {{ task.isRecurring ? task.recurringPeriod : 'No' }}</p>
+
+            <div v-if="task.subTasks?.length" class="mt-3">
+              <p class="font-semibold text-xs mb-1">Subtasks:</p>
+              <ul class="list-disc pl-4 space-y-1">
+                <li v-for="sub in task.subTasks" :key="sub.id">
+                  {{ sub.title }} ({{ sub.completed ? '✅' : '⏳' }})
+                </li>
+              </ul>
+            </div>
+          </div>
+        </transition>
         <p v-if="task.description" class="text-sm text-text/60 mt-1">
           {{ task.description }}
         </p>
       </div>
 
-      <div class="flex space-x-1">
-        <button
-          @click.stop="createSubTask"
-          class="text-text/60 hover:text-success-500 transition-colors duration-150"
-          title="Create Subtask"
-        >
-          ➕
-        </button>
-        <button
-          @click.stop="showTaskDialog = true"
-          class="text-text/60 hover:text-primary-500 transition-colors duration-150"
-          title="Edit Task"
-        >
-          ✎
-        </button>
-        <button
-          @click.stop="deleteTask"
-          class="text-text/60 hover:text-error-500 transition-colors duration-150"
-          title="Delete Task"
-        >
-          ✕
-        </button>
+      <div class="inline-flex rounded-md shadow-sm border border-gray-300 dark:border-gray-600 overflow-hidden">
+        <!-- Subtask -->
+        <div class="relative group">
+          <button
+            @click.stop="createSubTask"
+            class="w-8 h-8 flex items-center justify-center text-sm bg-success-100 dark:bg-success-700 text-success-800 dark:text-success-200 hover:bg-success-200 dark:hover:bg-success-600 transition"
+          >
+            ➕
+          </button>
+          <span class="absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 whitespace-nowrap bg-gray-700 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+            Create Subtask
+          </span>
+        </div>
+
+        <!-- Edit -->
+        <div class="relative group">
+          <button
+            @click.stop="showTaskDialog = true"
+            class="w-8 h-8 flex items-center justify-center text-sm bg-primary-100 dark:bg-primary-700 text-primary-800 dark:text-primary-200 hover:bg-primary-200 dark:hover:bg-primary-600 transition"
+          >
+            ✎
+          </button>
+          <span class="absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 whitespace-nowrap bg-gray-700 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+            Edit Task
+          </span>
+        </div>
+
+        <!-- Delete -->
+        <div class="relative group">
+          <button
+            @click.stop="deleteTask"
+            class="w-8 h-8 flex items-center justify-center text-sm bg-error-100 dark:bg-error-700 text-error-800 dark:text-error-200 hover:bg-error-200 dark:hover:bg-error-600 transition"
+          >
+            ✕
+          </button>
+          <span class="absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 whitespace-nowrap bg-gray-700 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+            Delete Task
+          </span>
+        </div>
       </div>
     </div>
 
@@ -237,5 +322,129 @@ const handleSubtaskSave = async (
       @close="showSubtaskDialog = false"
       @save="handleSubtaskSave"
     />
+
+    <!-- Quick View Panel -->
+    <transition name="slide">
+      <div
+        v-show="showQuickView"
+        class="fixed top-0 right-0 h-full w-80 max-w-full bg-white dark:bg-gray-900 shadow-lg z-50 p-4 overflow-y-auto transform transition-transform duration-300 ease-in-out"
+        :class="{ 'translate-x-0': showQuickView, 'translate-x-full': !showQuickView }"
+        @mousedown.stop
+      >
+        <div class="flex justify-between items-center mb-4 border-b pb-2">
+          <h3 class="text-xl font-bold text-text">Task Quick View</h3>
+          <button @click="showQuickView = false" class="text-text/60 hover:text-red-500">✕</button>
+        </div>
+        <div class="space-y-4 text-sm">
+          <div>
+            <p class="text-xs font-semibold text-gray-500 uppercase">Title</p>
+            <p class="text-base text-text">{{ task.title }}</p>
+          </div>
+          <div v-if="task.description">
+            <p class="text-xs font-semibold text-gray-500 uppercase">Description</p>
+            <p class="text-sm text-text/80">{{ task.description }}</p>
+          </div>
+          <div v-if="task.dueDate">
+            <p class="text-xs font-semibold text-gray-500 uppercase">Due Date</p>
+            <p class="text-sm text-text">{{ dueDateFormatted }}</p>
+          </div>
+          <div>
+            <p class="text-xs font-semibold text-gray-500 uppercase">Priority</p>
+            <p class="text-sm text-text">{{ task.priority }}</p>
+          </div>
+          <div>
+            <p class="text-xs font-semibold text-gray-500 uppercase">Progress</p>
+            <p class="text-sm text-text">{{ task.progress }}%</p>
+          </div>
+          <div>
+            <p class="text-xs font-semibold text-gray-500 uppercase">Hours Spent</p>
+            <p class="text-sm text-text">{{ totalHours }}</p>
+          </div>
+          <div v-if="task.estimatedHours">
+            <p class="text-xs font-semibold text-gray-500 uppercase">Estimated Hours</p>
+            <p class="text-sm text-text">{{ task.estimatedHours }}</p>
+          </div>
+          <div v-if="task.isRecurring">
+            <p class="text-xs font-semibold text-gray-500 uppercase">Recurring</p>
+            <p class="text-sm text-text">🔄 {{ task.recurringPeriod }}</p>
+          </div>
+
+          <!-- Subtasks Section -->
+          <div v-if="task.subTasks?.length">
+            <h4 class="text-sm font-bold text-text">Subtasks</h4>
+            <hr class="border-t border-gray-300 dark:border-gray-700 mb-2" />
+            <div
+              v-for="subtask in task.subTasks"
+              :key="subtask.id"
+              class="border border-gray-200 dark:border-gray-700 rounded mb-3"
+            >
+              <button
+                class="w-full flex justify-between items-center px-4 py-2 text-left bg-gray-100 dark:bg-gray-800 text-sm font-medium text-text hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none"
+                @click="expandedSubtasks[subtask.id] = !expandedSubtasks[subtask.id]"
+                @mousedown.stop
+              >
+                <span>{{ subtask.title }}</span>
+                <span class="text-xs text-gray-400">
+                  {{ subtask.completed ? '✅' : '⏳' }}
+                </span>
+              </button>
+              <transition name="accordion">
+                <div v-show="expandedSubtasks[subtask.id]" class="px-4 py-2 text-sm text-text/80 border-t border-gray-200 dark:border-gray-700">
+                  <p v-if="subtask.description" class="mb-1">
+                    <strong>Description:</strong> {{ subtask.description }}
+                  </p>
+                  <p>
+                    <strong>Progress:</strong> {{ subtask.progress || 0 }}%
+                  </p>
+                </div>
+              </transition>
+            </div>
+          </div>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
+
+<style>
+.slide-enter-active, .slide-leave-active {
+  transition: transform 0.3s ease;
+}
+.slide-enter-from, .slide-leave-to {
+  transform: translateX(100%);
+}
+.accordion-enter-active, .accordion-leave-active {
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+.accordion-enter-from, .accordion-leave-to {
+  max-height: 0;
+  opacity: 0;
+}
+.accordion-enter-to, .accordion-leave-from {
+  max-height: 200px;
+  opacity: 1;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  opacity: 0;
+  max-height: 0;
+}
+.slide-fade-enter-to,
+.slide-fade-leave-from {
+  opacity: 1;
+  max-height: 500px;
+}
+</style>
