@@ -110,7 +110,9 @@ const getCategoryClass = (category: string) => {
 <template>
   <div class="space-y-6 animate-slide-in">
     <div class="flex justify-between items-center">
-    
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">
+        Expense Tracker
+      </h1>
       <button @click="toggleAddForm" class="btn btn-primary">
         {{ showAddForm ? "Cancel" : "+ Add Expense" }}
       </button>
@@ -119,41 +121,45 @@ const getCategoryClass = (category: string) => {
     <!-- Add Expense Form -->
     <div
       v-if="showAddForm"
-      class="bg-white rounded-lg shadow-md p-6 animate-slide-up"
+      class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 animate-slide-up"
     >
-      <h3 class="text-lg font-medium mb-4">New Expense</h3>
+      <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
+        New Expense
+      </h3>
 
       <form @submit.prevent="handleAddExpense" class="space-y-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label class="block text-sm font-medium text-gray-700"
+            <label
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300"
               >Amount</label
             >
             <div class="relative">
               <div
                 class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
               >
-                <span class="text-gray-500">$</span>
+                <span class="text-gray-500 dark:text-gray-400">$</span>
               </div>
               <input
                 v-model.number="newExpense.amount"
                 type="number"
                 min="0.01"
                 step="0.01"
-                class="input pl-7"
+                class="input pl-7 dark:bg-gray-700 dark:text-gray-100"
                 required
               />
             </div>
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700"
+            <label
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300"
               >Category</label
             >
             <input
               v-model="newExpense.category"
               type="text"
-              class="input"
+              class="input dark:bg-gray-700 dark:text-gray-100"
               required
               placeholder="e.g., Groceries, Utilities, Rent"
               list="categories-list"
@@ -169,24 +175,28 @@ const getCategoryClass = (category: string) => {
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700"
+          <label
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300"
             >Description</label
           >
           <input
             v-model="newExpense.description"
             type="text"
-            class="input"
+            class="input dark:bg-gray-700 dark:text-gray-100"
             required
           />
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label class="block text-sm font-medium text-gray-700">Date</label>
+            <label
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >Date</label
+            >
             <input
               v-model="newExpense.date"
               type="date"
-              class="input"
+              class="input dark:bg-gray-700 dark:text-gray-100"
               :max="new Date().toISOString().split('T')[0]"
             />
           </div>
@@ -196,19 +206,26 @@ const getCategoryClass = (category: string) => {
               id="recurring"
               v-model="newExpense.isRecurring"
               type="checkbox"
-              class="h-4 w-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+              class="h-4 w-4 text-primary-600 dark:text-primary-400 border-gray-300 dark:border-gray-600 rounded focus:ring-primary-500"
             />
-            <label for="recurring" class="ml-2 block text-sm text-gray-700">
+            <label
+              for="recurring"
+              class="ml-2 block text-sm text-gray-700 dark:text-gray-300"
+            >
               Recurring expense
             </label>
           </div>
         </div>
 
         <div v-if="newExpense.isRecurring">
-          <label class="block text-sm font-medium text-gray-700"
+          <label
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300"
             >Recurring Period</label
           >
-          <select v-model="newExpense.recurringPeriod" class="input">
+          <select
+            v-model="newExpense.recurringPeriod"
+            class="input dark:bg-gray-700 dark:text-gray-100"
+          >
             <option value="daily">Daily</option>
             <option value="weekly">Weekly</option>
             <option value="monthly">Monthly</option>
@@ -219,7 +236,7 @@ const getCategoryClass = (category: string) => {
         <div class="pt-2">
           <button
             type="submit"
-            class="btn btn-primary"
+            class="btn btn-primary dark:bg-primary-600 dark:hover:bg-primary-700"
             :disabled="isSubmitting || newExpense.amount <= 0"
           >
             {{ isSubmitting ? "Saving..." : "Save Expense" }}
@@ -229,11 +246,16 @@ const getCategoryClass = (category: string) => {
     </div>
 
     <!-- Expenses Summary -->
-    <div class="bg-white rounded-lg shadow-md p-6">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
       <div class="flex justify-between items-center mb-4">
-        <h3 class="text-lg font-medium">Expenses Summary</h3>
+        <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+          Expenses Summary
+        </h3>
         <div>
-          <select v-model="filterCategory" class="input px-3 py-1 text-sm">
+          <select
+            v-model="filterCategory"
+            class="input px-3 py-1 text-sm dark:bg-gray-700 dark:text-gray-100"
+          >
             <option value="all">All Categories</option>
             <option
               v-for="category in categories"
@@ -247,10 +269,10 @@ const getCategoryClass = (category: string) => {
       </div>
 
       <div class="mb-6">
-        <div class="text-3xl font-bold text-gray-900">
+        <div class="text-3xl font-bold text-gray-900 dark:text-gray-100">
           {{ formatCurrency(totalExpenses) }}
         </div>
-        <div class="text-sm text-gray-500">
+        <div class="text-sm text-gray-500 dark:text-gray-400">
           {{
             filterCategory === "all"
               ? "Total expenses"
@@ -263,7 +285,7 @@ const getCategoryClass = (category: string) => {
         <div
           v-for="expense in sortedExpenses"
           :key="expense.id"
-          class="flex justify-between items-center p-3 border-b hover:bg-gray-50 transition-colors"
+          class="flex justify-between items-center p-3 border-b border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
         >
           <div class="flex items-center space-x-3">
             <span
@@ -273,8 +295,10 @@ const getCategoryClass = (category: string) => {
               {{ expense.category }}
             </span>
             <div>
-              <div class="font-medium">{{ expense.description }}</div>
-              <div class="text-xs text-gray-500">
+              <div class="font-medium text-gray-900 dark:text-gray-100">
+                {{ expense.description }}
+              </div>
+              <div class="text-xs text-gray-500 dark:text-gray-400">
                 {{ formatExpenseDate(expense.date) }}
                 <span v-if="expense.isRecurring" class="ml-2">
                   ({{ expense.recurringPeriod }})
@@ -284,12 +308,12 @@ const getCategoryClass = (category: string) => {
           </div>
 
           <div class="flex items-center space-x-3">
-            <div class="text-lg font-semibold">
+            <div class="text-lg font-semibold text-gray-900 dark:text-gray-100">
               {{ formatCurrency(expense.amount) }}
             </div>
             <button
               @click="handleDeleteExpense(expense.id)"
-              class="text-gray-400 hover:text-error-500"
+              class="text-gray-400 hover:text-error-500 dark:text-gray-500 dark:hover:text-error-400"
             >
               ✕
             </button>
@@ -297,8 +321,13 @@ const getCategoryClass = (category: string) => {
         </div>
       </div>
 
-      <div v-if="sortedExpenses.length === 0" class="text-center py-8">
-        <p class="text-gray-500 mb-3">No expenses found</p>
+      <div
+        v-if="sortedExpenses.length === 0"
+        class="text-center py-8 bg-white dark:bg-gray-800 rounded-lg shadow"
+      >
+        <p class="text-gray-500 dark:text-gray-400 mb-3">
+          No expenses found
+        </p>
         <button @click="toggleAddForm" class="btn btn-primary">
           Add your first expense
         </button>

@@ -193,7 +193,9 @@ const handleSubtaskSave = async (
           >
             ➕
           </button>
-          <span class="absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 whitespace-nowrap bg-gray-700 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+          <span
+            class="absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 whitespace-nowrap bg-gray-700 dark:bg-gray-800 text-white dark:text-gray-200 text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+          >
             Create Subtask
           </span>
         </div>
@@ -206,7 +208,9 @@ const handleSubtaskSave = async (
           >
             ✎
           </button>
-          <span class="absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 whitespace-nowrap bg-gray-700 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+          <span
+            class="absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 whitespace-nowrap bg-gray-700 dark:bg-gray-800 text-white dark:text-gray-200 text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+          >
             Edit Task
           </span>
         </div>
@@ -219,7 +223,9 @@ const handleSubtaskSave = async (
           >
             ✕
           </button>
-          <span class="absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 whitespace-nowrap bg-gray-700 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+          <span
+            class="absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 whitespace-nowrap bg-gray-700 dark:bg-gray-800 text-white dark:text-gray-200 text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+          >
             Delete Task
           </span>
         </div>

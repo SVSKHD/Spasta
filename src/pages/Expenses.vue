@@ -28,7 +28,6 @@ onMounted(async () => {
 
 <template>
   <div>
-    <h1 class="text-2xl font-bold text-gray-900 mb-6">Expense Tracker</h1>
 
     <div v-if="isLoading" class="flex justify-center items-center h-64">
       <div

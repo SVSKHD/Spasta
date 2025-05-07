@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1 class="text-3xl font-bold text-gray-800 mb-6">🎯 Goals Tracker</h1>
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">🎯 Goals Tracker</h1>
 
     <div class="flex gap-2 mb-2">
       <input

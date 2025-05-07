@@ -76,7 +76,7 @@ export const useAuthStore = defineStore("auth", {
         localStorage.setItem("spasta-login", new Date().toISOString());
         localStorage.setItem("spasta-user", JSON.stringify(this.user));
 
-        toast.success("Welcome to spasta.io! 🎉");
+        toast.success("Welcome to spasta.online! 🎉");
         return this.user;
       } catch (error: any) {
         console.error("Error signing in with email:", error);
@@ -103,7 +103,7 @@ export const useAuthStore = defineStore("auth", {
         localStorage.setItem("spasta-login", new Date().toISOString());
         localStorage.setItem("spasta-user", JSON.stringify(this.user));
 
-        toast.success("Successfully signed in with Google! 🎉");
+        toast.success("Successfully signed in ! 🎉");
         return this.user;
       } catch (error: any) {
         console.error("Error signing in with Google:", error);

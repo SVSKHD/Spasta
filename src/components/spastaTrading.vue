@@ -94,7 +94,9 @@ const formatTradeDate = (date: Date | null) => {
 <template>
   <div class="space-y-6 animate-slide-in">
     <div class="flex justify-between items-center">
-      <h1 class="text-2xl font-bold text-text mb-6">Trading Journal</h1>
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
+        Trading Journal
+      </h1>
       <button @click="toggleAddForm" class="btn btn-primary">
         {{ showAddForm ? "Cancel" : "+ Add Trade" }}
       </button>
@@ -103,30 +105,36 @@ const formatTradeDate = (date: Date | null) => {
     <!-- Add Trade Form -->
     <div
       v-if="showAddForm"
-      class="bg-white rounded-lg shadow-md p-6 animate-slide-up"
+      class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 animate-slide-up"
     >
-      <h3 class="text-lg font-medium mb-4">New Trade Entry</h3>
+      <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
+        New Trade Entry
+      </h3>
 
       <form @submit.prevent="handleAddTrade" class="space-y-4">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label class="block text-sm font-medium text-gray-700"
+            <label
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300"
               >Symbol</label
             >
             <input
               v-model="newTrade.symbol"
               type="text"
-              class="input uppercase"
+              class="input uppercase dark:bg-gray-700 dark:text-gray-100"
               required
               placeholder="AAPL"
             />
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700">Type</label>
+            <label
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >Type</label
+            >
             <select
               v-model="newTrade.type"
-              class="input"
+              class="input dark:bg-gray-700 dark:text-gray-100"
               @change="calculateProfit"
             >
               <option value="buy">Buy</option>
@@ -135,7 +143,8 @@ const formatTradeDate = (date: Date | null) => {
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700"
+            <label
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300"
               >Quantity</label
             >
             <input
@@ -143,14 +152,15 @@ const formatTradeDate = (date: Date | null) => {
               type="number"
               min="0.00001"
               step="0.00001"
-              class="input"
+              class="input dark:bg-gray-700 dark:text-gray-100"
               required
               @input="calculateProfit"
             />
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700"
+            <label
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300"
               >Entry Price</label
             >
             <input
@@ -158,14 +168,15 @@ const formatTradeDate = (date: Date | null) => {
               type="number"
               min="0.00001"
               step="0.00001"
-              class="input"
+              class="input dark:bg-gray-700 dark:text-gray-100"
               required
               @input="calculateProfit"
             />
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700"
+            <label
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300"
               >Exit Price</label
             >
             <input
@@ -173,62 +184,71 @@ const formatTradeDate = (date: Date | null) => {
               type="number"
               min="0.00001"
               step="0.00001"
-              class="input"
+              class="input dark:bg-gray-700 dark:text-gray-100"
               required
               @input="calculateProfit"
             />
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700"
+            <label
+              class="block text-sm font-medium text-gray-700 dark:text-gray-300"
               >Date & Time</label
             >
             <input
               v-model="newTrade.date"
               type="datetime-local"
-              class="input"
+              class="input dark:bg-gray-700 dark:text-gray-100"
               required
             />
           </div>
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700"
+          <label
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300"
             >Strategy</label
           >
           <input
             v-model="newTrade.strategy"
             type="text"
-            class="input"
+            class="input dark:bg-gray-700 dark:text-gray-100"
             required
           />
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700"
+          <label
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300"
             >Reason for Entry</label
           >
-          <textarea v-model="newTrade.reason" class="input h-20" required />
+          <textarea
+            v-model="newTrade.reason"
+            class="input h-20 dark:bg-gray-700 dark:text-gray-100"
+            required
+          />
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700"
+          <label
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300"
             >Mistakes Made</label
           >
           <textarea
             v-model="newTrade.mistakes"
-            class="input h-20"
+            class="input h-20 dark:bg-gray-700 dark:text-gray-100"
             placeholder="What could have been done better?"
           />
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700"
+          <label
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300"
             >Lessons Learned</label
           >
           <textarea
             v-model="newTrade.lessons"
-            class="input h-20"
+            class="input h-20 dark:bg-gray-700 dark:text-gray-100"
             placeholder="What did you learn from this trade?"
           />
         </div>
@@ -248,7 +268,7 @@ const formatTradeDate = (date: Date | null) => {
 
           <button
             type="submit"
-            class="btn btn-primary"
+            class="btn btn-primary dark:bg-primary-600 dark:hover:bg-primary-700"
             :disabled="isSubmitting"
           >
             {{ isSubmitting ? "Saving..." : "Save Trade" }}
@@ -259,8 +279,10 @@ const formatTradeDate = (date: Date | null) => {
 
     <!-- Trading Summary -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div class="bg-white rounded-lg shadow p-4">
-        <h3 class="text-sm font-medium text-gray-500 mb-1">Total P/L</h3>
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+        <h3 class="text-sm font-medium text-gray-500 dark:text-gray-300 mb-1">
+          Total P/L
+        </h3>
         <div
           :class="totalProfit >= 0 ? 'text-success-600' : 'text-error-600'"
           class="text-2xl font-bold"
@@ -269,45 +291,51 @@ const formatTradeDate = (date: Date | null) => {
         </div>
       </div>
 
-      <div class="bg-white rounded-lg shadow p-4">
-        <h3 class="text-sm font-medium text-gray-500 mb-1">Win Rate</h3>
-        <div class="text-2xl font-bold text-primary-600">
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+        <h3 class="text-sm font-medium text-gray-500 dark:text-gray-300 mb-1">
+          Win Rate
+        </h3>
+        <div class="text-2xl font-bold text-primary-600 dark:text-primary-400">
           {{ winRate.toFixed(1) }}%
         </div>
       </div>
 
-      <div class="bg-white rounded-lg shadow p-4">
-        <h3 class="text-sm font-medium text-gray-500 mb-1">Total Trades</h3>
-        <div class="text-2xl font-bold text-gray-900">
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+        <h3 class="text-sm font-medium text-gray-500 dark:text-gray-300 mb-1">
+          Total Trades
+        </h3>
+        <div class="text-2xl font-bold text-gray-900 dark:text-gray-100">
           {{ tradingStore.trades.length }}
         </div>
       </div>
     </div>
 
     <!-- Trade History -->
-    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
       <div class="px-4 py-5 sm:px-6">
-        <h3 class="text-lg font-medium text-gray-900">Trade History</h3>
+        <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+          Trade History
+        </h3>
       </div>
-      <div class="border-t border-gray-200">
-        <ul role="list" class="divide-y divide-gray-200">
+      <div class="border-t border-gray-200 dark:border-gray-600">
+        <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-600">
           <li
             v-for="trade in tradingStore.trades"
             :key="trade.id"
-            class="px-4 py-4 sm:px-6 hover:bg-gray-50"
+            class="px-4 py-4 sm:px-6 hover:bg-gray-50 dark:hover:bg-gray-700"
           >
             <div class="flex items-center justify-between">
               <div class="flex-1">
                 <div class="flex items-center justify-between">
                   <div class="flex items-center space-x-3">
-                    <span class="text-lg font-medium text-gray-900">{{
-                      trade.symbol
-                    }}</span>
+                    <span class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                      {{ trade.symbol }}
+                    </span>
                     <span
                       :class="
                         trade.type === 'buy'
-                          ? 'bg-success-100 text-success-800'
-                          : 'bg-error-100 text-error-800'
+                          ? 'bg-success-100 text-success-800 dark:bg-success-700 dark:text-success-200'
+                          : 'bg-error-100 text-error-800 dark:bg-error-700 dark:text-error-200'
                       "
                       class="px-2 py-1 text-xs rounded-full"
                     >
@@ -318,8 +346,8 @@ const formatTradeDate = (date: Date | null) => {
                     <span
                       :class="
                         trade.profit >= 0
-                          ? 'text-success-600'
-                          : 'text-error-600'
+                          ? 'text-success-600 dark:text-success-400'
+                          : 'text-error-600 dark:text-error-400'
                       "
                       class="text-lg font-medium"
                     >
@@ -328,14 +356,14 @@ const formatTradeDate = (date: Date | null) => {
                     </span>
                     <button
                       @click="handleDeleteTrade(trade.id)"
-                      class="text-gray-400 hover:text-error-500"
+                      class="text-gray-400 hover:text-error-500 dark:text-gray-500 dark:hover:text-error-400"
                     >
                       ✕
                     </button>
                   </div>
                 </div>
 
-                <div class="mt-2 grid grid-cols-2 gap-4 text-sm text-gray-500">
+                <div class="mt-2 grid grid-cols-2 gap-4 text-sm text-gray-500 dark:text-gray-400">
                   <div>
                     <span class="font-medium">Entry:</span> {{ trade.entry }}
                   </div>
@@ -353,18 +381,24 @@ const formatTradeDate = (date: Date | null) => {
                 </div>
 
                 <div class="mt-2">
-                  <p class="text-sm text-gray-600">
+                  <p class="text-sm text-gray-600 dark:text-gray-400">
                     <span class="font-medium">Strategy:</span>
                     {{ trade.strategy }}
                   </p>
-                  <p class="text-sm text-gray-600">
+                  <p class="text-sm text-gray-600 dark:text-gray-400">
                     <span class="font-medium">Reason:</span> {{ trade.reason }}
                   </p>
-                  <p v-if="trade.mistakes" class="text-sm text-gray-600">
+                  <p
+                    v-if="trade.mistakes"
+                    class="text-sm text-gray-600 dark:text-gray-400"
+                  >
                     <span class="font-medium">Mistakes:</span>
                     {{ trade.mistakes }}
                   </p>
-                  <p v-if="trade.lessons" class="text-sm text-gray-600">
+                  <p
+                    v-if="trade.lessons"
+                    class="text-sm text-gray-600 dark:text-gray-400"
+                  >
                     <span class="font-medium">Lessons:</span>
                     {{ trade.lessons }}
                   </p>

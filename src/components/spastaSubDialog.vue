@@ -102,78 +102,87 @@ const handleSubmit = () => {
 
 <template>
   <Dialog :open="isOpen" @close="emit('close')" class="relative z-50">
-    <div class="fixed inset-0 bg-black/30" aria-hidden="true" />
+    <div class="fixed inset-0 bg-black/30 dark:bg-black/50" aria-hidden="true" />
 
     <div class="fixed inset-0 flex items-center justify-center p-4">
-      <DialogPanel class="w-full max-w-lg rounded-lg bg-white p-6 shadow-xl">
-        <DialogTitle class="text-xl font-semibold mb-4">
+      <DialogPanel
+        class="w-full max-w-lg rounded-lg bg-white dark:bg-gray-800 p-6 shadow-xl"
+      >
+        <DialogTitle class="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">
           {{ subtask ? "Edit Subtask" : "New Subtask" }}
         </DialogTitle>
 
         <form @submit.prevent="handleSubmit" class="space-y-4">
           <div class="grid grid-cols-1 gap-4">
             <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Title</label
-              >
-            
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Title
+              </label>
               <input
                 v-model="newSubtask.title"
                 type="text"
-                class="input"
+                class="input dark:bg-gray-700 dark:text-gray-100"
                 required
                 placeholder="Enter subtask title"
               />
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Description</label
-              >
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Description
+              </label>
               <textarea
                 v-model="newSubtask.description"
-                class="input h-20"
+                class="input h-20 dark:bg-gray-700 dark:text-gray-100"
                 placeholder="Describe the subtask..."
               />
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Start Date</label
-              >
-              <input v-model="newSubtask.startDate" type="date" class="input" />
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Start Date
+              </label>
+              <input
+                v-model="newSubtask.startDate"
+                type="date"
+                class="input dark:bg-gray-700 dark:text-gray-100"
+              />
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Due Date</label
-              >
-              <input v-model="newSubtask.dueDate" type="date" class="input" />
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Due Date
+              </label>
+              <input
+                v-model="newSubtask.dueDate"
+                type="date"
+                class="input dark:bg-gray-700 dark:text-gray-100"
+              />
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Progress (%)</label
-              >
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Progress (%)
+              </label>
               <input
                 v-model.number="newSubtask.progress"
                 type="number"
                 min="0"
                 max="100"
-                class="input"
+                class="input dark:bg-gray-700 dark:text-gray-100"
               />
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Estimated Hours</label
-              >
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Estimated Hours
+              </label>
               <input
                 v-model.number="newSubtask.estimatedHours"
                 type="number"
                 min="0"
                 step="0.5"
-                class="input"
+                class="input dark:bg-gray-700 dark:text-gray-100"
                 required
                 placeholder="Enter estimated hours"
               />
@@ -181,13 +190,15 @@ const handleSubmit = () => {
           </div>
 
           <!-- Time Tracking Section -->
-          <div class="border-t pt-4">
+          <div class="border-t pt-4 dark:border-gray-600">
             <div class="flex justify-between items-center mb-2">
-              <h3 class="text-lg font-medium">Time Tracking</h3>
+              <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                Time Tracking
+              </h3>
               <button
                 type="button"
                 @click="showTimeEntry = true"
-                class="text-sm text-primary-600 hover:text-primary-800"
+                class="text-sm text-primary-600 hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300"
               >
                 <PlusIcon class="w-4 h-4 inline mr-1" />
                 Add Time
@@ -196,41 +207,46 @@ const handleSubmit = () => {
 
             <div class="grid grid-cols-2 gap-4 mb-4">
               <div class="text-sm">
-                <span class="text-gray-500">Total Hours:</span>
-                <span class="ml-2 font-medium">{{ totalHours }}</span>
+                <span class="text-gray-500 dark:text-gray-400">Total Hours:</span>
+                <span class="ml-2 font-medium text-gray-900 dark:text-gray-100">
+                  {{ totalHours }}
+                </span>
               </div>
               <div class="text-sm">
-                <span class="text-gray-500">Estimated:</span>
-                <span class="ml-2 font-medium">{{
-                  newSubtask.estimatedHours || "-"
-                }}</span>
+                <span class="text-gray-500 dark:text-gray-400">Estimated:</span>
+                <span class="ml-2 font-medium text-gray-900 dark:text-gray-100">
+                  {{ newSubtask.estimatedHours || "-" }}
+                </span>
               </div>
             </div>
 
             <!-- Add Time Entry Form -->
-            <div v-if="showTimeEntry" class="bg-gray-50 p-4 rounded-md mb-4">
+            <div
+              v-if="showTimeEntry"
+              class="bg-gray-50 dark:bg-gray-700 p-4 rounded-md mb-4"
+            >
               <div class="grid grid-cols-2 gap-4">
                 <div>
-                  <label class="block text-sm font-medium text-gray-700"
-                    >Hours</label
-                  >
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Hours
+                  </label>
                   <input
                     v-model.number="newTimeEntry.hours"
                     type="number"
                     min="0.25"
                     step="0.25"
-                    class="input"
+                    class="input dark:bg-gray-600 dark:text-gray-100"
                     required
                   />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700"
-                    >Description</label
-                  >
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Description
+                  </label>
                   <input
                     v-model="newTimeEntry.description"
                     type="text"
-                    class="input"
+                    class="input dark:bg-gray-600 dark:text-gray-100"
                     placeholder="What was done?"
                   />
                 </div>
@@ -240,7 +256,7 @@ const handleSubmit = () => {
                 <button
                   type="button"
                   @click="showTimeEntry = false"
-                  class="btn btn-secondary text-sm py-1"
+                  class="btn btn-secondary text-sm py-1 dark:bg-gray-600 dark:text-gray-100"
                 >
                   <MinusIcon class="w-4 h-4 inline mr-1" />
                   Cancel
@@ -248,7 +264,7 @@ const handleSubmit = () => {
                 <button
                   type="button"
                   @click="addTimeEntry"
-                  class="btn btn-primary text-sm py-1"
+                  class="btn btn-primary text-sm py-1 dark:bg-primary-600 dark:hover:bg-primary-700"
                   :disabled="!newTimeEntry.hours"
                 >
                   <PlusIcon class="w-4 h-4 inline mr-1" />
@@ -262,15 +278,20 @@ const handleSubmit = () => {
               <div
                 v-for="(entry, index) in newSubtask.timeEntries"
                 :key="index"
-                class="flex justify-between items-center text-sm bg-gray-50 p-2 rounded"
+                class="flex justify-between items-center text-sm bg-gray-50 dark:bg-gray-700 p-2 rounded"
               >
                 <div>
-                  <span class="font-medium">{{ entry.hours }}h</span>
-                  <span v-if="entry.description" class="ml-2 text-gray-600">
+                  <span class="font-medium text-gray-900 dark:text-gray-100">
+                    {{ entry.hours }}h
+                  </span>
+                  <span
+                    v-if="entry.description"
+                    class="ml-2 text-gray-600 dark:text-gray-400"
+                  >
                     - {{ entry.description }}
                   </span>
                 </div>
-                <div class="text-gray-500">
+                <div class="text-gray-500 dark:text-gray-400">
                   {{ new Date(entry.date).toLocaleDateString() }}
                 </div>
               </div>
@@ -281,16 +302,18 @@ const handleSubmit = () => {
             <button
               type="button"
               @click="emit('close')"
-              class="btn btn-secondary"
+              class="btn btn-secondary dark:bg-gray-600 dark:text-gray-100"
             >
               Cancel
             </button>
             <button
               type="submit"
-              class="btn btn-primary"
+              class="btn btn-primary dark:bg-primary-600 dark:hover:bg-primary-700"
               :disabled="isSubmitting"
             >
-              <span v-if="!isSubmitting">{{ subtask ? "Save Changes" : "Create Subtask" }}</span>
+              <span v-if="!isSubmitting">
+                {{ subtask ? "Save Changes" : "Create Subtask" }}
+              </span>
               <svg
                 v-else
                 class="w-5 h-5 animate-spin text-white"
