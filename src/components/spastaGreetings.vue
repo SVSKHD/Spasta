@@ -77,15 +77,17 @@ onMounted(() => {
       @close="showRestDialog = false"
       class="relative z-50"
     >
-      <div class="fixed inset-0 bg-black/30" aria-hidden="true" />
+      <div class="fixed inset-0 bg-black/30 backdrop-blur-sm" aria-hidden="true" />
 
       <div class="fixed inset-0 flex items-center justify-center p-4">
-        <DialogPanel class="w-full max-w-sm rounded-lg bg-card p-6 shadow-xl">
-          <DialogTitle class="text-xl font-semibold text-text mb-4">
+        <DialogPanel
+          class="w-full max-w-sm rounded-lg bg-white/70 dark:bg-gray-800/70 backdrop-blur-md p-6 shadow-xl"
+        >
+          <DialogTitle class="text-xl font-semibold text-text dark:text-gray-100 mb-4">
             Time to Rest 😴
           </DialogTitle>
 
-          <p class="text-text/80 mb-4">
+          <p class="text-text/80 dark:text-gray-300 mb-4">
             It's getting late! Consider taking a break and getting some rest. A
             good night's sleep will help you be more productive tomorrow.
           </p>
@@ -105,15 +107,17 @@ onMounted(() => {
       @close="resetActivityTimer"
       class="relative z-50"
     >
-      <div class="fixed inset-0 bg-black/30" aria-hidden="true" />
+      <div class="fixed inset-0 bg-black/30 backdrop-blur-sm" aria-hidden="true" />
 
       <div class="fixed inset-0 flex items-center justify-center p-4">
-        <DialogPanel class="w-full max-w-sm rounded-lg bg-card p-6 shadow-xl">
-          <DialogTitle class="text-xl font-semibold text-text mb-4">
+        <DialogPanel
+          class="w-full max-w-sm rounded-lg bg-white/70 dark:bg-gray-800/70 backdrop-blur-md p-6 shadow-xl"
+        >
+          <DialogTitle class="text-xl font-semibold text-text dark:text-gray-100 mb-4">
             Still there? 👋
           </DialogTitle>
 
-          <p class="text-text/80 mb-4">
+          <p class="text-text/80 dark:text-gray-300 mb-4">
             We noticed you've been inactive for a while. Need a break or just
             deep in thought?
           </p>

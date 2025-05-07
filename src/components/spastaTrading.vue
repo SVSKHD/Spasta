@@ -94,7 +94,7 @@ const formatTradeDate = (date: Date | null) => {
 <template>
   <div class="space-y-6 animate-slide-in">
     <div class="flex justify-between items-center">
-      <h2 class="text-xl font-bold text-gray-900">Trading Journal</h2>
+      <h1 class="text-2xl font-bold text-text mb-6">Trading Journal</h1>
       <button @click="toggleAddForm" class="btn btn-primary">
         {{ showAddForm ? "Cancel" : "+ Add Trade" }}
       </button>

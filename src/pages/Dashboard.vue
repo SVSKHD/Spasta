@@ -41,133 +41,136 @@
   </button>
 </div>
 
-<Transition name="fade">
-  <div v-if="showSummary">
-    <!-- Categories List -->
-    <div
-      class="overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-primary-200 scrollbar-track-transparent"
-    >
-      <div class="flex space-x-4 min-w-max">
-        <SpastaCategoryList
-          :categories="categories"
-          :selected-category-id="selectedCategoryId"
-          @selectCategory="handleSelectCategory"
-          class="w-full"
-        />
-      </div>
-    </div>
-
-    <!-- Stats Cards -->
-    <div
-        v-if="selectedCategory"
-        class="grid grid-cols-1 md:grid-cols-4 gap-4"
-      >
-        <!-- Overall Progress -->
-        <div class="card bg-primary-500/10 dark:bg-primary-500/20">
-          <div class="flex items-center justify-between mb-2">
-            <h3
-              class="text-sm font-medium text-primary-700 dark:text-primary-300"
-            >
-              Overall Progress
-            </h3>
-            <span
-              class="text-xl font-bold text-primary-700 dark:text-primary-300"
-              >{{ taskStats.progress }}%</span
-            >
-          </div>
+      <Transition name="fade">
+        <div v-if="showSummary">
+          <!-- Categories List -->
           <div
-            class="w-full bg-primary-200 dark:bg-primary-700/50 rounded-full h-2"
+            class="overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-primary-200 scrollbar-track-transparent"
           >
-            <div
-              class="bg-primary-600 dark:bg-primary-400 h-2 rounded-full transition-all duration-300"
-              :style="{ width: `${taskStats.progress}%` }"
-            ></div>
+            <div class="flex space-x-4 min-w-max">
+              <SpastaCategoryList
+                :categories="categories"
+                :selected-category-id="selectedCategoryId"
+                @selectCategory="handleSelectCategory"
+                class="w-full"
+              />
+            </div>
           </div>
-        </div>
 
-        <!-- Time Tracking -->
-        <div class="card bg-success-500/10 dark:bg-success-500/20">
-          <h3
-            class="text-sm font-medium text-success-700 dark:text-success-300 mb-2"
+          <!-- Stats Cards -->
+          <div
+            v-if="selectedCategory"
+            class="grid grid-cols-1 md:grid-cols-4 gap-4"
           >
-            Time Spent
-          </h3>
-          <div class="text-xl font-bold text-success-700 dark:text-success-300">
-            {{ taskStats.totalHours }}h
-            <span
-              class="text-sm font-normal text-success-600 dark:text-success-300"
-            >
-              / {{ taskStats.estimatedHours }}h est.
-            </span>
-          </div>
-        </div>
+            <!-- Overall Progress -->
+            <div class="card bg-primary-500/10 dark:bg-primary-500/20">
+              <div class="flex items-center justify-between mb-2">
+                <h3
+                  class="text-sm font-medium text-primary-700 dark:text-primary-300"
+                >
+                  Overall Progress
+                </h3>
+                <span
+                  class="text-xl font-bold text-primary-700 dark:text-primary-300"
+                  >{{ taskStats.progress }}%</span
+                >
+              </div>
+              <div
+                class="w-full bg-primary-200 dark:bg-primary-700/50 rounded-full h-2"
+              >
+                <div
+                  class="bg-primary-600 dark:bg-primary-400 h-2 rounded-full transition-all duration-300"
+                  :style="{ width: `${taskStats.progress}%` }"
+                ></div>
+              </div>
+            </div>
 
-        <!-- Priority Distribution -->
-        <div class="card bg-warning-500/10 dark:bg-warning-500/20">
-          <h3
-            class="text-sm font-medium text-warning-700 dark:text-warning-300 mb-2"
-          >
-            Priority Tasks
-          </h3>
-          <div class="space-y-1">
-            <div class="flex justify-between items-center">
-              <span class="text-sm text-warning-600 dark:text-warning-300"
-                >High</span
+            <!-- Time Tracking -->
+            <div class="card bg-success-500/10 dark:bg-success-500/20">
+              <h3
+                class="text-sm font-medium text-success-700 dark:text-success-300 mb-2"
               >
-              <span class="font-bold text-warning-700 dark:text-warning-300">{{
-                taskStats.byPriority.high
-              }}</span>
+                Time Spent
+              </h3>
+              <div class="text-xl font-bold text-success-700 dark:text-success-300">
+                {{ taskStats.totalHours }}h
+                <span
+                  class="text-sm font-normal text-success-600 dark:text-success-300"
+                >
+                  / {{ taskStats.estimatedHours }}h est.
+                </span>
+              </div>
             </div>
-            <div class="flex justify-between items-center">
-              <span class="text-sm text-warning-600 dark:text-warning-300"
-                >Medium</span
-              >
-              <span class="font-bold text-warning-700 dark:text-warning-300">{{
-                taskStats.byPriority.medium
-              }}</span>
-            </div>
-            <div class="flex justify-between items-center">
-              <span class="text-sm text-warning-600 dark:text-warning-300"
-                >Low</span
-              >
-              <span class="font-bold text-warning-700 dark:text-warning-300">{{
-                taskStats.byPriority.low
-              }}</span>
-            </div>
-          </div>
-        </div>
 
-        <!-- Flow Distribution -->
-        <div class="card bg-info-500/10 dark:bg-info-500/20">
-          <h3 class="text-sm font-medium text-info-700 dark:text-info-300 mb-2">
-            Task Distribution
-          </h3>
-          <div class="space-y-1">
-            <div
-              v-for="flow in selectedCategory.flows"
-              :key="flow.id"
-              class="flex justify-between items-center"
-            >
-              <span class="text-sm text-info-600 dark:text-info-300">{{
-                flow.name
-              }}</span>
-              <span class="font-bold text-info-700 dark:text-info-300">{{
-                taskStats.byFlow[flow.id] || 0
-              }}</span>
+            <!-- Priority Distribution -->
+            <div class="card bg-warning-500/10 dark:bg-warning-500/20">
+              <h3
+                class="text-sm font-medium text-warning-700 dark:text-warning-300 mb-2"
+              >
+                Priority Tasks
+              </h3>
+              <div class="space-y-1">
+                <div class="flex justify-between items-center">
+                  <span class="text-sm text-warning-700 dark:text-warning-300"
+                    >High</span
+                  >
+                  <span
+                    class="font-bold text-warning-700 dark:text-warning-300"
+                    >{{ taskStats.byPriority.high }}</span
+                  >
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-sm text-warning-700 dark:text-warning-300"
+                    >Medium</span
+                  >
+                  <span
+                    class="font-bold text-warning-700 dark:text-warning-300"
+                    >{{ taskStats.byPriority.medium }}</span
+                  >
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-sm text-warning-700 dark:text-warning-300"
+                    >Low</span
+                  >
+                  <span
+                    class="font-bold text-warning-700 dark:text-warning-300"
+                    >{{ taskStats.byPriority.low }}</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <!-- Flow Distribution -->
+            <div class="card bg-info-500/10 dark:bg-info-500/20">
+              <h3
+                class="text-sm font-medium text-warning-700 dark:text-warning-300 mb-2"
+              >
+                Task Distribution
+              </h3>
+              <div class="space-y-1">
+                <div
+                  v-for="flow in selectedCategory.flows"
+                  :key="flow.id"
+                  class="flex justify-between items-center"
+                >
+                  <span class="text-sm text-warning-700 dark:text-warning-300">{{
+                    flow.name
+                  }}</span>
+                  <span
+                    class="font-bold text-warning-700 dark:text-warning-300"
+                    >{{ taskStats.byFlow[flow.id] || 0 }}</span
+                  >
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-  </div>
-</Transition>
+      </Transition>
       <div
         class="overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-primary-200 scrollbar-track-transparent"
-      >
-      
-      </div>
+      ></div>
 
       <!-- Task Statistics -->
-   
 
       <!-- Task Board -->
       <div class="w-full">

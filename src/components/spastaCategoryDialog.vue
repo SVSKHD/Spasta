@@ -28,6 +28,7 @@ const newCategory = ref({
 });
 
 const draggedFlow = ref<number | null>(null);
+const loading = ref(false); // Add loading state
 
 watch(
   () => props.category,
@@ -98,8 +99,14 @@ const handleDrop = (index: number) => {
   draggedFlow.value = null;
 };
 
-const handleSubmit = () => {
-  emit("save", newCategory.value);
+const handleSubmit = async () => {
+  if (loading.value) return; // Prevent multiple submissions
+  loading.value = true;
+  try {
+    emit("save", newCategory.value);
+  } finally {
+    loading.value = false; // Reset loading state
+  }
 };
 </script>
 
@@ -109,7 +116,7 @@ const handleSubmit = () => {
 
     <div class="fixed inset-0 flex items-center justify-center p-4">
       <DialogPanel class="w-full max-w-md rounded-lg bg-card p-6 shadow-xl">
-        <DialogTitle class="text-xl font-semibold mb-4">
+        <DialogTitle class="text-xl font-semibold mb-4 dark:text-text/80">
           {{ category ? "Edit Category" : "New Category" }}
         </DialogTitle>
 
@@ -201,11 +208,17 @@ const handleSubmit = () => {
               type="button"
               @click="emit('close')"
               class="btn btn-secondary"
+              :disabled="loading"
             >
               Cancel
             </button>
-            <button type="submit" class="btn btn-primary">
-              {{ category ? "Save Changes" : "Create Category" }}
+            <button
+              type="submit"
+              class="btn btn-primary"
+              :disabled="loading"
+            >
+              <span v-if="loading" class="loader"></span>
+              {{ loading ? "Saving..." : category ? "Save Changes" : "Create Category" }}
             </button>
           </div>
         </form>

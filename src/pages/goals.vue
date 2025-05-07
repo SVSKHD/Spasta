@@ -1,8 +1,8 @@
 <template>
-  <div class="container mx-auto">
+  <div class="container">
     <h1 class="text-3xl font-bold text-gray-800 mb-6">🎯 Goals Tracker</h1>
 
-    <div class="flex gap-4 mb-4">
+    <div class="flex gap-2 mb-2">
       <input
         v-model="newCategory"
         type="text"

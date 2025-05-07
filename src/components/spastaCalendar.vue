@@ -229,9 +229,9 @@ const handleTaskDelete = async (taskId: string) => {
   <div class="bg-card rounded-lg shadow-md p-6 animate-slide-in">
     <!-- Calendar Header -->
     <div class="flex items-center justify-between mb-6">
-      <h2 class="text-xl font-bold text-text">
+      <h1 class="text-2xl font-bold text-text mb-6">
         {{ format(currentMonth, "MMMM yyyy") }}
-      </h2>
+      </h1>
       <div class="flex items-center space-x-4">
         <!-- Category Filter -->
         <select v-model="selectedCategoryId" class="input px-3 py-1 text-sm">
