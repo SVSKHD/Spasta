@@ -7,7 +7,7 @@ import App from "./App.vue";
 import "./style.css";
 
 // Import global components
-import {spastaComponents} from "./components/index";
+import { spastaComponents } from "./components/index";
 
 const pinia = createPinia();
 const app = createApp(App);

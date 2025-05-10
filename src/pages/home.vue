@@ -4,10 +4,9 @@
     <spasta-resizeable-card
       title="Card 1"
       content="This is the content of card 1."
-      minWidth="200px"/>
+      minWidth="200px"
+    />
   </div>
 </template>
 
-<script setup lang="ts">
-
-</script>
+<script setup lang="ts"></script>
