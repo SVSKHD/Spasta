@@ -61,7 +61,10 @@ const handleDelete = () => {
 
 <template>
   <Dialog :open="isOpen" @close="emit('close')" class="relative z-50">
-    <div class="fixed inset-0 bg-black/30 backdrop-blur-sm" aria-hidden="true" />
+    <div
+      class="fixed inset-0 bg-black/30 backdrop-blur-sm"
+      aria-hidden="true"
+    />
 
     <div class="fixed inset-0 flex items-center justify-center p-4">
       <DialogPanel
@@ -70,7 +73,9 @@ const handleDelete = () => {
         <div v-if="!isEditing">
           <!-- View Mode -->
           <div class="flex justify-between items-start mb-4">
-            <DialogTitle class="text-xl font-semibold text-text dark:text-gray-100">
+            <DialogTitle
+              class="text-xl font-semibold text-text dark:text-gray-100"
+            >
               {{ task?.data?.title }}
             </DialogTitle>
             <div class="flex space-x-2">
@@ -91,7 +96,9 @@ const handleDelete = () => {
 
           <div class="space-y-4">
             <div>
-              <div class="text-sm text-text/60 dark:text-gray-400 mb-1">Description</div>
+              <div class="text-sm text-text/60 dark:text-gray-400 mb-1">
+                Description
+              </div>
               <p class="text-text dark:text-gray-100">
                 {{ task?.data?.description || "No description" }}
               </p>
@@ -99,12 +106,16 @@ const handleDelete = () => {
 
             <div class="flex items-center space-x-4">
               <div>
-                <div class="text-sm text-text/60 dark:text-gray-400 mb-1">Status</div>
+                <div class="text-sm text-text/60 dark:text-gray-400 mb-1">
+                  Status
+                </div>
                 <span class="text-text dark:text-gray-100">{{ flowName }}</span>
               </div>
 
               <div>
-                <div class="text-sm text-text/60 dark:text-gray-400 mb-1">Priority</div>
+                <div class="text-sm text-text/60 dark:text-gray-400 mb-1">
+                  Priority
+                </div>
                 <span
                   :class="[priorityClasses, 'px-2 py-0.5 rounded-full text-sm']"
                 >
@@ -114,8 +125,12 @@ const handleDelete = () => {
             </div>
 
             <div v-if="task?.data?.dueDate">
-              <div class="text-sm text-text/60 dark:text-gray-400 mb-1">Due Date</div>
-              <span class="text-text dark:text-gray-100">{{ formattedDate }}</span>
+              <div class="text-sm text-text/60 dark:text-gray-400 mb-1">
+                Due Date
+              </div>
+              <span class="text-text dark:text-gray-100">{{
+                formattedDate
+              }}</span>
             </div>
 
             <div class="text-sm text-text/60 dark:text-gray-400">
@@ -130,7 +145,8 @@ const handleDelete = () => {
           <!-- Edit Mode -->
           <form @submit.prevent="handleSave" class="space-y-4">
             <div>
-              <label class="block text-sm font-medium text-text/60 dark:text-gray-400"
+              <label
+                class="block text-sm font-medium text-text/60 dark:text-gray-400"
                 >Title</label
               >
               <input
@@ -142,7 +158,8 @@ const handleDelete = () => {
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-text/60 dark:text-gray-400"
+              <label
+                class="block text-sm font-medium text-text/60 dark:text-gray-400"
                 >Description</label
               >
               <textarea
@@ -153,7 +170,8 @@ const handleDelete = () => {
 
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-medium text-text/60 dark:text-gray-400"
+                <label
+                  class="block text-sm font-medium text-text/60 dark:text-gray-400"
                   >Status</label
                 >
                 <select
@@ -171,7 +189,8 @@ const handleDelete = () => {
               </div>
 
               <div>
-                <label class="block text-sm font-medium text-text/60 dark:text-gray-400"
+                <label
+                  class="block text-sm font-medium text-text/60 dark:text-gray-400"
                   >Priority</label
                 >
                 <select
@@ -186,7 +205,8 @@ const handleDelete = () => {
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-text/60 dark:text-gray-400"
+              <label
+                class="block text-sm font-medium text-text/60 dark:text-gray-400"
                 >Due Date</label
               >
               <input

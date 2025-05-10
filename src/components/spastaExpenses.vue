@@ -325,9 +325,7 @@ const getCategoryClass = (category: string) => {
         v-if="sortedExpenses.length === 0"
         class="text-center py-8 bg-white dark:bg-gray-800 rounded-lg shadow"
       >
-        <p class="text-gray-500 dark:text-gray-400 mb-3">
-          No expenses found
-        </p>
+        <p class="text-gray-500 dark:text-gray-400 mb-3">No expenses found</p>
         <button @click="toggleAddForm" class="btn btn-primary">
           Add your first expense
         </button>

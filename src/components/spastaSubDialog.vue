@@ -42,15 +42,15 @@ watch(
       estimatedHours: updatedSubtask?.estimatedHours ?? 0,
       actualHours: updatedSubtask?.actualHours ?? 0,
       startDate: updatedSubtask?.startDate ?? new Date(),
-      dueDate: updatedSubtask?.dueDate ??
-        new Date(new Date().setHours(17, 0, 0, 0)),
+      dueDate:
+        updatedSubtask?.dueDate ?? new Date(new Date().setHours(17, 0, 0, 0)),
       userId: updatedSubtask?.userId ?? "",
       parentTaskId: props.parentTask.id,
       taskId: updatedSubtask?.taskId ?? props.parentTask.id,
       timeEntries: updatedSubtask?.timeEntries ?? [],
     };
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 const showTimeEntry = ref(false);
@@ -102,20 +102,27 @@ const handleSubmit = () => {
 
 <template>
   <Dialog :open="isOpen" @close="emit('close')" class="relative z-50">
-    <div class="fixed inset-0 bg-black/30 dark:bg-black/50" aria-hidden="true" />
+    <div
+      class="fixed inset-0 bg-black/30 dark:bg-black/50"
+      aria-hidden="true"
+    />
 
     <div class="fixed inset-0 flex items-center justify-center p-4">
       <DialogPanel
         class="w-full max-w-lg rounded-lg bg-white dark:bg-gray-800 p-6 shadow-xl"
       >
-        <DialogTitle class="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">
+        <DialogTitle
+          class="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100"
+        >
           {{ subtask ? "Edit Subtask" : "New Subtask" }}
         </DialogTitle>
 
         <form @submit.prevent="handleSubmit" class="space-y-4">
           <div class="grid grid-cols-1 gap-4">
             <div>
-              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
                 Title
               </label>
               <input
@@ -128,7 +135,9 @@ const handleSubmit = () => {
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
                 Description
               </label>
               <textarea
@@ -139,7 +148,9 @@ const handleSubmit = () => {
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
                 Start Date
               </label>
               <input
@@ -150,7 +161,9 @@ const handleSubmit = () => {
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
                 Due Date
               </label>
               <input
@@ -161,7 +174,9 @@ const handleSubmit = () => {
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
                 Progress (%)
               </label>
               <input
@@ -174,7 +189,9 @@ const handleSubmit = () => {
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
                 Estimated Hours
               </label>
               <input
@@ -207,7 +224,9 @@ const handleSubmit = () => {
 
             <div class="grid grid-cols-2 gap-4 mb-4">
               <div class="text-sm">
-                <span class="text-gray-500 dark:text-gray-400">Total Hours:</span>
+                <span class="text-gray-500 dark:text-gray-400"
+                  >Total Hours:</span
+                >
                 <span class="ml-2 font-medium text-gray-900 dark:text-gray-100">
                   {{ totalHours }}
                 </span>
@@ -227,7 +246,9 @@ const handleSubmit = () => {
             >
               <div class="grid grid-cols-2 gap-4">
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label
+                    class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
                     Hours
                   </label>
                   <input
@@ -240,7 +261,9 @@ const handleSubmit = () => {
                   />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label
+                    class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
                     Description
                   </label>
                   <input

@@ -84,18 +84,27 @@ const handleSubmit = () => {
 
 <template>
   <Dialog :open="isOpen" @close="emit('close')" class="relative z-50">
-    <div class="fixed inset-0 bg-black/30 dark:bg-black/50" aria-hidden="true" />
+    <div
+      class="fixed inset-0 bg-black/30 dark:bg-black/50"
+      aria-hidden="true"
+    />
 
     <div class="fixed inset-0 flex items-center justify-center p-4">
-      <DialogPanel class="w-full max-w-2xl rounded-lg bg-white dark:bg-gray-800 p-6 shadow-xl">
-        <DialogTitle class="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">
+      <DialogPanel
+        class="w-full max-w-2xl rounded-lg bg-white dark:bg-gray-800 p-6 shadow-xl"
+      >
+        <DialogTitle
+          class="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100"
+        >
           {{ task ? "Edit Task" : "New Task" }}
         </DialogTitle>
 
         <form @submit.prevent="handleSubmit" class="space-y-4">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="md:col-span-2">
-              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
                 Title
               </label>
               <input
@@ -108,7 +117,9 @@ const handleSubmit = () => {
             </div>
 
             <div class="md:col-span-2">
-              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
                 Description
               </label>
               <textarea
@@ -119,10 +130,15 @@ const handleSubmit = () => {
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
                 Status
               </label>
-              <select v-model="newTask.flowId" class="input dark:bg-gray-700 dark:text-gray-100">
+              <select
+                v-model="newTask.flowId"
+                class="input dark:bg-gray-700 dark:text-gray-100"
+              >
                 <option
                   v-for="flow in category.flows"
                   :key="flow.id"
@@ -134,10 +150,15 @@ const handleSubmit = () => {
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
                 Priority
               </label>
-              <select v-model="newTask.priority" class="input dark:bg-gray-700 dark:text-gray-100">
+              <select
+                v-model="newTask.priority"
+                class="input dark:bg-gray-700 dark:text-gray-100"
+              >
                 <option value="low">Low</option>
                 <option value="medium">Medium</option>
                 <option value="high">High</option>
@@ -145,21 +166,35 @@ const handleSubmit = () => {
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
                 Start Date
               </label>
-              <input v-model="newTask.startDate" type="date" class="input dark:bg-gray-700 dark:text-gray-100" />
+              <input
+                v-model="newTask.startDate"
+                type="date"
+                class="input dark:bg-gray-700 dark:text-gray-100"
+              />
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
                 Due Date
               </label>
-              <input v-model="newTask.dueDate" type="date" class="input dark:bg-gray-700 dark:text-gray-100" />
+              <input
+                v-model="newTask.dueDate"
+                type="date"
+                class="input dark:bg-gray-700 dark:text-gray-100"
+              />
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
                 Progress (%)
               </label>
               <input
@@ -172,7 +207,9 @@ const handleSubmit = () => {
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+              >
                 Estimated Hours
               </label>
               <input
@@ -193,13 +230,18 @@ const handleSubmit = () => {
                   type="checkbox"
                   class="h-4 w-4 text-primary-600 rounded border-gray-300 dark:border-gray-600"
                 />
-                <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label
+                  class="text-sm font-medium text-gray-700 dark:text-gray-300"
+                >
                   Recurring Task
                 </label>
               </div>
 
               <div v-if="newTask.isRecurring" class="mt-2">
-                <select v-model="newTask.recurringPeriod" class="input dark:bg-gray-700 dark:text-gray-100">
+                <select
+                  v-model="newTask.recurringPeriod"
+                  class="input dark:bg-gray-700 dark:text-gray-100"
+                >
                   <option value="daily">Daily</option>
                   <option value="weekly">Weekly</option>
                   <option value="monthly">Monthly</option>
@@ -212,7 +254,9 @@ const handleSubmit = () => {
           <!-- Time Tracking -->
           <div class="border-t pt-4 dark:border-gray-600">
             <div class="flex justify-between items-center mb-2">
-              <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Time Tracking</h3>
+              <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                Time Tracking
+              </h3>
               <button
                 type="button"
                 @click="showTimeEntry = true"
@@ -225,22 +269,33 @@ const handleSubmit = () => {
 
             <div class="grid grid-cols-2 gap-4 mb-4">
               <div class="text-sm">
-                <span class="text-gray-500 dark:text-gray-400">Total Hours:</span>
-                <span class="ml-2 font-medium text-gray-900 dark:text-gray-100">{{ totalHours }}</span>
+                <span class="text-gray-500 dark:text-gray-400"
+                  >Total Hours:</span
+                >
+                <span
+                  class="ml-2 font-medium text-gray-900 dark:text-gray-100"
+                  >{{ totalHours }}</span
+                >
               </div>
               <div class="text-sm">
                 <span class="text-gray-500 dark:text-gray-400">Estimated:</span>
-                <span class="ml-2 font-medium text-gray-900 dark:text-gray-100">{{
-                  newTask.estimatedHours || "-"
-                }}</span>
+                <span
+                  class="ml-2 font-medium text-gray-900 dark:text-gray-100"
+                  >{{ newTask.estimatedHours || "-" }}</span
+                >
               </div>
             </div>
 
             <!-- Time Entry Form -->
-            <div v-if="showTimeEntry" class="bg-gray-50 dark:bg-gray-700 p-4 rounded-md mb-4">
+            <div
+              v-if="showTimeEntry"
+              class="bg-gray-50 dark:bg-gray-700 p-4 rounded-md mb-4"
+            >
               <div class="grid grid-cols-2 gap-4">
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label
+                    class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
                     Hours
                   </label>
                   <input
@@ -253,7 +308,9 @@ const handleSubmit = () => {
                   />
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label
+                    class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >
                     Description
                   </label>
                   <input
@@ -294,8 +351,13 @@ const handleSubmit = () => {
                 class="flex justify-between items-center text-sm bg-gray-50 dark:bg-gray-700 p-2 rounded"
               >
                 <div>
-                  <span class="font-medium text-gray-900 dark:text-gray-100">{{ entry.hours }}h</span>
-                  <span v-if="entry.description" class="ml-2 text-gray-600 dark:text-gray-400">
+                  <span class="font-medium text-gray-900 dark:text-gray-100"
+                    >{{ entry.hours }}h</span
+                  >
+                  <span
+                    v-if="entry.description"
+                    class="ml-2 text-gray-600 dark:text-gray-400"
+                  >
                     - {{ entry.description }}
                   </span>
                 </div>
@@ -314,7 +376,10 @@ const handleSubmit = () => {
             >
               Cancel
             </button>
-            <button type="submit" class="btn btn-primary dark:bg-primary-600 dark:hover:bg-primary-700">
+            <button
+              type="submit"
+              class="btn btn-primary dark:bg-primary-600 dark:hover:bg-primary-700"
+            >
               {{ task ? "Save Changes" : "Create Task" }}
             </button>
           </div>

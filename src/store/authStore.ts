@@ -27,10 +27,11 @@ export const useAuthStore = defineStore("auth", {
       const savedLogin = localStorage.getItem("spasta-login");
       const savedUser = localStorage.getItem("spasta-user");
       const now = new Date();
-      
+
       if (savedLogin && savedUser) {
         const loginTime = new Date(savedLogin);
-        const hoursSince = (now.getTime() - loginTime.getTime()) / (1000 * 60 * 60);
+        const hoursSince =
+          (now.getTime() - loginTime.getTime()) / (1000 * 60 * 60);
         if (hoursSince < 24) {
           this.user = JSON.parse(savedUser);
           this.isAuthenticated = true;

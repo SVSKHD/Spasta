@@ -7,7 +7,7 @@ import App from "./App.vue";
 import "./style.css";
 
 // Import global components
-import components from "./components";
+import {spastaComponents} from "./components/index";
 
 const pinia = createPinia();
 const app = createApp(App);
@@ -33,8 +33,8 @@ const toastOptions: PluginOptions = {
   containerClassName: "spasta-toast-container",
 };
 
+spastaComponents(app);
 app.use(pinia);
 app.use(router);
-app.use(components);
 app.use(Toast, toastOptions);
 app.mount("#app");

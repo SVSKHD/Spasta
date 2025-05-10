@@ -77,13 +77,18 @@ onMounted(() => {
       @close="showRestDialog = false"
       class="relative z-50"
     >
-      <div class="fixed inset-0 bg-black/30 backdrop-blur-sm" aria-hidden="true" />
+      <div
+        class="fixed inset-0 bg-black/30 backdrop-blur-sm"
+        aria-hidden="true"
+      />
 
       <div class="fixed inset-0 flex items-center justify-center p-4">
         <DialogPanel
           class="w-full max-w-sm rounded-lg bg-white/70 dark:bg-gray-800/70 backdrop-blur-md p-6 shadow-xl"
         >
-          <DialogTitle class="text-xl font-semibold text-text dark:text-gray-100 mb-4">
+          <DialogTitle
+            class="text-xl font-semibold text-text dark:text-gray-100 mb-4"
+          >
             Time to Rest 😴
           </DialogTitle>
 
@@ -107,13 +112,18 @@ onMounted(() => {
       @close="resetActivityTimer"
       class="relative z-50"
     >
-      <div class="fixed inset-0 bg-black/30 backdrop-blur-sm" aria-hidden="true" />
+      <div
+        class="fixed inset-0 bg-black/30 backdrop-blur-sm"
+        aria-hidden="true"
+      />
 
       <div class="fixed inset-0 flex items-center justify-center p-4">
         <DialogPanel
           class="w-full max-w-sm rounded-lg bg-white/70 dark:bg-gray-800/70 backdrop-blur-md p-6 shadow-xl"
         >
-          <DialogTitle class="text-xl font-semibold text-text dark:text-gray-100 mb-4">
+          <DialogTitle
+            class="text-xl font-semibold text-text dark:text-gray-100 mb-4"
+          >
             Still there? 👋
           </DialogTitle>
 

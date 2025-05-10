@@ -11,7 +11,7 @@ import SpastaTaskCard from "./spastaTaskCard.vue";
 import SpastaTaskDialog from "./spastaTaskDialog.vue";
 
 const emit = defineEmits<{
-  (e: 'refresh'): void;
+  (e: "refresh"): void;
 }>();
 
 const props = defineProps<{
@@ -46,7 +46,7 @@ const handleCreateSubtask = async (data: any) => {
     showDialog.value = false;
     toastStore.showToast("Sub Task created successfully! 🎯", "success");
     triggerConfetti();
-    emit('refresh');
+    emit("refresh");
   } catch (error) {
     console.error("Error adding task:", error);
     toastStore.showToast("Failed to create task", "error");
@@ -105,7 +105,7 @@ const handleAddTask = async (
     showDialog.value = false;
     toastStore.showToast("Task created successfully! 🎯", "success");
     triggerConfetti();
-    emit('refresh');
+    emit("refresh");
   } catch (error) {
     console.error("Error adding task:", error);
     toastStore.showToast("Failed to create task", "error");
@@ -268,56 +268,49 @@ const onDrop = async (event: DragEvent, flowId: string) => {
       </div>
     </div>
 
-  <!-- Task Board -->
-<div class="scrollable-row overflow-x-auto">
-  <div
-    class="flex space-x-4 h-[calc(100vh-250px)] overflow-y-auto pb-4"
-  >
-    <div
-      v-for="flow in category.flows"
-      :key="flow.id"
-      class="flow-column bg-bg rounded-md p-3 flex-none w-80 overflow-y-auto"
-      @dragover="onDragOver($event, flow.id)"
-      @dragleave="onDragLeave"
-      @drop="onDrop($event, flow.id)"
-      :class="{
-        'dropzone-active': activeDropzone === flow.id,
-        'is-drop-target': draggedTask && draggedTask.flowId !== flow.id,
-      }"
-    >
-      <h3 class="font-medium text-text mb-3">{{ flow.name }}</h3>
-
-      <TransitionGroup
-        name="task-list"
-        tag="div"
-        class="space-y-3"
-      >
-        <SpastaTaskCard
-          v-for="task in tasksByFlow[flow.id]"
-          :key="task.id"
-          :task="task"
-          :category="category"
-          draggable="true"
-          @create-sub-task="handleCreateSubtask"
-          @dragstart="onDragStart($event, task)"
-          @dragend="onDragEnd"
-          @delete="handleDeleteTask(task.id)"
-          @update="handleEditTask(task, $event)"
-          class="transform transition-transform duration-150 ease-out cursor-move"
-        />
-
+    <!-- Task Board -->
+    <div class="scrollable-row overflow-x-auto">
+      <div class="flex space-x-4 h-[calc(100vh-250px)] overflow-y-auto pb-4">
         <div
-          v-if="!tasksByFlow[flow.id]?.length"
-          :key="'empty-' + flow.id"
-          class="empty-column text-center text-text/40 p-4 border-2 border-dashed border-border/50 rounded-md"
+          v-for="flow in category.flows"
+          :key="flow.id"
+          class="flow-column bg-bg rounded-md p-3 flex-none w-80 overflow-y-auto"
+          @dragover="onDragOver($event, flow.id)"
+          @dragleave="onDragLeave"
+          @drop="onDrop($event, flow.id)"
+          :class="{
+            'dropzone-active': activeDropzone === flow.id,
+            'is-drop-target': draggedTask && draggedTask.flowId !== flow.id,
+          }"
         >
-          <p>Drop tasks here</p>
-        </div>
-      </TransitionGroup>
-    </div>
-  </div>
-</div>
+          <h3 class="font-medium text-text mb-3">{{ flow.name }}</h3>
 
+          <TransitionGroup name="task-list" tag="div" class="space-y-3">
+            <SpastaTaskCard
+              v-for="task in tasksByFlow[flow.id]"
+              :key="task.id"
+              :task="task"
+              :category="category"
+              draggable="true"
+              @create-sub-task="handleCreateSubtask"
+              @dragstart="onDragStart($event, task)"
+              @dragend="onDragEnd"
+              @delete="handleDeleteTask(task.id)"
+              @update="handleEditTask(task, $event)"
+              class="transform transition-transform duration-150 ease-out cursor-move"
+            />
+
+            <div
+              v-if="!tasksByFlow[flow.id]?.length"
+              :key="'empty-' + flow.id"
+              class="empty-column text-center text-text/40 p-4 border-2 border-dashed border-border/50 rounded-md"
+            >
+              <p>Drop tasks here</p>
+            </div>
+          </TransitionGroup>
+        </div>
+      </div>
+    </div>
 
     <!-- Task Dialog -->
     <SpastaTaskDialog

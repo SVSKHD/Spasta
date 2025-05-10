@@ -296,7 +296,9 @@ const formatWorkoutDate = (date: Date) => {
           >
             <div class="flex justify-between items-start">
               <div>
-                <h4 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                <h4
+                  class="text-lg font-medium text-gray-900 dark:text-gray-100"
+                >
                   {{ workout.name }}
                 </h4>
                 <p class="text-sm text-gray-500 dark:text-gray-400">
@@ -323,8 +325,12 @@ const formatWorkoutDate = (date: Date) => {
               </div>
             </div>
 
-            <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-600">
-              <h5 class="text-sm font-medium mb-2 text-gray-900 dark:text-gray-100">
+            <div
+              class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-600"
+            >
+              <h5
+                class="text-sm font-medium mb-2 text-gray-900 dark:text-gray-100"
+              >
                 Exercises
               </h5>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-3">

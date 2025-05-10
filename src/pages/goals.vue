@@ -1,6 +1,8 @@
 <template>
   <div class="container">
-    <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">🎯 Goals Tracker</h1>
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">
+      🎯 Goals Tracker
+    </h1>
 
     <div class="flex gap-2 mb-2">
       <input
@@ -56,9 +58,25 @@
           @click="deleteCategory(category)"
           class="flex items-center justify-center w-6 h-6 rounded-full text-white bg-red-500 hover:bg-red-600 transition duration-200"
         >
-          <svg v-if="deletingCategory === category" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+          <svg
+            v-if="deletingCategory === category"
+            class="w-4 h-4 animate-spin"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+            ></path>
           </svg>
           <span v-else class="text-xs">×</span>
         </button>
@@ -77,8 +95,14 @@
 
     <transition name="fade">
       <div v-if="selectedCategory" class="mt-6">
-        <h2 class="text-lg font-semibold text-gray-700 mb-4">Goals in {{ selectedCategory }}</h2>
-        <transition-group name="goal-list" tag="div" class="grid md:grid-cols-2 gap-6">
+        <h2 class="text-lg font-semibold text-gray-700 mb-4">
+          Goals in {{ selectedCategory }}
+        </h2>
+        <transition-group
+          name="goal-list"
+          tag="div"
+          class="grid md:grid-cols-2 gap-6"
+        >
           <div
             v-for="goalItem in goalsMap[selectedCategory]"
             :key="goalItem.title"
@@ -127,9 +151,25 @@
               @click="deleteGoal(goalItem.title)"
               class="flex items-center justify-center w-6 h-6 rounded-full text-white bg-red-400 hover:bg-red-500 transition duration-200 ml-2"
             >
-              <svg v-if="deletingGoal === goalItem.title" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+              <svg
+                v-if="deletingGoal === goalItem.title"
+                class="w-4 h-4 animate-spin"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                ></path>
               </svg>
               <span v-else class="text-xs">×</span>
             </button>
@@ -146,122 +186,134 @@
 
     <!-- Dialog -->
     <transition name="fade-dialog">
-  <div
-    v-if="showDialog"
-    class="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
-  >
-    <div class="bg-white p-6 rounded-lg w-full max-w-md shadow-xl scale-in">
-      <h2 class="text-xl font-bold mb-4">Add Goal to {{ selectedCategory }}</h2>
-      <input
-        v-model="goalTitle"
-        placeholder="Goal title"
-        class="input mb-3 w-full"
-      />
-      <textarea
-        v-model="goalDescription"
-        placeholder="Goal description"
-        class="input mb-3 w-full"
-        rows="2"
-      ></textarea>
-      <select v-model="goalPriority" class="input mb-4 w-full">
-        <option disabled value="">Select priority</option>
-        <option value="high">🔥 High</option>
-        <option value="medium">🌟 Medium</option>
-        <option value="low">✅ Low</option>
-      </select>
-      <div class="flex justify-end gap-2">
-        <button class="btn bg-gray-200 text-gray-700" @click="closeDialog">
-          Cancel
-        </button>
-        <button
-          class="btn transition-transform duration-200 active:scale-95 disabled:opacity-50"
-          :disabled="isGoalAdding"
-          @click="addGoal"
-        >
-          <span v-if="!isGoalAdding">Add Goal</span>
-          <svg
-            v-else
-            class="w-5 h-5 animate-spin text-white"
-            fill="none"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <circle
-              class="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              stroke-width="4"
-            ></circle>
-            <path
-              class="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-            ></path>
-          </svg>
-        </button>
+      <div
+        v-if="showDialog"
+        class="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
+      >
+        <div class="bg-white p-6 rounded-lg w-full max-w-md shadow-xl scale-in">
+          <h2 class="text-xl font-bold mb-4">
+            Add Goal to {{ selectedCategory }}
+          </h2>
+          <input
+            v-model="goalTitle"
+            placeholder="Goal title"
+            class="input mb-3 w-full"
+          />
+          <textarea
+            v-model="goalDescription"
+            placeholder="Goal description"
+            class="input mb-3 w-full"
+            rows="2"
+          ></textarea>
+          <select v-model="goalPriority" class="input mb-4 w-full">
+            <option disabled value="">Select priority</option>
+            <option value="high">🔥 High</option>
+            <option value="medium">🌟 Medium</option>
+            <option value="low">✅ Low</option>
+          </select>
+          <div class="flex justify-end gap-2">
+            <button class="btn bg-gray-200 text-gray-700" @click="closeDialog">
+              Cancel
+            </button>
+            <button
+              class="btn transition-transform duration-200 active:scale-95 disabled:opacity-50"
+              :disabled="isGoalAdding"
+              @click="addGoal"
+            >
+              <span v-if="!isGoalAdding">Add Goal</span>
+              <svg
+                v-else
+                class="w-5 h-5 animate-spin text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                ></path>
+              </svg>
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</transition>
+    </transition>
 
-<transition name="fade-dialog">
-  <div
-    v-if="editingGoalTitle"
-    class="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
-  >
-    <div class="bg-white p-6 rounded-lg w-full max-w-md shadow-xl scale-in">
-      <h2 class="text-xl font-bold mb-4">Edit Goal</h2>
-      <input v-model="editTitle" placeholder="Goal title" class="input mb-3 w-full" />
-      <textarea v-model="editDescription" placeholder="Goal description" class="input mb-3 w-full" rows="2"></textarea>
-      <select v-model="editPriority" class="input mb-4 w-full">
-        <option disabled value="">Select priority</option>
-        <option value="high">🔥 High</option>
-        <option value="medium">🌟 Medium</option>
-        <option value="low">✅ Low</option>
-      </select>
-      <div class="flex justify-end gap-2">
-        <button class="btn bg-gray-200 text-gray-700" @click="cancelEdit">Cancel</button>
-        <button
-          class="btn transition-transform duration-200 active:scale-95 disabled:opacity-50"
-          :disabled="isGoalUpdating"
-          @click="submitEdit"
-        >
-          <span v-if="!isGoalUpdating">Update Goal</span>
-          <svg
-            v-else
-            class="w-5 h-5 animate-spin text-white"
-            fill="none"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <circle
-              class="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              stroke-width="4"
-            ></circle>
-            <path
-              class="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-            ></path>
-          </svg>
-        </button>
+    <transition name="fade-dialog">
+      <div
+        v-if="editingGoalTitle"
+        class="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
+      >
+        <div class="bg-white p-6 rounded-lg w-full max-w-md shadow-xl scale-in">
+          <h2 class="text-xl font-bold mb-4">Edit Goal</h2>
+          <input
+            v-model="editTitle"
+            placeholder="Goal title"
+            class="input mb-3 w-full"
+          />
+          <textarea
+            v-model="editDescription"
+            placeholder="Goal description"
+            class="input mb-3 w-full"
+            rows="2"
+          ></textarea>
+          <select v-model="editPriority" class="input mb-4 w-full">
+            <option disabled value="">Select priority</option>
+            <option value="high">🔥 High</option>
+            <option value="medium">🌟 Medium</option>
+            <option value="low">✅ Low</option>
+          </select>
+          <div class="flex justify-end gap-2">
+            <button class="btn bg-gray-200 text-gray-700" @click="cancelEdit">
+              Cancel
+            </button>
+            <button
+              class="btn transition-transform duration-200 active:scale-95 disabled:opacity-50"
+              :disabled="isGoalUpdating"
+              @click="submitEdit"
+            >
+              <span v-if="!isGoalUpdating">Update Goal</span>
+              <svg
+                v-else
+                class="w-5 h-5 animate-spin text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                ></path>
+              </svg>
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</transition>
+    </transition>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue";
-import {useGoalCategoryStore} from "../store/goalStore"
-
+import { useGoalCategoryStore } from "../store/goalStore";
 
 const store = useGoalCategoryStore();
 
@@ -278,9 +330,17 @@ const isGoalAdding = ref(false);
 const deletingCategory = ref<string | null>(null);
 const deletingGoal = ref<string | null>(null);
 
-const goalsMap = ref<Record<string, {
-  completed: any; title: string; description: string; priority: 'high' | 'medium' | 'low' 
-}[]>>({});
+const goalsMap = ref<
+  Record<
+    string,
+    {
+      completed: any;
+      title: string;
+      description: string;
+      priority: "high" | "medium" | "low";
+    }[]
+  >
+>({});
 
 const goalCategories = computed(() => store.categories.map((c) => c.name));
 
@@ -297,7 +357,15 @@ onMounted(async () => {
   await store.fetchGoals();
 
   // Group goals by category name
-  const grouped: Record<string, { completed: boolean; title: string; description: string; priority: "high" | "medium" | "low" }[]> = {};
+  const grouped: Record<
+    string,
+    {
+      completed: boolean;
+      title: string;
+      description: string;
+      priority: "high" | "medium" | "low";
+    }[]
+  > = {};
   for (const category of store.categories) {
     grouped[category.name] = store.goals
       .filter((goal) => goal.categoryId === category.id)
@@ -325,21 +393,23 @@ const createGoalCategory = async () => {
 };
 
 const deleteCategory = async (categoryName: string) => {
-  const category = store.categories.find(c => c.name === categoryName);
+  const category = store.categories.find((c) => c.name === categoryName);
   if (!category) return;
   deletingCategory.value = categoryName;
   try {
     await store.deleteCategory(category.id);
     await store.fetchCategories();
     await store.fetchGoals();
-    const updated: Record<string, typeof goalsMap.value[string]> = {};
+    const updated: Record<string, (typeof goalsMap.value)[string]> = {};
     for (const c of store.categories) {
-      updated[c.name] = store.goals.filter(g => g.categoryId === c.id).map(g => ({
-        completed: g.completed ?? false,
-        title: g.title,
-        description: g.description || "",
-        priority: g.priority || "medium",
-      }));
+      updated[c.name] = store.goals
+        .filter((g) => g.categoryId === c.id)
+        .map((g) => ({
+          completed: g.completed ?? false,
+          title: g.title,
+          description: g.description || "",
+          priority: g.priority || "medium",
+        }));
     }
     goalsMap.value = updated;
     if (selectedCategory.value === categoryName) selectedCategory.value = "";
@@ -366,11 +436,14 @@ const closeDialog = () => {
 };
 
 const addGoal = async () => {
-  if (!selectedCategory.value || !goalTitle.value || !goalPriority.value) return;
+  if (!selectedCategory.value || !goalTitle.value || !goalPriority.value)
+    return;
 
   isGoalAdding.value = true;
   try {
-    const category = store.categories.find((c) => c.name === selectedCategory.value);
+    const category = store.categories.find(
+      (c) => c.name === selectedCategory.value,
+    );
     if (!category) return;
 
     await store.addGoal({
@@ -397,7 +470,9 @@ const addGoal = async () => {
     await store.fetchGoals();
 
     // Remap goals after adding
-    const updatedGoals = store.goals.filter((g) => g.categoryId === category.id);
+    const updatedGoals = store.goals.filter(
+      (g) => g.categoryId === category.id,
+    );
     goalsMap.value[selectedCategory.value] = updatedGoals.map((goal) => ({
       completed: goal.completed ?? false,
       title: goal.title,
@@ -410,30 +485,40 @@ const addGoal = async () => {
 };
 
 const deleteGoal = async (goalTitleToDelete: string) => {
-  const category = store.categories.find(c => c.name === selectedCategory.value);
+  const category = store.categories.find(
+    (c) => c.name === selectedCategory.value,
+  );
   if (!category) return;
-  const goal = store.goals.find(g => g.categoryId === category.id && g.title === goalTitleToDelete);
+  const goal = store.goals.find(
+    (g) => g.categoryId === category.id && g.title === goalTitleToDelete,
+  );
   if (!goal) return;
   deletingGoal.value = goalTitleToDelete;
   try {
     await store.deleteGoal(goal.id);
     await store.fetchGoals();
-    goalsMap.value[selectedCategory.value] = store.goals.filter(g => g.categoryId === category.id).map(g => ({
-      completed: g.completed ?? false,
-      title: g.title,
-      description: g.description || "",
-      priority: g.priority || "medium",
-    }));
+    goalsMap.value[selectedCategory.value] = store.goals
+      .filter((g) => g.categoryId === category.id)
+      .map((g) => ({
+        completed: g.completed ?? false,
+        title: g.title,
+        description: g.description || "",
+        priority: g.priority || "medium",
+      }));
   } finally {
     deletingGoal.value = null;
   }
 };
 
 const toggleGoalCompletion = async (goalTitle: string) => {
-  const category = store.categories.find(c => c.name === selectedCategory.value);
+  const category = store.categories.find(
+    (c) => c.name === selectedCategory.value,
+  );
   if (!category) return;
   // Find the goal in the store (source of truth)
-  const goal = store.goals.find(g => g.categoryId === category.id && g.title === goalTitle);
+  const goal = store.goals.find(
+    (g) => g.categoryId === category.id && g.title === goalTitle,
+  );
   if (!goal) return;
 
   const newCompletedStatus = !goal.completed;
@@ -455,9 +540,13 @@ const cancelEdit = () => {
 
 const submitEdit = async () => {
   if (!selectedCategory.value || !editingGoalTitle.value) return;
-  const category = store.categories.find(c => c.name === selectedCategory.value);
+  const category = store.categories.find(
+    (c) => c.name === selectedCategory.value,
+  );
   if (!category) return;
-  const goal = store.goals.find(g => g.categoryId === category.id && g.title === editingGoalTitle.value);
+  const goal = store.goals.find(
+    (g) => g.categoryId === category.id && g.title === editingGoalTitle.value,
+  );
   if (!goal) return;
 
   isGoalUpdating.value = true;
@@ -469,7 +558,9 @@ const submitEdit = async () => {
     });
 
     await store.fetchGoals();
-    const updatedGoals = store.goals.filter((g) => g.categoryId === category.id);
+    const updatedGoals = store.goals.filter(
+      (g) => g.categoryId === category.id,
+    );
     goalsMap.value[selectedCategory.value] = updatedGoals.map((goal) => ({
       completed: goal.completed ?? false,
       title: goal.title,
@@ -491,10 +582,12 @@ const submitEdit = async () => {
   @apply px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700;
 }
 
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity 0.3s ease;
 }
-.fade-enter-from, .fade-leave-to {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
 }
 
@@ -522,8 +615,10 @@ const submitEdit = async () => {
 .slider {
   position: absolute;
   cursor: pointer;
-  top: 0; left: 0;
-  right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background-color: #ccc;
   transition: 0.4s;
   border-radius: 34px;

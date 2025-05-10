@@ -96,12 +96,16 @@ const handleTaskSave = (updates: Partial<Task>) => {
 };
 
 const handleSubtaskSave = async (
-  SubTask: Omit<SubTask, "id" | "createdAt" | "updatedAt">
+  SubTask: Omit<SubTask, "id" | "createdAt" | "updatedAt">,
 ) => {
   isSubtaskSaving.value = true;
   try {
     if (editingSubtask.value) {
-      emit("update-SubTask", { ...editingSubtask.value, ...SubTask }, props.task.id);
+      emit(
+        "update-SubTask",
+        { ...editingSubtask.value, ...SubTask },
+        props.task.id,
+      );
     } else {
       emit("create-SubTask", SubTask, props.task.id);
     }
@@ -110,7 +114,6 @@ const handleSubtaskSave = async (
     isSubtaskSaving.value = false;
   }
 };
-
 </script>
 
 <template>
@@ -165,13 +168,16 @@ const handleSubtaskSave = async (
                 <div class="space-y-1 text-xs text-text/70">
                   <p><strong>Progress:</strong> {{ task.progress }}%</p>
                   <p><strong>Due:</strong> {{ dueDateFormatted }}</p>
-                  <p><strong>Hours:</strong> {{ totalHours }} / {{ task.estimatedHours || '∞' }}</p>
+                  <p>
+                    <strong>Hours:</strong> {{ totalHours }} /
+                    {{ task.estimatedHours || "∞" }}
+                  </p>
                 </div>
                 <div v-if="task.subTasks?.length" class="mt-4">
                   <p class="font-semibold mb-1 text-xs">Subtasks</p>
                   <ul class="list-disc pl-4 text-xs">
                     <li v-for="sub in task.subTasks" :key="sub.id">
-                      {{ sub.title }} ({{ sub.completed ? '✅' : '⏳' }})
+                      {{ sub.title }} ({{ sub.completed ? "✅" : "⏳" }})
                     </li>
                   </ul>
                 </div>
@@ -184,7 +190,9 @@ const handleSubtaskSave = async (
         </p>
       </div>
 
-      <div class="inline-flex rounded-md shadow-sm border border-gray-300 dark:border-gray-600 overflow-hidden">
+      <div
+        class="inline-flex rounded-md shadow-sm border border-gray-300 dark:border-gray-600 overflow-hidden"
+      >
         <!-- Subtask -->
         <div class="relative group">
           <button
@@ -323,12 +331,20 @@ const handleSubtaskSave = async (
       <div
         v-show="showQuickView"
         class="fixed top-0 right-0 h-full w-80 max-w-full bg-white dark:bg-gray-900 shadow-lg z-50 p-4 overflow-y-auto transform transition-transform duration-300 ease-in-out"
-        :class="{ 'translate-x-0': showQuickView, 'translate-x-full': !showQuickView }"
+        :class="{
+          'translate-x-0': showQuickView,
+          'translate-x-full': !showQuickView,
+        }"
         @mousedown.stop
       >
         <div class="flex justify-between items-center mb-4 border-b pb-2">
           <h3 class="text-xl font-bold text-text">Task Quick View</h3>
-          <button @click="showQuickView = false" class="text-text/60 hover:text-red-500">✕</button>
+          <button
+            @click="showQuickView = false"
+            class="text-text/60 hover:text-red-500"
+          >
+            ✕
+          </button>
         </div>
         <div class="space-y-4 text-sm">
           <div>
@@ -336,31 +352,45 @@ const handleSubtaskSave = async (
             <p class="text-base text-text">{{ task.title }}</p>
           </div>
           <div v-if="task.description">
-            <p class="text-xs font-semibold text-gray-500 uppercase">Description</p>
+            <p class="text-xs font-semibold text-gray-500 uppercase">
+              Description
+            </p>
             <p class="text-sm text-text/80">{{ task.description }}</p>
           </div>
           <div v-if="task.dueDate">
-            <p class="text-xs font-semibold text-gray-500 uppercase">Due Date</p>
+            <p class="text-xs font-semibold text-gray-500 uppercase">
+              Due Date
+            </p>
             <p class="text-sm text-text">{{ dueDateFormatted }}</p>
           </div>
           <div>
-            <p class="text-xs font-semibold text-gray-500 uppercase">Priority</p>
+            <p class="text-xs font-semibold text-gray-500 uppercase">
+              Priority
+            </p>
             <p class="text-sm text-text">{{ task.priority }}</p>
           </div>
           <div>
-            <p class="text-xs font-semibold text-gray-500 uppercase">Progress</p>
+            <p class="text-xs font-semibold text-gray-500 uppercase">
+              Progress
+            </p>
             <p class="text-sm text-text">{{ task.progress }}%</p>
           </div>
           <div>
-            <p class="text-xs font-semibold text-gray-500 uppercase">Hours Spent</p>
+            <p class="text-xs font-semibold text-gray-500 uppercase">
+              Hours Spent
+            </p>
             <p class="text-sm text-text">{{ totalHours }}</p>
           </div>
           <div v-if="task.estimatedHours">
-            <p class="text-xs font-semibold text-gray-500 uppercase">Estimated Hours</p>
+            <p class="text-xs font-semibold text-gray-500 uppercase">
+              Estimated Hours
+            </p>
             <p class="text-sm text-text">{{ task.estimatedHours }}</p>
           </div>
           <div v-if="task.isRecurring">
-            <p class="text-xs font-semibold text-gray-500 uppercase">Recurring</p>
+            <p class="text-xs font-semibold text-gray-500 uppercase">
+              Recurring
+            </p>
             <p class="text-sm text-text">🔄 {{ task.recurringPeriod }}</p>
           </div>
 
@@ -375,22 +405,25 @@ const handleSubtaskSave = async (
             >
               <button
                 class="w-full flex justify-between items-center px-4 py-2 text-left bg-gray-100 dark:bg-gray-800 text-sm font-medium text-text hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none"
-                @click="expandedSubtasks[subtask.id] = !expandedSubtasks[subtask.id]"
+                @click="
+                  expandedSubtasks[subtask.id] = !expandedSubtasks[subtask.id]
+                "
                 @mousedown.stop
               >
                 <span>{{ subtask.title }}</span>
                 <span class="text-xs text-gray-400">
-                  {{ subtask.completed ? '✅' : '⏳' }}
+                  {{ subtask.completed ? "✅" : "⏳" }}
                 </span>
               </button>
               <transition name="accordion">
-                <div v-show="expandedSubtasks[subtask.id]" class="px-4 py-2 text-sm text-text/80 border-t border-gray-200 dark:border-gray-700">
+                <div
+                  v-show="expandedSubtasks[subtask.id]"
+                  class="px-4 py-2 text-sm text-text/80 border-t border-gray-200 dark:border-gray-700"
+                >
                   <p v-if="subtask.description" class="mb-1">
                     <strong>Description:</strong> {{ subtask.description }}
                   </p>
-                  <p>
-                    <strong>Progress:</strong> {{ subtask.progress || 0 }}%
-                  </p>
+                  <p><strong>Progress:</strong> {{ subtask.progress || 0 }}%</p>
                 </div>
               </transition>
             </div>
@@ -402,28 +435,37 @@ const handleSubtaskSave = async (
 </template>
 
 <style>
-.slide-enter-active, .slide-leave-active {
+.slide-enter-active,
+.slide-leave-active {
   transition: transform 0.3s ease;
 }
-.slide-enter-from, .slide-leave-to {
+.slide-enter-from,
+.slide-leave-to {
   transform: translateX(100%);
 }
-.accordion-enter-active, .accordion-leave-active {
-  transition: max-height 0.3s ease, opacity 0.3s ease;
+.accordion-enter-active,
+.accordion-leave-active {
+  transition:
+    max-height 0.3s ease,
+    opacity 0.3s ease;
 }
-.accordion-enter-from, .accordion-leave-to {
+.accordion-enter-from,
+.accordion-leave-to {
   max-height: 0;
   opacity: 0;
 }
-.accordion-enter-to, .accordion-leave-from {
+.accordion-enter-to,
+.accordion-leave-from {
   max-height: 200px;
   opacity: 1;
 }
 
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity 0.2s ease;
 }
-.fade-enter-from, .fade-leave-to {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
 }
 

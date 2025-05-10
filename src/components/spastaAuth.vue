@@ -39,7 +39,10 @@ const handleGoogleAuth = async () => {
 
 <template>
   <Dialog :open="isOpen" @close="emit('close')" class="relative z-50">
-    <div class="fixed inset-0 bg-black/30 dark:bg-black/50" aria-hidden="true" />
+    <div
+      class="fixed inset-0 bg-black/30 dark:bg-black/50"
+      aria-hidden="true"
+    />
 
     <div class="fixed inset-0 flex items-center justify-center p-4">
       <DialogPanel
@@ -108,7 +111,9 @@ const handleGoogleAuth = async () => {
 
         <div class="relative">
           <div class="absolute inset-0 flex items-center">
-            <div class="w-full border-t border-gray-300 dark:border-gray-600"></div>
+            <div
+              class="w-full border-t border-gray-300 dark:border-gray-600"
+            ></div>
           </div>
           <div class="relative flex justify-center text-sm">
             <span

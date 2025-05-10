@@ -328,7 +328,9 @@ const formatTradeDate = (date: Date | null) => {
               <div class="flex-1">
                 <div class="flex items-center justify-between">
                   <div class="flex items-center space-x-3">
-                    <span class="text-lg font-medium text-gray-900 dark:text-gray-100">
+                    <span
+                      class="text-lg font-medium text-gray-900 dark:text-gray-100"
+                    >
                       {{ trade.symbol }}
                     </span>
                     <span
@@ -363,7 +365,9 @@ const formatTradeDate = (date: Date | null) => {
                   </div>
                 </div>
 
-                <div class="mt-2 grid grid-cols-2 gap-4 text-sm text-gray-500 dark:text-gray-400">
+                <div
+                  class="mt-2 grid grid-cols-2 gap-4 text-sm text-gray-500 dark:text-gray-400"
+                >
                   <div>
                     <span class="font-medium">Entry:</span> {{ trade.entry }}
                   </div>

@@ -11,35 +11,35 @@
     <div v-else class="space-y-6">
       <!-- Categories List - Horizontal Scrolling -->
       <div class="flex justify-end mb-4">
-  <button
-    @click="toggleSummary"
-    class="text-sm text-primary-600 hover:underline flex items-center gap-2"
-    :disabled="isSummaryLoading"
-  >
-    <span>{{ showSummary ? "Hide Summary ▲" : "Show Summary ▼" }}</span>
-    <svg
-      v-if="isSummaryLoading"
-      class="w-4 h-4 animate-spin text-primary-600"
-      fill="none"
-      viewBox="0 0 24 24"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <circle
-        class="opacity-25"
-        cx="12"
-        cy="12"
-        r="10"
-        stroke="currentColor"
-        stroke-width="4"
-      ></circle>
-      <path
-        class="opacity-75"
-        fill="currentColor"
-        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-      ></path>
-    </svg>
-  </button>
-</div>
+        <button
+          @click="toggleSummary"
+          class="text-sm text-primary-600 hover:underline flex items-center gap-2"
+          :disabled="isSummaryLoading"
+        >
+          <span>{{ showSummary ? "Hide Summary ▲" : "Show Summary ▼" }}</span>
+          <svg
+            v-if="isSummaryLoading"
+            class="w-4 h-4 animate-spin text-primary-600"
+            fill="none"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+            ></path>
+          </svg>
+        </button>
+      </div>
 
       <Transition name="fade">
         <div v-if="showSummary">
@@ -48,7 +48,7 @@
             class="overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-primary-200 scrollbar-track-transparent"
           >
             <div class="flex space-x-4 min-w-max">
-              <SpastaCategoryList
+              <spasta-category-list
                 :categories="categories"
                 :selected-category-id="selectedCategoryId"
                 @selectCategory="handleSelectCategory"
@@ -92,7 +92,9 @@
               >
                 Time Spent
               </h3>
-              <div class="text-xl font-bold text-success-700 dark:text-success-300">
+              <div
+                class="text-xl font-bold text-success-700 dark:text-success-300"
+              >
                 {{ taskStats.totalHours }}h
                 <span
                   class="text-sm font-normal text-success-600 dark:text-success-300"
@@ -153,9 +155,10 @@
                   :key="flow.id"
                   class="flex justify-between items-center"
                 >
-                  <span class="text-sm text-warning-700 dark:text-warning-300">{{
-                    flow.name
-                  }}</span>
+                  <span
+                    class="text-sm text-warning-700 dark:text-warning-300"
+                    >{{ flow.name }}</span
+                  >
                   <span
                     class="font-bold text-warning-700 dark:text-warning-300"
                     >{{ taskStats.byFlow[flow.id] || 0 }}</span
@@ -195,7 +198,7 @@ import { ref, onMounted, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../store/authStore";
 import { useCategoryStore, type Category } from "../store/categoryStore";
-import {useSubTaskStore} from "../store/subTaskStore"
+import { useSubTaskStore } from "../store/subTaskStore";
 import { useTaskStore, type Task } from "../store/taskStore";
 import SpastaCategoryList from "../components/spastaCategoryList.vue";
 import SpastaTaskBoard from "../components/spastaTaskBoard.vue";
@@ -207,7 +210,7 @@ const subTaskStore = useSubTaskStore();
 const taskStore = useTaskStore();
 
 const isLoading = ref(true);
-const showSummary = ref(true); 
+const showSummary = ref(true);
 const isSummaryLoading = ref(false);
 
 const selectedCategoryId = ref<string>("");

@@ -105,7 +105,10 @@ onUnmounted(() => {
 });
 
 const navigation = [
-  { name: "Dashboard", path: "/", icon: "📋" },
+  { name: "Home", path: "/", icon: "🏠" },
+  { name: "Tasks", path: "/dashboard", icon: "📋" },
+  { name: "Stats", path: "/stats", icon: "📊" },
+
   { name: "Calendar", path: "/calendar", icon: "🗓️" },
   { name: "Fitness", path: "/fitness", icon: "🏋️" },
   { name: "Goal", path: "/goals", icon: "🥅" },
@@ -205,10 +208,11 @@ const navigation = [
             :key="item.name"
             :to="item.path"
             :class="[
-              route.path === item.path
-                ? 'bg-primary-50 text-primary-700 dark:bg-primary-900/50 dark:text-primary-100'
-                : 'text-text/60 hover:bg-bg hover:text-text',
               'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
+              route.path === item.path ||
+              (item.path !== '/' && route.path.startsWith(item.path))
+                ? 'router-link-active'
+                : 'text-text/60 hover:bg-bg hover:text-text',
             ]"
           >
             <span class="text-xl">{{ item.icon }}</span>

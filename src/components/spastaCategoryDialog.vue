@@ -212,13 +212,15 @@ const handleSubmit = async () => {
             >
               Cancel
             </button>
-            <button
-              type="submit"
-              class="btn btn-primary"
-              :disabled="loading"
-            >
+            <button type="submit" class="btn btn-primary" :disabled="loading">
               <span v-if="loading" class="loader"></span>
-              {{ loading ? "Saving..." : category ? "Save Changes" : "Create Category" }}
+              {{
+                loading
+                  ? "Saving..."
+                  : category
+                    ? "Save Changes"
+                    : "Create Category"
+              }}
             </button>
           </div>
         </form>

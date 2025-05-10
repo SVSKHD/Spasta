@@ -10,21 +10,21 @@ import SpastaTaskBoard from "./spastaTaskBoard.vue";
 import SpastaTaskCard from "./spastaTaskCard.vue";
 import SpastaTaskDialog from "./spastaTaskDialog.vue";
 import SpastaTaskQuickView from "./spastaTaskQuickView.vue";
-import spastaSubDialog from "./spastaSubDialog.vue";
+import SpastaSubDialog from "./spastaSubDialog.vue";
+import SpastaResizeableCard from "./spastaResizeCard.vue";
 
-export default {
-  install: (app: App) => {
-    app.component("SpastaAuth", SpastaAuth);
-    app.component("SpastaCalendar", SpastaCalendar);
-    app.component("SpastaCategoryDialog", SpastaCategoryDialog);
-    app.component("SpastaCategoryList", SpastaCategoryList);
-    app.component("SpastaExpenses", SpastaExpenses);
-    app.component("SpastaFitness", SpastaFitness);
-    app.component("SpastaGreetings", SpastaGreetings);
-    app.component("SpastaTaskBoard", SpastaTaskBoard);
-    app.component("SpastaTaskCard", SpastaTaskCard);
-    app.component("SpastaTaskDialog", SpastaTaskDialog);
-    app.component("SpastaTaskQuickView", SpastaTaskQuickView);
-    app.component("SpastaSubDialog", spastaSubDialog);
-  },
+export const spastaComponents = (app: App) => {
+  app.component("SpastaAuth", SpastaAuth);
+  app.component("SpastaCalendar", SpastaCalendar);
+  app.component("SpastaCategoryDialog", SpastaCategoryDialog);
+  app.component("SpastaCategoryList", SpastaCategoryList);
+  app.component("SpastaExpenses", SpastaExpenses);
+  app.component("SpastaFitness", SpastaFitness);
+  app.component("SpastaGreetings", SpastaGreetings);
+  app.component("SpastaTaskBoard", SpastaTaskBoard);
+  app.component("SpastaTaskCard", SpastaTaskCard);
+  app.component("SpastaTaskDialog", SpastaTaskDialog);
+  app.component("SpastaTaskQuickView", SpastaTaskQuickView);
+  app.component("SpastaSubDialog", SpastaSubDialog);
+  app.component("SpastaResizeableCard", SpastaResizeableCard);
 };

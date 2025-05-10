@@ -12,8 +12,10 @@ const Expenses = () => import("../pages/Expenses.vue");
 const Chat = () => import("../pages/Chat.vue");
 const notes = () => import("../pages/notes.vue");
 const goals = () => import("../pages/goals.vue");
-const Trading = () => import('../pages/Trading.vue');
+const Trading = () => import("../pages/Trading.vue");
 const Login = () => import("../pages/Login.vue");
+const Stats = () => import("../pages/stats.vue");
+const Home = () => import("../pages/home.vue");
 // const Register = () => import('../pages/Register.vue');
 
 const routes = [
@@ -23,7 +25,12 @@ const routes = [
     meta: { requiresAuth: true },
     children: [
       {
-        path: "",
+        name: "home",
+        path: "/",
+        component: Home,
+      },
+      {
+        path: "/dashboard",
         name: "dashboard",
         component: Dashboard,
       },
@@ -58,9 +65,14 @@ const routes = [
         component: notes,
       },
       {
-        path: '/trading',
-        name: 'trading',
+        path: "/trading",
+        name: "trading",
         component: Trading,
+      },
+      {
+        path: "/stats",
+        name: "stats",
+        component: Stats,
       },
     ],
   },

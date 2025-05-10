@@ -86,7 +86,8 @@ export const useGoalCategoryStore = defineStore("goalCategory", {
             priority: data.priority || "medium",
             createdAt: (data.createdAt as Timestamp)?.toDate?.() || new Date(),
             updatedAt: (data.updatedAt as Timestamp)?.toDate?.() || new Date(),
-            completed: typeof data.completed === "boolean" ? data.completed : false,
+            completed:
+              typeof data.completed === "boolean" ? data.completed : false,
             checklist: data.checklist || [],
           } as Goal;
         });
@@ -186,7 +187,7 @@ export const useGoalCategoryStore = defineStore("goalCategory", {
       try {
         const q = query(
           collection(db, "goalCategories"),
-          where("userId", "==", authStore.user.id)
+          where("userId", "==", authStore.user.id),
         );
         const snapshot = await getDocs(q);
 
@@ -218,7 +219,10 @@ export const useGoalCategoryStore = defineStore("goalCategory", {
       };
 
       try {
-        const docRef = await addDoc(collection(db, "goalCategories"), newCategory);
+        const docRef = await addDoc(
+          collection(db, "goalCategories"),
+          newCategory,
+        );
         this.categories.push({
           id: docRef.id,
           name,
