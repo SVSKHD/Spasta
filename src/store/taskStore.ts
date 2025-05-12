@@ -171,8 +171,20 @@ export const useTaskStore = defineStore("task", {
           userId: authStore.user.id,
           createdAt: serverTimestamp(),
           updatedAt: serverTimestamp(),
-          dueDate: task.dueDate ? Timestamp.fromDate(task.dueDate) : null,
-          startDate: task.startDate ? Timestamp.fromDate(task.startDate) : null,
+          dueDate: task.dueDate
+            ? Timestamp.fromDate(
+                task.dueDate instanceof Date
+                  ? task.dueDate
+                  : new Date(task.dueDate)
+              )
+            : null,
+          startDate: task.startDate
+            ? Timestamp.fromDate(
+                task.startDate instanceof Date
+                  ? task.startDate
+                  : new Date(task.startDate)
+              )
+            : null,
           progress: task.progress || 0,
           timeEntries: [],
         };
