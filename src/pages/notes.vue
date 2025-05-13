@@ -7,6 +7,9 @@ import SpastaCategoryList from "../components/spastaCategoryList.vue";
 import { useEditor, EditorContent } from "@tiptap/vue-3";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
+import BulletList from "@tiptap/extension-bullet-list";
+import OrderedList from "@tiptap/extension-ordered-list";
+import ListItem from "@tiptap/extension-list-item";
 import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
 import Link from "@tiptap/extension-link";
@@ -48,7 +51,13 @@ const newNote = ref({
 
 const editor = useEditor({
   extensions: [
-    StarterKit,
+    StarterKit.configure({
+      bulletList: false, // Disable default bulletList to avoid conflicts
+      orderedList: false, // Disable default orderedList to avoid conflicts
+    }),
+    BulletList, // Explicitly add BulletList extension
+    OrderedList, // Explicitly add OrderedList extension
+    ListItem.configure({ HTMLAttributes: { class: "list-disc ml-4" } }),
     Placeholder.configure({
       placeholder: "Start writing your note...",
     }),
@@ -434,7 +443,8 @@ onUnmounted(() => {
                     },
                   ]"
                   :key="index"
-                  @click="action.command"
+                  @click="action.command()"
+                  :class="{ 'text-primary-600': editor?.isActive(action.active) }"
                 >
                   <component :is="action.icon" class="w-5 h-5" />
                 </button>
@@ -568,6 +578,14 @@ onUnmounted(() => {
 .prose blockquote {
   @apply border-l-4 border-primary-200 dark:border-primary-800 pl-4 italic;
 }
+
+/* Ensure italic text is styled */
+.ProseMirror em {
+  font-style: italic !important;
+  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif !important;
+}
+
+
 
 /* Error Button */
 </style>

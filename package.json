@@ -12,7 +12,9 @@
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.23",
+    "@tailwindcss/typography": "^0.5.16",
     "@testing-library/vue": "^8.1.0",
+    "@tiptap/extension-bullet-list": "^2.12.0",
     "@tiptap/extension-code-block-lowlight": "^2.12.0",
     "@tiptap/extension-color": "^2.12.0",
     "@tiptap/extension-dropcursor": "^2.12.0",
@@ -20,6 +22,7 @@
     "@tiptap/extension-image": "^2.12.0",
     "@tiptap/extension-link": "^2.12.0",
     "@tiptap/extension-list-item": "^2.12.0",
+    "@tiptap/extension-ordered-list": "^2.12.0",
     "@tiptap/extension-placeholder": "^2.12.0",
     "@tiptap/extension-task-item": "^2.12.0",
     "@tiptap/extension-task-list": "^2.12.0",

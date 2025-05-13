@@ -7,6 +7,15 @@ export default {
       fontFamily: {
         mono: ["JetBrains Mono", "monospace"],
       },
+      typography: (theme) => ({
+        DEFAULT: {
+          css: {
+            em: {
+              fontStyle: 'italic',
+            },
+          },
+        },
+      }),
       colors: {
         bg: "rgb(var(--color-bg) / <alpha-value>)",
         text: "rgb(var(--color-text) / <alpha-value>)",
@@ -54,5 +63,7 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography')
+  ],
 };
