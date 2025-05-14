@@ -254,17 +254,24 @@ const onDrop = async (event: DragEvent, flowId: string) => {
     </div>
 
     <!-- Flow Status Bar -->
-    <div class="flex items-center space-x-4 mb-6 px-4">
+    <div class="flex flex-wrap gap-2 mb-4 px-3">
       <div
         v-for="flow in category.flows"
         :key="flow.id"
-        class="flex items-center space-x-2"
+        class="flex items-center justify-between bg-primary-100 dark:bg-primary-700 text-primary-800 dark:text-primary-200 px-3 py-1 rounded-md shadow-sm w-full md:w-auto"
       >
-        <span class="w-2 h-2 rounded-full bg-primary-500"></span>
-        <span class="text-sm text-text/70">{{ flow.name }}</span>
-        <span class="text-sm font-medium text-text">{{
-          flowTaskCounts[flow.id]
-        }}</span>
+        <!-- Flow Name -->
+        <div class="flex items-center space-x-2">
+          <span class="w-2 h-2 rounded-full bg-primary-500"></span>
+          <span class="text-xs font-medium">{{ flow.name }}</span>
+        </div>
+
+        <!-- Task Count -->
+        <div
+          class="ml-4 bg-primary-200 dark:bg-primary-600 text-primary-900 dark:text-primary-100 px-2 py-0.5 rounded-full text-xs font-semibold"
+        >
+          {{ flowTaskCounts[flow.id] }}
+        </div>
       </div>
     </div>
 

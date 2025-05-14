@@ -39,26 +39,45 @@
       </button>
     </div>
 
-    <div class="flex overflow-x-auto gap-4 mb-6 pb-2 border-b">
+    <div class="flex overflow-x-auto gap-4 mb-6 pb-2 border-b border-gray-200 dark:border-gray-700">
       <div
         v-for="category in goalCategories"
         :key="category"
         class="flex items-center gap-2"
       >
         <div
-          class="px-4 py-2 bg-gray-100 rounded cursor-pointer whitespace-nowrap"
-          :class="{ 'bg-blue-500 text-white': selectedCategory === category }"
+          class="px-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded cursor-pointer whitespace-nowrap transition-colors duration-200"
+          :class="{
+            'bg-blue-500 text-dark': selectedCategory === category,
+            'hover:bg-gray-200 dark:hover:bg-gray-700': selectedCategory !== category
+          }"
           @click="selectCategory(category)"
         >
           {{ category }}
         </div>
         <button
           @click="deleteCategory(category)"
-          class="flex items-center justify-center w-6 h-6 rounded-full text-white bg-red-500 hover:bg-red-600 transition duration-200"
+          class="flex items-center justify-center w-6 h-6 rounded-full text-white bg-red-500 hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700 transition duration-200"
         >
-          <svg v-if="deletingCategory === category" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+          <svg
+            v-if="deletingCategory === category"
+            class="w-4 h-4 animate-spin text-white"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+            ></path>
           </svg>
           <span v-else class="text-xs">×</span>
         </button>
@@ -78,7 +97,11 @@
     <transition name="fade">
       <div v-if="selectedCategory" class="mt-6">
         <h2 class="text-lg font-semibold text-gray-700 mb-4">Goals in {{ selectedCategory }}</h2>
-        <transition-group name="goal-list" tag="div" class="grid md:grid-cols-2 gap-6">
+        <transition-group
+          name="goal-list"
+          tag="div"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+        >
           <div
             v-for="goalItem in goalsMap[selectedCategory]"
             :key="goalItem.title"
