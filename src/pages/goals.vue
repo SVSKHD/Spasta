@@ -96,7 +96,9 @@
 
     <transition name="fade">
       <div v-if="selectedCategory" class="mt-6">
-        <h2 class="text-lg font-semibold text-gray-700 mb-4">Goals in {{ selectedCategory }}</h2>
+        <h2 class="text-lg font-semibold text-gray-700 dark:text-gray-100 mb-4">
+          Goals in {{ selectedCategory }}
+        </h2>
         <transition-group
           name="goal-list"
           tag="div"
@@ -105,7 +107,7 @@
           <div
             v-for="goalItem in goalsMap[selectedCategory]"
             :key="goalItem.title"
-            class="p-4 rounded shadow bg-white border-l-4 flex items-start gap-2"
+            class="p-4 rounded-lg shadow-lg backdrop-blur-md bg-white/70 dark:bg-gray-800/70 border-l-4 flex items-start gap-2"
             :class="{
               'border-red-500': goalItem.priority === 'high',
               'border-yellow-500': goalItem.priority === 'medium',
@@ -123,8 +125,8 @@
             <div class="flex-1">
               <div class="flex justify-between items-start">
                 <h3
-                  class="font-bold"
-                  :class="{ 'line-through text-gray-500': goalItem.completed }"
+                  class="font-bold text-gray-900 dark:text-gray-100"
+                  :class="{ 'line-through text-gray-500 dark:text-gray-400': goalItem.completed }"
                 >
                   {{ goalItem.title }}
                 </h3>
@@ -140,25 +142,41 @@
                 </span>
               </div>
               <p
-                class="text-sm mt-1 text-gray-600"
-                :class="{ 'line-through text-gray-400': goalItem.completed }"
+                class="text-sm mt-1 text-gray-600 dark:text-gray-300"
+                :class="{ 'line-through text-gray-400 dark:text-gray-500': goalItem.completed }"
               >
                 {{ goalItem.description }}
               </p>
             </div>
             <button
               @click="deleteGoal(goalItem.title)"
-              class="flex items-center justify-center w-6 h-6 rounded-full text-white bg-red-400 hover:bg-red-500 transition duration-200 ml-2"
+              class="flex items-center justify-center w-6 h-6 rounded-full text-white bg-red-400 hover:bg-red-500 dark:bg-red-500 dark:hover:bg-red-600 transition duration-200 ml-2"
             >
-              <svg v-if="deletingGoal === goalItem.title" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+              <svg
+                v-if="deletingGoal === goalItem.title"
+                class="w-4 h-4 animate-spin"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                ></path>
               </svg>
               <span v-else class="text-xs">×</span>
             </button>
             <button
               @click="startEditingGoal(goalItem)"
-              class="flex items-center justify-center w-6 h-6 rounded-full text-white bg-yellow-400 hover:bg-yellow-500 transition duration-200 ml-2"
+              class="flex items-center justify-center w-6 h-6 rounded-full text-white bg-yellow-400 hover:bg-yellow-500 dark:bg-yellow-500 dark:hover:bg-yellow-600 transition duration-200 ml-2"
             >
               ✏️
             </button>
@@ -173,31 +191,41 @@
     v-if="showDialog"
     class="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
   >
-    <div class="bg-white p-6 rounded-lg w-full max-w-md shadow-xl scale-in">
-      <h2 class="text-xl font-bold mb-4">Add Goal to {{ selectedCategory }}</h2>
+    <div
+      class="bg-white dark:bg-gray-800 p-6 rounded-lg w-full max-w-md shadow-xl scale-in border border-gray-200 dark:border-gray-700"
+    >
+      <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+        Add Goal to {{ selectedCategory }}
+      </h2>
       <input
         v-model="goalTitle"
         placeholder="Goal title"
-        class="input mb-3 w-full"
+        class="input mb-3 w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-600"
       />
       <textarea
         v-model="goalDescription"
         placeholder="Goal description"
-        class="input mb-3 w-full"
+        class="input mb-3 w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-600"
         rows="2"
       ></textarea>
-      <select v-model="goalPriority" class="input mb-4 w-full">
+      <select
+        v-model="goalPriority"
+        class="input mb-4 w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-600"
+      >
         <option disabled value="">Select priority</option>
         <option value="high">🔥 High</option>
         <option value="medium">🌟 Medium</option>
         <option value="low">✅ Low</option>
       </select>
       <div class="flex justify-end gap-2">
-        <button class="btn bg-gray-200 text-gray-700" @click="closeDialog">
+        <button
+          class="btn bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-100"
+          @click="closeDialog"
+        >
           Cancel
         </button>
         <button
-          class="btn transition-transform duration-200 active:scale-95 disabled:opacity-50"
+          class="btn transition-transform duration-200 active:scale-95 disabled:opacity-50 bg-blue-600 dark:bg-blue-500 text-white"
           :disabled="isGoalAdding"
           @click="addGoal"
         >
@@ -234,20 +262,41 @@
     v-if="editingGoalTitle"
     class="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
   >
-    <div class="bg-white p-6 rounded-lg w-full max-w-md shadow-xl scale-in">
-      <h2 class="text-xl font-bold mb-4">Edit Goal</h2>
-      <input v-model="editTitle" placeholder="Goal title" class="input mb-3 w-full" />
-      <textarea v-model="editDescription" placeholder="Goal description" class="input mb-3 w-full" rows="2"></textarea>
-      <select v-model="editPriority" class="input mb-4 w-full">
+    <div
+      class="bg-white dark:bg-gray-800 p-6 rounded-lg w-full max-w-md shadow-xl scale-in border border-gray-200 dark:border-gray-700"
+    >
+      <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">
+        Edit Goal
+      </h2>
+      <input
+        v-model="editTitle"
+        placeholder="Goal title"
+        class="input mb-3 w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-600"
+      />
+      <textarea
+        v-model="editDescription"
+        placeholder="Goal description"
+        class="input mb-3 w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-600"
+        rows="2"
+      ></textarea>
+      <select
+        v-model="editPriority"
+        class="input mb-4 w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-600"
+      >
         <option disabled value="">Select priority</option>
         <option value="high">🔥 High</option>
         <option value="medium">🌟 Medium</option>
         <option value="low">✅ Low</option>
       </select>
       <div class="flex justify-end gap-2">
-        <button class="btn bg-gray-200 text-gray-700" @click="cancelEdit">Cancel</button>
         <button
-          class="btn transition-transform duration-200 active:scale-95 disabled:opacity-50"
+          class="btn bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-100"
+          @click="cancelEdit"
+        >
+          Cancel
+        </button>
+        <button
+          class="btn transition-transform duration-200 active:scale-95 disabled:opacity-50 bg-blue-600 dark:bg-blue-500 text-white"
           :disabled="isGoalUpdating"
           @click="submitEdit"
         >
