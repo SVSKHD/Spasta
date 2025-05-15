@@ -16,6 +16,7 @@ const Trading = () => import("../pages/Trading.vue");
 const Login = () => import("../pages/Login.vue");
 const Stats = () => import("../pages/stats.vue");
 const Home = () => import("../pages/home.vue");
+const Redirect = () => import("../pages/redirect.vue");
 // const Register = () => import('../pages/Register.vue');
 
 const routes = [
@@ -74,6 +75,11 @@ const routes = [
         name: "stats",
         component: Stats,
       },
+      {
+        path:"/redirect",
+        name:"redirect",
+        component: Redirect,
+      }
     ],
   },
   {
