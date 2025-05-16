@@ -75,12 +75,12 @@ const routes = [
         name: "stats",
         component: Stats,
       },
-      {
-        path:"/redirect",
-        name:"redirect",
-        component: redirect,
-      }
     ],
+  },
+  {
+    path: "/redirect",
+    name: "redirect",
+    component: redirect,
   },
   {
     path: "/login",

@@ -1,6 +1,6 @@
 <template>
   <div class="container mx-auto p-4">
-    <h1 class="text-2xl font-bold mb-4 text-center">Spasta Redirect Parameters</h1>
+    <h1 class="text-2xl font-bold mb-5 mt-5 text-center">Spasta Redirect Parameters</h1>
     <div v-if="params && Object.keys(params).length" class="space-y-4">
       <div
         v-for="(value, key) in params"
