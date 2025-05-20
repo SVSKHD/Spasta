@@ -19,7 +19,7 @@ export interface Expense {
   amount: number;
   category: string;
   description: string;
-  date: Date;
+  date: any;
   isRecurring: boolean;
   recurringPeriod?: "daily" | "weekly" | "monthly" | "yearly";
   userId: string;
@@ -54,22 +54,53 @@ export const useExpenseStore = defineStore("expense", {
 
         const expenses: Expense[] = [];
         querySnapshot.forEach((doc) => {
-          const data = doc.data() as Omit<
-            Expense,
-            "id" | "createdAt" | "updatedAt" | "date"
-          > & {
-            createdAt: Timestamp;
-            updatedAt: Timestamp;
-            date: Timestamp;
-          };
+          const data = doc.data();
+
+          // If data.date is an object with 'date' property, flatten it
+          let dateValue: Date = new Date();
+          if (
+            data.date &&
+            typeof data.date === "object" &&
+            "seconds" in data.date &&
+            "nanoseconds" in data.date
+          ) {
+            // Firestore Timestamp
+            dateValue = new Timestamp(
+              data.date.seconds,
+              data.date.nanoseconds,
+            ).toDate();
+          } else if (typeof data.date === "string") {
+            // ISO string
+            dateValue = new Date(data.date);
+          }
 
           expenses.push({
             id: doc.id,
-            ...data,
-            createdAt: data.createdAt.toDate(),
-            updatedAt: data.updatedAt.toDate(),
-            date: data.date.toDate(),
+            amount: data.amount,
+            category: data.category,
+            description: data.description,
+            date: dateValue,
+            isRecurring: data.isRecurring,
+            recurringPeriod: data.recurringPeriod,
+            userId: data.userId,
+            createdAt:
+              data.createdAt?.seconds &&
+              data.createdAt?.nanoseconds
+                ? new Timestamp(
+                    data.createdAt.seconds,
+                    data.createdAt.nanoseconds,
+                  ).toDate()
+                : new Date(),
+            updatedAt:
+              data.updatedAt?.seconds &&
+              data.updatedAt?.nanoseconds
+                ? new Timestamp(
+                    data.updatedAt.seconds,
+                    data.updatedAt.nanoseconds,
+                  ).toDate()
+                : new Date(),
           });
+          console.log("Expense fetched:", expenses);
         });
 
         this.expenses = expenses;
