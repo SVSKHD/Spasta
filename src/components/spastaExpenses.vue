@@ -297,7 +297,7 @@ const lastExpenseCount = ref(props.expenses.length);
 
 watch(
   () => props.expenses.length,
-  (newLen, oldLen) => {
+  (newLen) => {
     if (isSubmitting.value && newLen > lastExpenseCount.value) {
       // New expense appeared, close form and reset
       isSubmitting.value = false;
