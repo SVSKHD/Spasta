@@ -15,7 +15,7 @@
       class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 animate-slide-up"
     >
       <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
-        New Expense
+        {{ editingExpenseId ? "Edit Expense" : "New Expense" }}
       </h3>
 
       <form @submit.prevent="handleAddExpense" class="space-y-4">
@@ -130,7 +130,7 @@
             class="btn btn-primary dark:bg-primary-600 dark:hover:bg-primary-700"
             :disabled="isSubmitting || newExpense.amount <= 0"
           >
-            {{ isSubmitting ? "Saving..." : "Save Expense" }}
+            {{ isSubmitting ? "Saving..." : (editingExpenseId ? "Update Expense" : "Save Expense") }}
           </button>
         </div>
       </form>
@@ -212,6 +212,13 @@
             >
               ✕
             </button>
+            <button
+              @click="startEditExpense(expense)"
+              class="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 mr-2"
+              title="Edit"
+            >
+              ✎
+            </button>
           </div>
         </div>
       </transition-group>
@@ -275,6 +282,7 @@ const isSubmitting = ref(false);
 const filterCategory = ref("all");
 const showDeleteDialog = ref(false);
 const expenseToDelete = ref<string | null>(null);
+const editingExpenseId = ref<string | null>(null);
 
 const newExpense = ref<Omit<Expense, "id" | "userId" | "createdAt" | "updatedAt">>({
   amount: 0,
@@ -345,14 +353,41 @@ const toggleAddForm = () => {
   }
 };
 
+const startEditExpense = (expense: Expense) => {
+  editingExpenseId.value = expense.id;
+  showAddForm.value = true;
+  newExpense.value = {
+    amount: expense.amount,
+    category: expense.category,
+    description: expense.description,
+    date: expense.date instanceof Date
+      ? expense.date.toISOString().split("T")[0]
+      : typeof expense.date === "string"
+        ? expense.date
+        : new Date(expense.date.seconds * 1000).toISOString().split("T")[0],
+    isRecurring: expense.isRecurring,
+    recurringPeriod: expense.recurringPeriod,
+  };
+};
+
 const handleAddExpense = async () => {
   if (newExpense.value.amount <= 0 || !newExpense.value.category) return;
   isSubmitting.value = true;
   try {
-    await expenseStore.addExpense(newExpense.value);
-    // Do not close form here; wait for watcher to close it when prop updates
+    if (editingExpenseId.value) {
+      await expenseStore.updateExpense(editingExpenseId.value, {
+        ...newExpense.value,
+        date: new Date(newExpense.value.date),
+      });
+    } else {
+      await expenseStore.addExpense({
+        ...newExpense.value,
+        date: new Date(newExpense.value.date),
+      });
+    }
+    // Wait for watcher to close form
   } catch (error) {
-    console.error("Error adding expense:", error);
+    console.error("Error saving expense:", error);
     isSubmitting.value = false;
   }
 };
