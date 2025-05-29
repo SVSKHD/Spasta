@@ -145,12 +145,12 @@ const nextPage = () => {
 }
 
 // Edit and Delete handlers
-const onEdit = (row) => {
+const onEdit = (row:any) => {
   // Handle edit action
   console.log('Edit:', row)
 }
 
-const onDelete = (row) => {
+const onDelete = (row:any) => {
   // Handle delete action
   console.log('Delete:', row)
 }
