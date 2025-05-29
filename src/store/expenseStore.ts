@@ -17,9 +17,10 @@ import { useAuthStore } from "./authStore";
 export interface Expense {
   id: string;
   amount: number;
+  account: string; // ✅ NEW FIELD
   category: string;
   description: string;
-  date: any;
+  date: Date;
   isRecurring: boolean;
   recurringPeriod?: "daily" | "weekly" | "monthly" | "yearly";
   userId: string;
@@ -53,54 +54,27 @@ export const useExpenseStore = defineStore("expense", {
         const querySnapshot = await getDocs(q);
 
         const expenses: Expense[] = [];
-        querySnapshot.forEach((doc) => {
-          const data = doc.data();
+        querySnapshot.forEach((docSnap) => {
+          const data = docSnap.data();
 
-          // If data.date is an object with 'date' property, flatten it
-          let dateValue: Date = new Date();
-          if (
-            data.date &&
-            typeof data.date === "object" &&
-            "seconds" in data.date &&
-            "nanoseconds" in data.date
-          ) {
-            // Firestore Timestamp
-            dateValue = new Timestamp(
-              data.date.seconds,
-              data.date.nanoseconds,
-            ).toDate();
-          } else if (typeof data.date === "string") {
-            // ISO string
-            dateValue = new Date(data.date);
-          }
+          const toDate = (val: any): Date =>
+            val?.seconds && val?.nanoseconds
+              ? new Timestamp(val.seconds, val.nanoseconds).toDate()
+              : new Date(val);
 
           expenses.push({
-            id: doc.id,
+            id: docSnap.id,
             amount: data.amount,
+            account: data.account || "", // fallback if old records
             category: data.category,
             description: data.description,
-            date: dateValue,
+            date: toDate(data.date),
             isRecurring: data.isRecurring,
             recurringPeriod: data.recurringPeriod,
             userId: data.userId,
-            createdAt:
-              data.createdAt?.seconds &&
-              data.createdAt?.nanoseconds
-                ? new Timestamp(
-                    data.createdAt.seconds,
-                    data.createdAt.nanoseconds,
-                  ).toDate()
-                : new Date(),
-            updatedAt:
-              data.updatedAt?.seconds &&
-              data.updatedAt?.nanoseconds
-                ? new Timestamp(
-                    data.updatedAt.seconds,
-                    data.updatedAt.nanoseconds,
-                  ).toDate()
-                : new Date(),
+            createdAt: toDate(data.createdAt),
+            updatedAt: toDate(data.updatedAt),
           });
-          console.log("Expense fetched:", expenses);
         });
 
         this.expenses = expenses;
@@ -113,28 +87,25 @@ export const useExpenseStore = defineStore("expense", {
     },
 
     async addExpense(
-      expense: Omit<Expense, "id" | "userId" | "createdAt" | "updatedAt">,
+      expense: Omit<Expense, "id" | "userId" | "createdAt" | "updatedAt">
     ) {
       const authStore = useAuthStore();
       if (!authStore.user?.id) throw new Error("User not authenticated");
 
+      if (!expense.account || !expense.category)
+        throw new Error("Account and category are required");
+
       try {
         const now = new Date();
-        const expenseWithUser = {
+        const expenseWithMeta = {
           ...expense,
           userId: authStore.user.id,
           createdAt: now,
           updatedAt: now,
         };
 
-        const docRef = await addDoc(
-          collection(db, "expenses"),
-          expenseWithUser,
-        );
-        const newExpense: Expense = {
-          id: docRef.id,
-          ...expenseWithUser,
-        };
+        const docRef = await addDoc(collection(db, "expenses"), expenseWithMeta);
+        const newExpense: Expense = { id: docRef.id, ...expenseWithMeta };
 
         this.expenses.push(newExpense);
         return newExpense;
@@ -148,13 +119,16 @@ export const useExpenseStore = defineStore("expense", {
       expenseId: string,
       updates: Partial<
         Omit<Expense, "id" | "userId" | "createdAt" | "updatedAt">
-      >,
+      >
     ) {
+      if (updates.account === "" || updates.category === "")
+        throw new Error("Account and category are required");
+
       try {
         const expenseRef = doc(db, "expenses", expenseId);
-        const expenseDoc = await getDoc(expenseRef);
+        const existingDoc = await getDoc(expenseRef);
 
-        if (!expenseDoc.exists()) {
+        if (!existingDoc.exists()) {
           throw new Error("Expense not found");
         }
 
@@ -187,6 +161,22 @@ export const useExpenseStore = defineStore("expense", {
         console.error("Error deleting expense:", error);
         throw error;
       }
+    },
+
+    // 🔍 FILTERING METHODS
+
+    getExpensesByAccount(account: string): Expense[] {
+      return this.expenses.filter((e) => e.account === account);
+    },
+
+    getExpensesByCategory(category: string): Expense[] {
+      return this.expenses.filter((e) => e.category === category);
+    },
+
+    getExpensesByAccountAndCategory(account: string, category: string): Expense[] {
+      return this.expenses.filter(
+        (e) => e.account === account && e.category === category
+      );
     },
   },
 });

@@ -1,239 +1,243 @@
 <template>
   <div class="space-y-6 animate-slide-in">
+    <!-- Header with Add Expense Button -->
     <div class="flex justify-between items-center">
-      <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">
+      <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100">
         Expense Tracker
-      </h1>
-      <button @click="toggleAddForm" class="btn btn-primary">
-        {{ showAddForm ? "Cancel" : "+ Add Expense" }}
+      </h2>
+      <button
+        @click="toggleAddForm"
+        class="btn btn-primary dark:bg-primary-600 dark:hover:bg-primary-700"
+      >
+        {{ showAddForm ? "Close Form" : "Add Expense" }}
       </button>
     </div>
 
-    <!-- Add Expense Form -->
-    <div
-      v-if="showAddForm"
-      class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 animate-slide-up"
-    >
-      <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
-        {{ editingExpenseId ? "Edit Expense" : "New Expense" }}
-      </h3>
+    <!-- Grid Layout for Form and Expense Summary -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Add Expense Form -->
+      <transition name="fade">
+        <div
+          v-if="showAddForm"
+          class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6"
+        >
+          <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
+            {{ editingExpenseId ? "Edit Expense" : "New Expense" }}
+          </h3>
 
-      <form @submit.prevent="handleAddExpense" class="space-y-4">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label
-              class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >Amount</label
-            >
-            <div class="relative">
-              <div
-                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-              >
-                <span class="text-gray-500 dark:text-gray-400">$</span>
+          <form @submit.prevent="handleAddExpense" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >Account</label
+                >
+                <select
+                  v-model="newExpense.account"
+                  class="input dark:bg-gray-700 dark:text-gray-100"
+                  required
+                >
+                  <option
+                    v-for="account in accounts"
+                    :value="account.value"
+                    :key="account.value"
+                  >
+                    {{ account.name }}
+                  </option>
+                </select>
               </div>
+
+              <div>
+                <label
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  >Amount</label
+                >
+                <input
+                  v-model.number="newExpense.amount"
+                  type="number"
+                  min="0.01"
+                  step="0.01"
+                  class="input dark:bg-gray-700 dark:text-gray-100"
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                >Category</label
+              >
               <input
-                v-model.number="newExpense.amount"
-                type="number"
-                min="0.01"
-                step="0.01"
-                class="input pl-7 dark:bg-gray-700 dark:text-gray-100"
+                v-model="newExpense.category"
+                type="text"
+                class="input dark:bg-gray-700 dark:text-gray-100"
                 required
               />
             </div>
-          </div>
 
-          <div>
-            <label
-              class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >Category</label
+            <div>
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                >Description</label
+              >
+              <textarea
+                v-model="newExpense.description"
+                class="input dark:bg-gray-700 dark:text-gray-100 resize-y"
+                rows="3"
+              ></textarea>
+            </div>
+
+            <div>
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                >Date</label
+              >
+              <input
+                v-model="newExpense.date"
+                type="date"
+                class="input dark:bg-gray-700 dark:text-gray-100"
+                :max="new Date().toISOString().split('T')[0]"
+              />
+            </div>
+
+            <div class="pt-2">
+              <button
+                type="submit"
+                class="btn btn-primary dark:bg-primary-600 dark:hover:bg-primary-700"
+                :disabled="isSubmitting || newExpense.amount <= 0"
+              >
+                {{ isSubmitting
+                  ? "Saving..."
+                  : editingExpenseId
+                  ? "Update Expense"
+                  : "Save Expense" }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </transition>
+
+      <!-- Expenses Summary -->
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+            Expenses Summary
+          </h3>
+          <div class="flex gap-4">
+            <!-- Account Filter -->
+            <select
+              v-model="filterAccount"
+              class="input px-3 py-1 text-sm dark:bg-gray-700 dark:text-gray-100"
             >
-            <input
-              v-model="newExpense.category"
-              type="text"
-              class="input dark:bg-gray-700 dark:text-gray-100"
-              required
-              placeholder="e.g., Groceries, Utilities, Rent"
-              list="categories-list"
-            />
-            <datalist id="categories-list">
+              <option value="all">All Accounts</option>
+              <option
+                v-for="account in accounts"
+                :key="account.value"
+                :value="account.value"
+              >
+                {{ account.name }}
+              </option>
+            </select>
+
+            <!-- Category Filter -->
+            <select
+              v-model="filterCategory"
+              class="input px-3 py-1 text-sm dark:bg-gray-700 dark:text-gray-100"
+            >
+              <option value="all">All Categories</option>
               <option
                 v-for="category in categories"
                 :key="category"
                 :value="category"
-              ></option>
-            </datalist>
+              >
+                {{ category }}
+              </option>
+            </select>
           </div>
         </div>
 
-        <div>
-          <label
-            class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >Description</label
-          >
-          <input
-            v-model="newExpense.description"
-            type="text"
-            class="input dark:bg-gray-700 dark:text-gray-100"
-            required
-          />
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label
-              class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >Date</label
-            >
-            <input
-              v-model="newExpense.date"
-              type="date"
-              class="input dark:bg-gray-700 dark:text-gray-100"
-              :max="new Date().toISOString().split('T')[0]"
-            />
+        <div class="mb-6">
+          <div class="text-3xl font-bold text-gray-900 dark:text-gray-100">
+            {{ formatCurrency(totalExpenses) }}
           </div>
-
-          <div class="flex items-center">
-            <input
-              id="recurring"
-              v-model="newExpense.isRecurring"
-              type="checkbox"
-              class="h-4 w-4 text-primary-600 dark:text-primary-400 border-gray-300 dark:border-gray-600 rounded focus:ring-primary-500"
-            />
-            <label
-              for="recurring"
-              class="ml-2 block text-sm text-gray-700 dark:text-gray-300"
-            >
-              Recurring expense
-            </label>
+          <div class="text-sm text-gray-500 dark:text-gray-400">
+            {{
+              filterCategory === "all" && filterAccount === "all"
+                ? "Total expenses"
+                : filterCategory !== "all" && filterAccount === "all"
+                ? `Total ${filterCategory} expenses`
+                : filterCategory === "all" && filterAccount !== "all"
+                ? `Total expenses for ${filterAccount}`
+                : `Total ${filterCategory} expenses for ${filterAccount}`
+            }}
           </div>
         </div>
 
-        <div v-if="newExpense.isRecurring">
-          <label
-            class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >Recurring Period</label
+        <transition-group
+          name="expense-fade"
+          tag="div"
+          class="space-y-4"
+        >
+          <div
+            v-for="expense in filteredExpenses"
+            :key="expense.id"
+            class="flex justify-between items-center p-3 border-b border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
           >
-          <select
-            v-model="newExpense.recurringPeriod"
-            class="input dark:bg-gray-700 dark:text-gray-100"
-          >
-            <option value="daily">Daily</option>
-            <option value="weekly">Weekly</option>
-            <option value="monthly">Monthly</option>
-            <option value="yearly">Yearly</option>
-          </select>
-        </div>
+            <div class="flex items-center space-x-3">
+              <span
+                class="inline-block px-2 py-1 text-xs rounded-full"
+                :class="getCategoryClass(expense.category)"
+              >
+                {{ expense.category }}
+              </span>
+              <div>
+                <div class="font-medium text-gray-900 dark:text-gray-100">
+                  {{ expense.description }}
+                </div>
+                <div class="text-xs text-gray-500 dark:text-gray-400">
+                  {{ formatExpenseDate(expense.date) }}
+                  <span v-if="expense.isRecurring" class="ml-2">
+                    ({{ expense.recurringPeriod }})
+                  </span>
+                </div>
+              </div>
+            </div>
 
-        <div class="pt-2">
-          <button
-            type="submit"
-            class="btn btn-primary dark:bg-primary-600 dark:hover:bg-primary-700"
-            :disabled="isSubmitting || newExpense.amount <= 0"
-          >
-            {{ isSubmitting ? "Saving..." : (editingExpenseId ? "Update Expense" : "Save Expense") }}
+            <div class="flex items-center space-x-3">
+              <div class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                {{ formatCurrency(expense.amount) }}
+              </div>
+              <button
+                @click="openDeleteDialog(expense.id)"
+                class="text-gray-400 hover:text-error-500 dark:text-gray-500 dark:hover:text-error-400"
+              >
+                ✕
+              </button>
+              <button
+                @click="startEditExpense(expense)"
+                class="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 mr-2"
+                title="Edit"
+              >
+                ✎
+              </button>
+            </div>
+          </div>
+        </transition-group>
+
+        <div
+          v-if="filteredExpenses.length === 0"
+          class="text-center py-8 bg-white dark:bg-gray-800 rounded-lg shadow"
+        >
+          <p class="text-gray-500 dark:text-gray-400 mb-3">No expenses found</p>
+          <button @click="toggleAddForm" class="btn btn-primary">
+            Add your first expense
           </button>
         </div>
-      </form>
-    </div>
-
-    <!-- Expenses Summary -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-          Expenses Summary
-        </h3>
-        <div>
-          <select
-            v-model="filterCategory"
-            class="input px-3 py-1 text-sm dark:bg-gray-700 dark:text-gray-100"
-          >
-            <option value="all">All Categories</option>
-            <option
-              v-for="category in categories"
-              :key="category"
-              :value="category"
-            >
-              {{ category }}
-            </option>
-          </select>
-        </div>
-      </div>
-
-      <div class="mb-6">
-        <div class="text-3xl font-bold text-gray-900 dark:text-gray-100">
-          {{ formatCurrency(totalExpenses) }}
-        </div>
-        <div class="text-sm text-gray-500 dark:text-gray-400">
-          {{
-            filterCategory === "all"
-              ? "Total expenses"
-              : `Total ${filterCategory} expenses`
-          }}
-        </div>
-      </div>
-
-      <transition-group
-        name="expense-fade"
-        tag="div"
-        class="space-y-4"
-      >
-        <div
-          v-for="expense in sortedExpenses"
-          :key="expense.id"
-          class="flex justify-between items-center p-3 border-b border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-        >
-          <div class="flex items-center space-x-3">
-            <span
-              class="inline-block px-2 py-1 text-xs rounded-full"
-              :class="getCategoryClass(expense.category)"
-            >
-              {{ expense.category }}
-            </span>
-            <div>
-              <div class="font-medium text-gray-900 dark:text-gray-100">
-                {{ expense.description }}
-              </div>
-              <div class="text-xs text-gray-500 dark:text-gray-400">
-                {{ formatExpenseDate(expense.date) }}
-                <span v-if="expense.isRecurring" class="ml-2">
-                  ({{ expense.recurringPeriod }})
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div class="flex items-center space-x-3">
-            <div class="text-lg font-semibold text-gray-900 dark:text-gray-100">
-              {{ formatCurrency(expense.amount) }}
-            </div>
-            <button
-              @click="openDeleteDialog(expense.id)"
-              class="text-gray-400 hover:text-error-500 dark:text-gray-500 dark:hover:text-error-400"
-            >
-              ✕
-            </button>
-            <button
-              @click="startEditExpense(expense)"
-              class="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 mr-2"
-              title="Edit"
-            >
-              ✎
-            </button>
-          </div>
-        </div>
-      </transition-group>
-
-      <div
-        v-if="sortedExpenses.length === 0"
-        class="text-center py-8 bg-white dark:bg-gray-800 rounded-lg shadow"
-      >
-        <p class="text-gray-500 dark:text-gray-400 mb-3">No expenses found</p>
-        <button @click="toggleAddForm" class="btn btn-primary">
-          Add your first expense
-        </button>
       </div>
     </div>
 
+    <!-- Delete Confirmation Dialog -->
     <transition name="fade-dialog">
       <div
         v-if="showDeleteDialog"
@@ -250,14 +254,17 @@
             <button
               @click="closeDeleteDialog"
               class="btn bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-100"
+              :disabled="isDeleting"
             >
               Cancel
             </button>
             <button
               @click="confirmDeleteExpense"
-              class="btn bg-red-600 hover:bg-red-700 text-white"
+              class="btn bg-red-600 hover:bg-red-700 text-white flex items-center"
+              :disabled="isDeleting"
             >
-              Delete
+              <span v-if="isDeleting" class="loader mr-2"></span>
+              {{ isDeleting ? "Deleting..." : "Delete" }}
             </button>
           </div>
         </div>
@@ -280,12 +287,15 @@ const expenseStore = useExpenseStore();
 const showAddForm = ref(false);
 const isSubmitting = ref(false);
 const filterCategory = ref("all");
+const filterAccount = ref("all");
 const showDeleteDialog = ref(false);
 const expenseToDelete = ref<string | null>(null);
 const editingExpenseId = ref<string | null>(null);
+const isDeleting = ref(false);
 
 const newExpense = ref<Omit<Expense, "id" | "userId" | "createdAt" | "updatedAt">>({
   amount: 0,
+  account: "",
   category: "",
   description: "",
   date: new Date(),
@@ -294,6 +304,46 @@ const newExpense = ref<Omit<Expense, "id" | "userId" | "createdAt" | "updatedAt"
 
 // Track the last expense count to detect when a new one is added
 const lastExpenseCount = ref(props.expenses.length);
+
+const accounts = ref([
+{
+  name: "Please select an account",
+  value: "Please select an account",
+},  
+{
+  name: "Cash",
+  value: "Cash",
+}, {
+  name: "Kundana-Business(Kotak)",
+  value: "Kundana-Business(Kotak)",
+}, {
+  name: "Kundana-Business(ICICI)",
+  value: "Kundana-Business(ICICI)",
+}, {
+  name: "Personal-Account(HDFC)",
+  value: "Personal-Account(HDFC)",
+}, {
+  name: "Personal-Account(ICICI)",
+  value: "Personal-Account(ICICI)",
+}, {
+  name: "Personal-Account(AXIS)",
+  value: "Personal-Account(AXIS)",
+}, {
+  name: "Mom Personal(ICIC)",
+  value: "Mom Personal(ICIC)",
+}
+, {
+  name: "Credit Card(ICICI)",
+  value: "Credit Card(ICICI)",
+}, {
+  name: "Credit Card(AXIS)",
+  value: "Credit Card(AXIS)",
+}, 
+{
+  name: "Credit Card(HDFC)",
+  value: "Credit Card(HDFC)",
+},
+]);
 
 watch(
   () => props.expenses.length,
@@ -320,22 +370,25 @@ const categories = computed(() => {
 });
 
 const filteredExpenses = computed(() => {
-  if (filterCategory.value === "all") {
-    return props.expenses;
-  }
-  return props.expenses.filter((e) => e.category === filterCategory.value);
-});
+  let result = props.expenses;
 
-const sortedExpenses = computed(() => {
-  return [...filteredExpenses.value].sort(
-    (a, b) => b.date.getTime() - a.date.getTime(),
-  );
+  // Filter by account
+  if (filterAccount.value !== "all") {
+    result = result.filter((e) => e.account === filterAccount.value);
+  }
+
+  // Filter by category
+  if (filterCategory.value !== "all") {
+    result = result.filter((e) => e.category === filterCategory.value);
+  }
+
+  return result;
 });
 
 const totalExpenses = computed(() => {
   return filteredExpenses.value.reduce(
     (sum, expense) => sum + expense.amount,
-    0,
+    0
   );
 });
 
@@ -404,13 +457,18 @@ const closeDeleteDialog = () => {
 
 const confirmDeleteExpense = async () => {
   if (expenseToDelete.value) {
+    isDeleting.value = true; // Start loader
     try {
       await expenseStore.deleteExpense(expenseToDelete.value);
+      // Remove the expense locally
+      props.expenses = props.expenses.filter((e) => e.id !== expenseToDelete.value);
     } catch (error) {
       console.error("Error deleting expense:", error);
+    } finally {
+      isDeleting.value = false; // Stop loader
+      closeDeleteDialog();
     }
   }
-  closeDeleteDialog();
 };
 
 const formatExpenseDate = (date: Date | string) => {
@@ -432,6 +490,14 @@ const getCategoryClass = (category: string) => {
     "bg-error-100 text-error-800",
   ];
   return colors[hash % colors.length];
+};
+
+const wordCount = ref(0);
+
+const updateWordCount = () => {
+  wordCount.value = newExpense.value.description
+    ? newExpense.value.description.split(/\s+/).filter((word) => word.length > 0).length
+    : 0;
 };
 </script>
 
@@ -460,7 +526,7 @@ const getCategoryClass = (category: string) => {
 }
 
 .fade-dialog-enter-active, .fade-dialog-leave-active {
-  transition: opacity 0.2s;
+  transition: opacity 0.2s ease-in-out;
 }
 .fade-dialog-enter-from, .fade-dialog-leave-to {
   opacity: 0;
