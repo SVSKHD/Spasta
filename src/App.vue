@@ -1,11 +1,7 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
-  <spasta-task-card/>
+  <router-view />
 </template>
 
-<style scoped>
-
-</style>
+<script setup lang="ts">
+document.title = 'Spasta.online - Personal Dashboard'
+</script>
