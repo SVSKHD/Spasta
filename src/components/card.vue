@@ -16,7 +16,7 @@
     <q-separator dark inset />
 
     <!-- Content Section -->
-    <q-card-section>    
+    <q-card-section>
       <slot />
     </q-card-section>
 
@@ -36,40 +36,40 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits, computed } from 'vue'
+import { defineProps, defineEmits, computed } from "vue";
 
 // Props for the card component
 const props = defineProps<{
-  title: string // Title of the card
-  description: string // Subtitle or description of the card
-  actions?: { label: string; icon?: string; onClick: () => void }[] // Actions for the card
-  draggable?: boolean // Whether the card is draggable
-  priority?: 'low' | 'medium' | 'high' // Priority of the card
-}>()
+  title: string; // Title of the card
+  description: string; // Subtitle or description of the card
+  actions?: { label: string; icon?: string; onClick: () => void }[]; // Actions for the card
+  draggable?: boolean; // Whether the card is draggable
+  priority?: "low" | "medium" | "high"; // Priority of the card
+}>();
 
 // Emits for drag events
 const emit = defineEmits<{
-  (e: 'dragstart', event: DragEvent): void
-}>()
+  (e: "dragstart", event: DragEvent): void;
+}>();
 
 // Handle drag start event
 const onDragStart = (event: DragEvent) => {
-  emit('dragstart', event)
-}
+  emit("dragstart", event);
+};
 
 // Compute the background color based on priority
 const priorityStyle = computed(() => {
   switch (props.priority) {
-    case 'low':
-      return { backgroundColor: '#d4edda' } // Light green for low priority
-    case 'medium':
-      return { backgroundColor: '#fff3cd' } // Light yellow for medium priority
-    case 'high':
-      return { backgroundColor: '#f8d7da' } // Light red for high priority
+    case "low":
+      return { backgroundColor: "#d4edda" }; // Light green for low priority
+    case "medium":
+      return { backgroundColor: "#fff3cd" }; // Light yellow for medium priority
+    case "high":
+      return { backgroundColor: "#f8d7da" }; // Light red for high priority
     default:
-      return {} // Default style
+      return {}; // Default style
   }
-})
+});
 </script>
 
 <style scoped>

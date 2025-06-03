@@ -3,5 +3,5 @@
 </template>
 
 <script setup lang="ts">
-document.title = 'Spasta.online - Personal Dashboard'
+document.title = "Spasta.online - Personal Dashboard";
 </script>

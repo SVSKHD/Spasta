@@ -1,13 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
-:root{
-    --primary-color: #3498db;
-    --secondary-color: #2ecc71;
-    --background-color: #f4f4f4;
-    --theme-color:#F5EEDC;
-    --theme-text:#27548A;
-    --theme-secondary:#183B4E;
-    --text-color: #333;
-    --font-family: 'JetBrains Mono', monospace!important;
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap");
+:root {
+  --primary-color: #3498db;
+  --secondary-color: #2ecc71;
+  --background-color: #f4f4f4;
+  --theme-color: #f5eedc;
+  --theme-text: #27548a;
+  --theme-secondary: #183b4e;
+  --text-color: #333;
+  --font-family: "JetBrains Mono", monospace !important;
 }
 
 body {
@@ -19,21 +19,21 @@ body {
   box-sizing: border-box;
 }
 
-.header{
-    background-color: var(--theme-secondary);
-    color: var(--theme-text);
-    padding: 10px;
-    text-align: center;
-    color: var(--theme-color);
+.header {
+  background-color: var(--theme-secondary);
+  color: var(--theme-text);
+  padding: 10px;
+  text-align: center;
+  color: var(--theme-color);
 }
 
-.drawer{
-    background-color: var(--theme-secondary);
-    color: var(--theme-text);
-    padding: 10px;
-    width: 250px;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
+.drawer {
+  background-color: var(--theme-secondary);
+  color: var(--theme-text);
+  padding: 10px;
+  width: 250px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
 }
