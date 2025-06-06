@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap");
 :root {
-  --primary-color: #3498db;
+  --primary-color: ##f5eedc;
   --secondary-color: #2ecc71;
   --background-color: #f4f4f4;
   --theme-color: #f5eedc;
@@ -36,4 +36,38 @@ body {
   position: fixed;
   top: 0;
   left: 0;
+}
+
+.q-item__label{
+  color: var(--theme-color);
+}
+
+.q-separator {
+  color: var(--theme-color);
+}
+
+.tabs-color{
+  background-color: var(--theme-secondary);
+  color: var(--theme-text);
+}
+
+.task-card{
+  background-color: var(--theme-secondary);
+  color: var(--theme-text);
+  border-radius: 5px;       
+}
+
+.task-rack{
+  background-color: var(--theme-primary);
+  height: calc(100vh - 18rem); /* Adjust height to account for header or other elements */
+  color: var(--theme-text);
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.category-create-button{
+  background-color: var(--theme-color);
+  color: var(--theme-text);
+  font-family: var(--font-family);
+  font-weight: bold;
 }

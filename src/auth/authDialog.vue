@@ -1,23 +1,14 @@
 <template>
   <spasta-dialog v-model="isOpen" size="large">
     <form @submit.prevent="handleSignIn">
-      <spasta-input
-        v-model="email"
-        label="Email"
-        type="email"
-        outlined
-        dense
-        :error="emailError"
-        :error-messages="emailError ? ['Please enter a valid email.'] : []"
-      />
-
       <spasta-button
         color="teal"
-        icon="mdi-login"
+        icon="fab fa-google"
         type="submit"
         label="Google Sign In"
         :fullWidth="true"
         class="mt-4"
+        @click="handleGmailSignIn"
       />
     </form>
   </spasta-dialog>
@@ -25,6 +16,7 @@
 
 <script setup lang="ts">
 import { defineProps, defineEmits, computed, ref, watch } from "vue";
+import { useAuthStore } from "../store/authStore";
 
 // Props
 const props = defineProps<{ modelValue: boolean }>();
@@ -61,4 +53,18 @@ function handleSignIn() {
     isOpen.value = false;
   }
 }
+
+const isLoading = ref(false);
+const handleGmailSignIn = async () => {
+  isLoading.value = true;
+  try {
+    const authStore = useAuthStore();
+    await authStore.signInWithGoogle();
+    isOpen.value = false; // Close the dialog on successful sign-in
+  } catch (error) {
+    console.error("Google Sign-In failed", error);
+  } finally {
+    isLoading.value = false;
+  }
+};
 </script>

@@ -1,3 +1,10 @@
 <template>
-  <h4>Hello There</h4>
+  <SpastaTaskBoard/>
 </template>
+
+<script setup lang="ts">
+import SpastaTaskBoard from "../pageComponents/tasks/taskBoard.vue"
+
+
+
+</script>

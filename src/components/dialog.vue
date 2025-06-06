@@ -1,6 +1,6 @@
 <template>
-  <q-dialog v-model="isOpen" :class="sizeClass">
-    <q-card class="rounded-card">
+  <q-dialog v-model="isOpen">
+    <q-card :class="['rounded-card', sizeClass]">
       <!-- Header Section -->
       <q-card-section>
         <div class="text-h6">{{ title }}</div>
