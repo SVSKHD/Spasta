@@ -1,61 +1,134 @@
 <template>
-  <div class="q-pa-md row items-start q-gutter-md">
-    <q-card class="my-card" flat bordered>
-      <q-img src="https://cdn.quasar.dev/img/parallax2.jpg" />
-
-      <q-card-section>
-        <div class="text-overline text-orange-9">Overline</div>
-        <div class="text-h5 q-mt-sm q-mb-xs">Title</div>
-        <div class="text-caption text-grey">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </div>
-      </q-card-section>
-
-      <q-card-actions>
-        <q-btn flat color="primary" label="Share" />
-        <q-btn flat color="secondary" label="Book" />
-
-        <q-space />
-
-        <q-btn
-          color="grey"
-          round
-          flat
-          dense
-          :icon="expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'"
-          @click="expanded = !expanded"
+  <q-card
+    class="task-card q-pa-sm rounded-borders"
+    flat
+    bordered
+    :class="priorityClass(task.priority)"
+  >
+    <q-card-section class="q-pa-sm">
+      <!-- Header: Priority + Actions -->
+      <div class="row justify-between items-center q-mb-xs">
+        <q-badge
+          :color="badgeColor(task.priority)"
+          text-color="black"
+          rounded
+          :label="task.priority.toUpperCase()"
         />
-      </q-card-actions>
-
-      <q-slide-transition>
-        <div v-show="expanded">
-          <q-separator />
-          <q-card-section class="text-subtitle2">
-            {{ lorem }}
-          </q-card-section>
+        <div class="row items-center q-gutter-xs">
+          <q-btn icon="edit" size="sm" flat dense color="blue-3" />
+          <q-btn icon="close" size="sm" flat dense color="red-3" />
         </div>
-      </q-slide-transition>
-    </q-card>
-  </div>
+      </div>
+
+      <!-- Title -->
+      <div class="text-white text-weight-bold q-mb-xs">
+        {{ task.title }}
+        <q-icon name="mdi-note-outline" class="q-ml-xs" />
+      </div>
+
+      <!-- Description -->
+      <div class="text-caption text-grey-6 q-mb-xs">
+        {{ task.description || "No description" }}
+      </div>
+
+      <!-- Progress and Time -->
+      <div class="row items-center justify-between text-caption q-my-xs">
+        <q-linear-progress
+          :value="task.progress / 100"
+          size="6px"
+          color="blue"
+          rounded
+          class="col"
+        />
+        <div class="q-ml-sm">{{ task.progress }}%</div>
+        <div>{{ task.actualHours || 0 }}h spent</div>
+      </div>
+
+      <!-- Date -->
+      <div class="text-caption text-grey-7">
+        {{ formatDate(task.dueDate) }}
+      </div>
+    </q-card-section>
+
+    <!-- Accordion Add Button -->
+    <q-expansion-item
+      dense
+      expand-separator
+      icon="add"
+      label="Add Details"
+      header-class="text-indigo-5 text-caption"
+      class="bg-grey-10"
+    >
+      <q-card-section>
+        <q-input label="Subtask name" dense filled />
+        <q-btn label="Add Subtask" icon="add" color="green" class="q-mt-sm" dense />
+      </q-card-section>
+    </q-expansion-item>
+  </q-card>
 </template>
 
-<script>
-import { ref } from "vue";
+<script setup lang="ts">
+import { defineProps } from "vue";
 
-export default {
-  setup() {
-    return {
-      expanded: ref(false),
-      lorem:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    };
+const props = defineProps({
+  task: {
+    type: Object,
+    required: true,
   },
-};
+});
+
+function formatDate(date: string) {
+  return new Date(date).toLocaleDateString(undefined, {
+    month: "short",
+    day: "2-digit",
+    year: "numeric",
+  });
+}
+
+function badgeColor(priority: string) {
+  switch (priority) {
+    case "low":
+      return "green-2";
+    case "medium":
+      return "yellow-2";
+    case "high":
+      return "red-2";
+    default:
+      return "grey-4";
+  }
+}
+
+function priorityClass(priority: string) {
+  switch (priority) {
+    case "low":
+      return "border-left-low";
+    case "medium":
+      return "border-left-medium";
+    case "high":
+      return "border-left-high";
+    default:
+      return "";
+  }
+}
+
 </script>
 
-<style lang="sass" scoped>
-.my-card
-  width: 100%
-  max-width: 350px
+<style scoped>
+.task-card {
+  transition: all 0.2s ease;
+  border-left: 4px solid transparent;
+  border-radius: 20px;
+  background-color: #183b4e;
+}
+
+.border-left-low {
+  border-left: 5px solid #4caf50;
+}
+.border-left-medium {
+  border-left: 5px solid #ffeb3b;
+}
+.border-left-high {
+  border-left: 5px solid #f44336;
+}
+
 </style>

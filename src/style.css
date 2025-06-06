@@ -49,21 +49,12 @@ body {
 .tabs-color{
   background-color: var(--theme-secondary);
   color: var(--theme-text);
+  border-radius: 15px;
 }
 
-.task-card{
-  background-color: var(--theme-secondary);
-  color: var(--theme-text);
-  border-radius: 5px;       
-}
 
-.task-rack{
-  background-color: var(--theme-primary);
-  height: calc(100vh - 18rem); /* Adjust height to account for header or other elements */
-  color: var(--theme-text);
-  border-radius: 5px;
-  padding: 10px;
-}
+
+
 
 .category-create-button{
   background-color: var(--theme-color);
